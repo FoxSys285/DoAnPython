@@ -1,10 +1,8 @@
-
-
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 from datetime import datetime
-
+from MyButton import HoverButton
 
 # MÀN HÌNH BÁN HÀNG
 
@@ -32,7 +30,7 @@ class MH_BanHang(tk.Frame):
         ]
 
         for text, xpos in buttons_info:
-            tk.Button(
+            HoverButton(
                 self,
                 text=text,
                 font=("proxima-nova", 14, "bold"),
@@ -90,7 +88,7 @@ class MH_BanHang(tk.Frame):
 
         # Nút đăng xuất sẽ chuyển về màn hình đăng nhập
 
-        tk.Button(
+        HoverButton(
             qtv_frame,
             text="Đăng xuất",
             font=("proxima-nova", 14, "bold"),
