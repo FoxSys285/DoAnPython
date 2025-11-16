@@ -68,26 +68,30 @@ class MH_DangNhap(tk.Frame):
             username = username_entry.get()
             password = password_entry.get()
 
+            if not username:
+                print("Bạn chưa nhập tài khoản.")
+                self.tb_text.set("Bạn chưa nhập tài khoản.")
+                return
+
+            if username and not password:
+                print("Bạn chưa nhập mật khẩu.")
+                self.tb_text.set("Bạn chưa nhập mật khẩu.")
+                return
+
             if username in du_lieu_dang_nhap:
                 if du_lieu_dang_nhap[username] == password:
                     print("Đăng nhập thành công")
                     self.tb_text.set("")
                     from MH_BanHang import MH_BanHang
                     controller.show_frame(MH_BanHang)
+                    reset(username_entry, password_entry)
                 else:
                     print("Sai mật khẩu.")
                     self.tb_text.set("Sai mật khẩu.")
-                reset(username_entry, password_entry)
-            elif not username:
-                print("Bạn chưa nhập tài khoản.")
-                self.tb_text.set("Bạn chưa nhập tài khoản.")
-            elif username and not password:
-                print("Bạn chưa nhập mật khẩu.")
-                self.tb_text.set("Bạn chưa nhập mật khẩu.")
+            
             else:
                 print("Sai tài khoản hoặc mật khẩu. Hãy kiểm tra lại")
                 self.tb_text.set("Sai tài khoản hoặc mật khẩu. Hãy kiểm tra lại.")
-                reset(username_entry, password_entry)
 
             
 
@@ -116,3 +120,4 @@ class MH_DangNhap(tk.Frame):
             font=("proxima-nova", 10, "bold"),
             command=controller.destroy
         ).place(x=680, y=460, width=90, height=25)
+
