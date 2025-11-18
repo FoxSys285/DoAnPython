@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
@@ -6,10 +5,6 @@ from datetime import datetime
 
 
 # MÀN HÌNH ĐĂNG NHẬP
-
-
-
-
 class MH_DangNhap(tk.Frame):
     def __init__(self, parent, controller):
         self.tb_text = tk.StringVar(value = "") # Thông báo đăng nhập
@@ -58,42 +53,33 @@ class MH_DangNhap(tk.Frame):
         # Xử lí dữ liệu đăng nhập
 
         def login():
-
-            tb_frame = tk.Frame(self, bg = "#f9f4ef", height = 30, width = 350) # Frame xử lí thông báo khi đăng nhập
-            tb_label = tk.Label(tb_frame, textvariable = self.tb_text, font=("proxima-nova", 12), fg = "red", bg = "#f9f4ef")
-            tb_label.pack(side = LEFT)
-            tb_frame.place(x=470, y = 300)
-
-
+            tb_frame = tk.Frame(self, bg="#f9f4ef", height=30, width=350)
+            tb_label = tk.Label(tb_frame, textvariable=self.tb_text,font=("proxima-nova", 12), fg="red", bg="#f9f4ef")
+            tb_label.pack(side=LEFT)
+            tb_frame.place(x=470, y=300)
             username = username_entry.get()
             password = password_entry.get()
-
             if not username:
-                print("Bạn chưa nhập tài khoản.")
                 self.tb_text.set("Bạn chưa nhập tài khoản.")
+                self.controller.show_toast("Bạn chưa nhập tài khoản!")
                 return
-
             if username and not password:
-                print("Bạn chưa nhập mật khẩu.")
                 self.tb_text.set("Bạn chưa nhập mật khẩu.")
+                self.controller.show_toast("Bạn chưa nhập mật khẩu!")
                 return
-
             if username in du_lieu_dang_nhap:
                 if du_lieu_dang_nhap[username] == password:
-                    print("Đăng nhập thành công")
                     self.tb_text.set("")
+                    self.controller.show_toast("Đăng nhập thành công!")
                     from MH_BanHang import MH_BanHang
                     controller.show_frame(MH_BanHang)
                     reset(username_entry, password_entry)
                 else:
-                    print("Sai mật khẩu.")
                     self.tb_text.set("Sai mật khẩu.")
-            
+                    self.controller.show_toast("Sai mật khẩu!")
             else:
-                print("Sai tài khoản hoặc mật khẩu. Hãy kiểm tra lại")
                 self.tb_text.set("Sai tài khoản hoặc mật khẩu. Hãy kiểm tra lại.")
-
-            
+                self.controller.show_toast("Sai tài khoản hoặc mật khẩu!")
 
 
 
@@ -120,4 +106,3 @@ class MH_DangNhap(tk.Frame):
             font=("proxima-nova", 10, "bold"),
             command=controller.destroy
         ).place(x=680, y=460, width=90, height=25)
-
