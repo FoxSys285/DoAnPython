@@ -56,6 +56,57 @@ class App(tk.Tk):
         # Sau 1 giây chuyển sang trang thật
         self.after(1000, lambda: self._show_page(page, loading))
 
+    def show_toast(self, message, duration=1500):
+        """Hiển thị thông báo nhỏ tự tắt sau duration(ms)"""
+
+        toast = tk.Toplevel(self)
+        toast.overrideredirect(True)  # bỏ viền
+        toast.attributes("-topmost", True)
+        toast.configure(bg="#333333")
+
+        # nội dung
+        label = tk.Label(
+            toast,
+            text=message,
+            fg="white",
+            bg="#333333",
+            font=("Arial", 11, "bold"),
+            padx=12, pady=8
+        )
+        label.pack()
+
+        # đặt vị trí (góc phải dưới của cửa sổ app)
+        self.update_idletasks()
+        x = self.winfo_x() + self.winfo_width() - toast.winfo_reqwidth() - 20
+        y = self.winfo_y() + self.winfo_height() - toast.winfo_reqheight() - 40
+        toast.geometry(f"+{x}+{y}")
+
+        # hiệu ứng fade-in
+        toast.attributes("-alpha", 0.0)
+        self.fade_in(toast)
+
+        # tự tắt sau duration ms
+        self.after(duration, lambda: self.fade_out(toast))
+
+
+    def fade_in(self, widget, alpha=0.0):
+        """Hiệu ứng hiện dần"""
+        alpha += 0.1
+        if alpha >= 1:
+            widget.attributes("-alpha", 1.0)
+            return
+        widget.attributes("-alpha", alpha)
+        self.after(20, lambda: self.fade_in(widget, alpha))
+
+
+    def fade_out(self, widget, alpha=1.0):
+        """Hiệu ứng biến mất dần"""
+        alpha -= 0.1
+        if alpha <= 0:
+            widget.destroy()
+            return
+        widget.attributes("-alpha", alpha)
+        self.after(20, lambda: self.fade_out(widget, alpha))
 
     def _show_page(self, page, loading_frame):
         """Ẩn loading và hiện trang thật"""
