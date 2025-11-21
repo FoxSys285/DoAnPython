@@ -1,15 +1,25 @@
+from objects.TaiKhoan import TaiKhoan, DanhSachTaiKhoan
+
 import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 from datetime import datetime
 
+import os
 
 # MÀN HÌNH ĐĂNG NHẬP
 class MH_DangNhap(tk.Frame):
     def __init__(self, parent, controller):
+
+        dulieu_path = "data/du_lieu_tk.json"
+
         self.tb_text = tk.StringVar(value = "") # Thông báo đăng nhập
 
-        du_lieu_dang_nhap = {"admin": "123456"}
+        list_user = DanhSachTaiKhoan()
+        list_user.doc_file(dulieu_path)
+
+        for i in list_user.ds:
+            print(i)
 
         super().__init__(parent, bg="#f9f4ef")
         self.controller = controller
@@ -65,8 +75,8 @@ class MH_DangNhap(tk.Frame):
             if username and not password:
                 self.tb_text.set("Bạn chưa nhập mật khẩu.")
                 return
-            if username in du_lieu_dang_nhap:
-                if du_lieu_dang_nhap[username] == password:
+            if username in list_user.ds:
+                if list_user.ds[username] == password:
                     self.tb_text.set("")
                     from .MH_BanHang import MH_BanHang
                     controller.show_frame(MH_BanHang)
