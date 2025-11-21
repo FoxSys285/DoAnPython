@@ -110,6 +110,6 @@ class MH_BanHang(tk.Frame):
         ).pack(pady=150)
 
     def logout(self):
-            from MH_DangNhap import MH_DangNhap
+            from .MH_DangNhap import MH_DangNhap
             self.controller.show_frame(MH_DangNhap)
 
