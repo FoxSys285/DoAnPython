@@ -5,7 +5,6 @@ from tkinter import *
 from PIL import Image, ImageTk
 from datetime import datetime
 
-import os
 
 # MÀN HÌNH ĐĂNG NHẬP
 class MH_DangNhap(tk.Frame):
@@ -17,9 +16,6 @@ class MH_DangNhap(tk.Frame):
 
         list_user = DanhSachTaiKhoan()
         list_user.doc_file(dulieu_path)
-
-        for i in list_user.ds:
-            print(i)
 
         super().__init__(parent, bg="#f9f4ef")
         self.controller = controller
@@ -75,18 +71,24 @@ class MH_DangNhap(tk.Frame):
             if username and not password:
                 self.tb_text.set("Bạn chưa nhập mật khẩu.")
                 return
-            if username in list_user.ds:
-                if list_user.ds[username] == password:
-                    self.tb_text.set("")
-                    from .MH_BanHang import MH_BanHang
-                    controller.show_frame(MH_BanHang)
-                    reset(username_entry, password_entry)
-                else:
-                    self.tb_text.set("Sai mật khẩu.")
+
+
+            is_successful, result_data = list_user.check_login(username, password)
+    
+            if is_successful:
+                self.tb_text.set("")
+                
+                # result_data ở đây là đối tượng TaiKhoan (bao gồm cả role)
+                controller.current_user = result_data
+                print(f"Đăng nhập thành công! Quyền: {result_data.role}") 
+                
+                # Chuyển màn hình
+                from .MH_BanHang import MH_BanHang
+                controller.show_frame(MH_BanHang)
+                reset(username_entry, password_entry)
             else:
-                self.tb_text.set("Sai tài khoản hoặc mật khẩu. Hãy kiểm tra lại.")
-
-
+                # Nếu đăng nhập thất bại, result_data là thông báo lỗi (chuỗi)
+                self.tb_text.set(result_data)
 
         # ===================== HÌNH ẢNH =====================
         path_img = "images/name_cafe.png"

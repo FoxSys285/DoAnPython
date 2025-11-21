@@ -79,15 +79,58 @@ class MH_BanHang(tk.Frame):
         self.content_container.grid_rowconfigure(0, weight=1)
         self.content_container.grid_columnconfigure(0, weight=1)
 
+        # ===================== QTV + ĐĂNG XUẤT =====================
+        qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
+        qtv_frame.place(x=1080, y=40, width=160, height=60)
+
+        # Lấy quyền người dùng
+        try:
+            # Sửa lỗi: Lấy user_role và username
+            user_role = self.controller.current_user.role
+            username = self.controller.current_user.username
+        except AttributeError:
+            # Trường hợp lỗi: Không có user_role (chưa đăng nhập hoặc controller không có thuộc tính)
+            user_role = "Employee" # Mặc định là quyền thấp nhất nếu không có thông tin
+            username = "nv001" # Tên mặc định
+
+        # Cập nhật hiển thị tên QTV
+        tk.Label(
+            qtv_frame, text=f"QTV: {username}", # Dùng biến username đã lấy được
+            fg="#716040", font=("proxima-nova", 12, "bold"),
+            bg="#f9f4ef"
+        ).place(x=0, y=0, width=160, height=30)
+
+        # Nút đăng xuất sẽ chuyển về màn hình đăng nhập
+        HoverButton(
+            qtv_frame,
+            text="Đăng xuất",
+            font=("proxima-nova", 14, "bold"),
+            bg="#8c7851", fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge",
+            command=lambda: self.logout()
+        ).place(x=0, y=30, width=160, height=30)
+        
         # ===================== CÁC NÚT MENU =====================
+
+        # 1. Định nghĩa các nút cơ bản mà tất cả đều có (Trang chủ, Bán hàng)
         buttons_info = [
-            ("TRANG CHỦ", 40, lambda: self.show_page(self.tt_frame)), # Gán command TRANG CHỦ
-            ("BÁN HÀNG", 200, lambda: self.show_page(self.bh_frame)), # Gán command BÁN HÀNG
-            ("QUẢN LÝ", 360, None),
-            ("THỐNG KÊ", 520, None),
-            ("CREDITS", 680, None)
+            ("TRANG CHỦ", 40, lambda: self.show_page(self.tt_frame)), 
+            ("BÁN HÀNG", 200, lambda: self.show_page(self.bh_frame)), 
         ]
 
+        # 2. Thêm các nút đặc quyền nếu là Manager
+        # Sửa: Chuyển role về chữ thường để kiểm tra không phân biệt chữ hoa/thường
+        if user_role.lower() == "manager":
+            # Thêm 3 chức năng đặc quyền
+            manager_buttons = [
+                ("QUẢN LÝ", 360, None), # Sẽ gán command thực tế sau
+                ("THỐNG KÊ", 520, None), # Sẽ gán command thực tế sau
+                ("CREDITS", 680, None)
+            ]
+            buttons_info.extend(manager_buttons)
+
+        # 3. Tạo các nút theo danh sách đã lọc
         for text, xpos, cmd in buttons_info:
             HoverButton(
                 full_frame, # Đặt nút menu trên full_frame (để nó luôn cố định)
@@ -100,7 +143,7 @@ class MH_BanHang(tk.Frame):
                 relief="ridge",
                 command=cmd # Gán command đã tạo
             ).place(x=xpos, y=40, width=125, height=60)
-
+            
         # ===================== NGÀY GIỜ =====================
         date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
         date_time_frame.place(x=860, y=0, width=220, height=40)
@@ -114,30 +157,7 @@ class MH_BanHang(tk.Frame):
         )
         self.label_time.pack(expand=True, anchor="nw")
 
-        update_time()
-
-        # ===================== QTV + ĐĂNG XUẤT =====================
-        qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        qtv_frame.place(x=1080, y=40, width=160, height=60)
-
-        tk.Label(
-            qtv_frame, text="QTV: nv001",
-            fg="#716040", font=("proxima-nova", 12, "bold"),
-            bg="#f9f4ef"
-        ).place(x=0, y=0, width=160, height=30)
-
-
-        # Nút đăng xuất sẽ chuyển về màn hình đăng nhập
-
-        HoverButton(
-            qtv_frame,
-            text="Đăng xuất",
-            font=("proxima-nova", 14, "bold"),
-            bg="#8c7851", fg="#fffffe",
-            cursor="hand2",
-            bd=3, relief="ridge",
-            command=lambda: self.logout()
-        ).place(x=0, y=30, width=160, height=30)
+        update_time() # Gọi hàm update_time sau khi label đã được tạo
 
         # ===================== TRẠNG THÁI BÀN =====================
         table_free = 16
@@ -214,6 +234,3 @@ class MH_BanHang(tk.Frame):
     def show_page(self, frame):
         """Hiện thị các trang bằng cách đưa frame mong muốn lên trên cùng."""
         frame.tkraise()
-
-
-        
