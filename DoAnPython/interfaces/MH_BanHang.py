@@ -79,28 +79,48 @@ class MH_BanHang(tk.Frame):
         self.content_container.grid_rowconfigure(0, weight=1)
         self.content_container.grid_columnconfigure(0, weight=1)
 
-        # ===================== QTV + ĐĂNG XUẤT =====================
+        # TẠO KHUNG CHỨA CÁC NÚT MENU ĐỂ DỄ DÀNG QUẢN LÝ
+        self.menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
+        self.menu_frame.place(x=0, y=0, width=860, height=120)
+
+        # ===================== QTV ========================= =====================
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
         qtv_frame.place(x=1080, y=40, width=160, height=60)
 
-        # Lấy quyền người dùng
-        try:
-            # Sửa lỗi: Lấy user_role và username
-            user_role = self.controller.current_user.role
-            username = self.controller.current_user.username
-        except AttributeError:
-            # Trường hợp lỗi: Không có user_role (chưa đăng nhập hoặc controller không có thuộc tính)
-            user_role = "Employee" # Mặc định là quyền thấp nhất nếu không có thông tin
-            username = "nv001" # Tên mặc định
-
-        # Cập nhật hiển thị tên QTV
-        tk.Label(
-            qtv_frame, text=f"QTV: {username}", # Dùng biến username đã lấy được
+        # Tạo Label QTV và lưu vào self.
+        self.label_qtv = tk.Label(
+            qtv_frame,
+            text="", # Để trống ban đầu, sẽ cập nhật sau
             fg="#716040", font=("proxima-nova", 12, "bold"),
             bg="#f9f4ef"
-        ).place(x=0, y=0, width=160, height=30)
-
-        # Nút đăng xuất sẽ chuyển về màn hình đăng nhập
+        )
+        self.label_qtv.place(x=0, y=0, width=160, height=30)
+        
+        # ...
+        
+        # KHỞI TẠO CÁC NÚT CHUNG (Trang chủ, Bán hàng)
+        self.buttons = []
+        buttons_info = [
+            ("TRANG CHỦ", 40, lambda: self.show_page(self.tt_frame)), 
+            ("BÁN HÀNG", 200, lambda: self.show_page(self.bh_frame)), 
+        ]
+        
+        for text, xpos, cmd in buttons_info:
+            btn = HoverButton(
+                self.menu_frame, # Dùng self.menu_frame
+                text=text,
+                font=("proxima-nova", 14, "bold"),
+                bg="#8c7851",
+                fg="#fffffe",
+                cursor="hand2",
+                bd=3,
+                relief="ridge",
+                command=cmd
+            )
+            btn.place(x=xpos, y=40, width=125, height=60)
+            self.buttons.append(btn)
+        
+        # TẠO NÚT ĐĂNG XUẤT
         HoverButton(
             qtv_frame,
             text="Đăng xuất",
@@ -110,30 +130,18 @@ class MH_BanHang(tk.Frame):
             bd=3, relief="ridge",
             command=lambda: self.logout()
         ).place(x=0, y=30, width=160, height=30)
-        
-        # ===================== CÁC NÚT MENU =====================
 
-        # 1. Định nghĩa các nút cơ bản mà tất cả đều có (Trang chủ, Bán hàng)
-        buttons_info = [
-            ("TRANG CHỦ", 40, lambda: self.show_page(self.tt_frame)), 
-            ("BÁN HÀNG", 200, lambda: self.show_page(self.bh_frame)), 
+        # TẠO VÀ LƯU CÁC NÚT ĐẶC QUYỀN
+        self.manager_buttons = []
+        manager_buttons_info = [
+            ("QUẢN LÝ", 360, None), 
+            ("THỐNG KÊ", 520, None), 
+            ("CREDITS", 680, None)
         ]
-
-        # 2. Thêm các nút đặc quyền nếu là Manager
-        # Sửa: Chuyển role về chữ thường để kiểm tra không phân biệt chữ hoa/thường
-        if user_role.lower() == "manager":
-            # Thêm 3 chức năng đặc quyền
-            manager_buttons = [
-                ("QUẢN LÝ", 360, None), # Sẽ gán command thực tế sau
-                ("THỐNG KÊ", 520, None), # Sẽ gán command thực tế sau
-                ("CREDITS", 680, None)
-            ]
-            buttons_info.extend(manager_buttons)
-
-        # 3. Tạo các nút theo danh sách đã lọc
-        for text, xpos, cmd in buttons_info:
-            HoverButton(
-                full_frame, # Đặt nút menu trên full_frame (để nó luôn cố định)
+        
+        for text, xpos, cmd in manager_buttons_info:
+            btn = HoverButton(
+                self.menu_frame, # Dùng self.menu_frame
                 text=text,
                 font=("proxima-nova", 14, "bold"),
                 bg="#8c7851",
@@ -141,8 +149,10 @@ class MH_BanHang(tk.Frame):
                 cursor="hand2",
                 bd=3,
                 relief="ridge",
-                command=cmd # Gán command đã tạo
-            ).place(x=xpos, y=40, width=125, height=60)
+                command=cmd
+            )
+            # Không place() ở đây, sẽ place() trong update_user_display()
+            self.manager_buttons.append(btn)
             
         # ===================== NGÀY GIỜ =====================
         date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
@@ -180,6 +190,8 @@ class MH_BanHang(tk.Frame):
 
         # Hiển thị Frame Trang Chủ ban đầu
         self.show_page(self.tt_frame) 
+
+    
 
     def xu_ly_click_ban(self, so_ban):
         """Hàm xử lý khi click vào Button Bàn."""
@@ -224,6 +236,35 @@ class MH_BanHang(tk.Frame):
         for i in range(SO_COT):
             frame.grid_columnconfigure(i, weight=1) 
 
+    def update_user_display(self):
+        """Cập nhật tên QTV và hiển thị/ẩn các nút đặc quyền dựa trên role."""
+        
+        current = self.controller.current_user
+        if current:
+            username = current.username
+            user_role = current.role
+        else:
+            # Trường hợp lỗi/đăng xuất (fallback)
+            username = "N/A"
+            user_role = ""
+            
+        # 1. Cập nhật tên QTV
+        self.label_qtv.config(text=f"QTV: {username}")
+        
+        # 2. Xử lý nút đặc quyền (Manager)
+        is_manager = user_role.lower() == "manager"
+        
+        # Danh sách tọa độ cho các nút đặc quyền đã lưu trong self.manager_buttons
+        manager_xpos = [360, 520, 680]
+        
+        for i, btn in enumerate(self.manager_buttons):
+            if is_manager:
+                # Hiện nút nếu là Manager
+                btn.place(x=manager_xpos[i], y=40, width=125, height=60)
+            else:
+                # Ẩn nút nếu không phải Manager
+                btn.place_forget()
+
     # Chức năng thoát
     def logout(self):
         # Đảm bảo MH_DangNhap đã được import ở file main app
@@ -234,3 +275,9 @@ class MH_BanHang(tk.Frame):
     def show_page(self, frame):
         """Hiện thị các trang bằng cách đưa frame mong muốn lên trên cùng."""
         frame.tkraise()
+
+    def on_show(self):
+        """Hàm được gọi khi màn hình được hiển thị."""
+        # Gọi hàm cập nhật ngay khi màn hình Bán Hàng chuẩn bị hiện
+        self.update_user_display()
+        self.show_page(self.tt_frame) # Mặc định hiển thị trang chủ

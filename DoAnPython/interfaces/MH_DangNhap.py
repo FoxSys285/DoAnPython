@@ -59,6 +59,7 @@ class MH_DangNhap(tk.Frame):
         # Xử lí dữ liệu đăng nhập
 
         def login():
+
             tb_frame = tk.Frame(self, bg="#f9f4ef", height=30, width=350)
             tb_label = tk.Label(tb_frame, textvariable=self.tb_text,font=("proxima-nova", 12), fg="red", bg="#f9f4ef")
             tb_label.pack(side=LEFT)
@@ -80,10 +81,12 @@ class MH_DangNhap(tk.Frame):
                 
                 # result_data ở đây là đối tượng TaiKhoan (bao gồm cả role)
                 controller.current_user = result_data
+                controller.username = username
+                controller.role = result_data.role
                 print(f"Đăng nhập thành công! Quyền: {result_data.role}") 
-                
                 # Chuyển màn hình
                 from .MH_BanHang import MH_BanHang
+                
                 controller.show_frame(MH_BanHang)
                 reset(username_entry, password_entry)
             else:
@@ -114,3 +117,4 @@ class MH_DangNhap(tk.Frame):
             font=("proxima-nova", 10, "bold"),
             command=controller.destroy
         ).place(x=680, y=460, width=90, height=25)
+

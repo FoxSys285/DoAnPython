@@ -29,6 +29,10 @@ class App(tk.Tk):
         self.geometry("1280x640")
         self.resizable(False, False)
 
+        self.current_user = None
+        self.username = ""
+        self.role = ""
+
         # Khung chứa toàn bộ màn hình
         container = tk.Frame(self)
         container.pack(fill="both", expand=True)
@@ -79,6 +83,13 @@ class App(tk.Tk):
         """Ẩn loading và hiện trang thật"""
         loading_frame.destroy()
         frame = self.frames[page]
+        
+        # === THÊM LOGIC NÀY ===
+        # Gọi phương thức on_show() của frame nếu nó tồn tại
+        if hasattr(frame, 'on_show'):
+            frame.on_show()
+        # ======================
+            
         frame.tkraise()
 
 
