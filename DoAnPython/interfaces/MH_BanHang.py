@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk, ImageEnhance # Import thêm ImageEnhance để làm mờ ảnh (tùy chọn)
 from datetime import datetime
-# from .MyButton import HoverButton # Giả định bạn đã có lớp này
+
+from objects.Ban import Ban, DanhSachBan 
+
 
 # Giả định lớp HoverButton
 class HoverButton(tk.Button):
@@ -27,6 +29,20 @@ class MH_BanHang(tk.Frame):
         
         # Biến tham chiếu ảnh nền Tcl/Tk (Cần thiết cho ảnh TT_frame)
         self.bg_image_ref = None 
+
+        # KHỞI TẠO BIẾN THAM CHIẾU NÚT BÀN NGAY TẠI ĐÂY (Vị trí mới)
+        self.button_bans = [] 
+
+        table_icon_path = "images/ly_cafe.png" # Cần đảm bảo đường dẫn này đúng
+        try:
+            img_table = Image.open(table_icon_path)
+            img_table = img_table.resize((75, 75), Image.Resampling.LANCZOS)
+            # Lưu đối tượng ImageTk.PhotoImage vào biến của lớp
+            self.table_icon_ref = ImageTk.PhotoImage(img_table)
+        except FileNotFoundError:
+            print(f"Lỗi: Không tìm thấy icon bàn tại {table_icon_path}")
+            self.table_icon_ref = None
+
 
         def update_time():
             now = datetime.now().strftime("%H:%M:%S  %d/%m/%Y")
@@ -72,7 +88,12 @@ class MH_BanHang(tk.Frame):
         self.bh_frame.grid(row = 0, column = 0, sticky="nsew") # Đặt cùng vị trí với tt_frame
         
         ban_frame = tk.Frame(self.bh_frame, bg = "white")
-        ban_frame.place(x = 10, y = 10, width = 500, height = 500) # Tăng height để đủ 16 bàn
+        ban_frame.place(x = 10, y = 10, width = 500, height = 410) # Tăng height để đủ 16 bàn
+        
+        du_lieu_ban_path = "data/du_lieu_ban.json"
+        self.ds_ban = DanhSachBan()
+        self.ds_ban.doc_file(du_lieu_ban_path)
+
         self.tao_danh_sach_ban(ban_frame)
         
         # Cấu hình container chia đều không gian cho các frame con (nếu cần)
@@ -83,7 +104,17 @@ class MH_BanHang(tk.Frame):
         self.menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
         self.menu_frame.place(x=0, y=0, width=860, height=120)
 
-        # ===================== QTV ========================= =====================
+        # Bảng chú thích
+        note_frame = tk.Frame(self.bh_frame, bg = "white")
+        note_frame.place(x = 10, y = 430, width = 500, height = 80)
+
+
+
+        info_table_frame = tk.Frame(self.bh_frame, bg = "white")
+
+        info_order_frame = tk.Frame(self.bh_frame, bg = "white")
+
+        # ============================ QTV =======================================
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
         qtv_frame.place(x=1080, y=40, width=160, height=60)
 
@@ -95,9 +126,7 @@ class MH_BanHang(tk.Frame):
             bg="#f9f4ef"
         )
         self.label_qtv.place(x=0, y=0, width=160, height=30)
-        
-        # ...
-        
+
         # KHỞI TẠO CÁC NÚT CHUNG (Trang chủ, Bán hàng)
         self.buttons = []
         buttons_info = [
@@ -170,9 +199,10 @@ class MH_BanHang(tk.Frame):
         update_time() # Gọi hàm update_time sau khi label đã được tạo
 
         # ===================== TRẠNG THÁI BÀN =====================
-        table_free = 16
-        table_reserved = 0
-        table_serve = 0
+
+        table_free = self.ds_ban.free()
+        table_reserved = self.ds_ban.serve()
+        table_serve = self.ds_ban.booked()
 
         table_free_var = StringVar(value=f"Bàn còn trống: {table_free:02d}")
         table_reserved_var = StringVar(value=f"Bàn đã đặt: {table_reserved:02d}")
@@ -187,6 +217,9 @@ class MH_BanHang(tk.Frame):
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
         tk.Label(table_frame, textvariable=table_serve_var, fg="#716040",
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
+        
+        # Gọi hàm tạo danh sách bàn sau khi self.ds_ban và self.button_bans đã sẵn sàng
+        self.tao_danh_sach_ban(ban_frame)
 
         # Hiển thị Frame Trang Chủ ban đầu
         self.show_page(self.tt_frame) 
@@ -207,29 +240,55 @@ class MH_BanHang(tk.Frame):
         
         frame.pack_propagate(False) # Ngăn không cho frame chứa bàn bị co lại
 
-        so_thu_tu_ban = 1
+        ds_ban_hien_thi = self.ds_ban.ds[:SO_HANG * SO_COT]
         
         for hang in range(SO_HANG):
             for cot in range(SO_COT):
                 
-                btn_ban = tk.Button(
-                    frame,
-                    text=f"Bàn {so_thu_tu_ban}",
-                    bg="#4CAF50", 
-                    fg="white",
-                    font=("Arial", 12, "bold"),
-                    command=lambda b=so_thu_tu_ban: self.xu_ly_click_ban(b)
-                )
+                # Tính chỉ mục của bàn trong danh sách 
+                index = hang * SO_COT + cot
                 
-                btn_ban.grid(
-                    row=hang,  
-                    column=cot,  
-                    padx=5,  
-                    pady=5,  
-                    sticky="nsew",
-                )
-                
-                so_thu_tu_ban += 1
+                if index < len(ds_ban_hien_thi):
+                    ban = ds_ban_hien_thi[index]
+                    
+                    # 1. Định nghĩa màu nền dựa trên trạng thái
+                    trang_thai_mau = {
+                        "Free": "#4CAF50",    # Xanh lá cây
+                        "Serve": "#FFC107",   # Vàng (Đang phục vụ)
+                        "Booked": "#F44336",  # Đỏ (Đã đặt)
+                    }.get(ban.trang_thai, "#9E9E9E")
+
+                    btn_ban = tk.Button(
+                        frame,
+                        text=f"{ban.ten_ban}", # Hiển thị tên bàn và trạng thái
+                        
+                        image = self.table_icon_ref,
+                        compound = "top",
+
+                        bg=trang_thai_mau, 
+                        fg="white",
+                        font=("Arial", 10, "bold"),
+                        
+                        padx = 5, 
+
+                        # Truyền chính đối tượng 'ban' vào command
+                        command=lambda b_obj=ban: self.xu_ly_click_ban(b_obj)
+                    )
+                    
+                    btn_ban.grid(
+                        row=hang,  
+                        column=cot,  
+                        padx=5,  
+                        pady=5,  
+                        sticky="nsew",
+                    )
+                    btn_ban.image = self.table_icon_ref
+                    # Lưu tham chiếu nút
+                    self.button_bans.append(btn_ban) 
+                else:
+                    # Tạo ô trống hoặc nút bị vô hiệu hóa nếu ít hơn 16 bàn
+                    empty_label = tk.Label(frame, text="", bg="lightgray")
+                    empty_label.grid(row=hang, column=cot, padx=5, pady=5, sticky="nsew")
         
         for i in range(SO_HANG):
             frame.grid_rowconfigure(i, weight=1) 
@@ -281,3 +340,4 @@ class MH_BanHang(tk.Frame):
         # Gọi hàm cập nhật ngay khi màn hình Bán Hàng chuẩn bị hiện
         self.update_user_display()
         self.show_page(self.tt_frame) # Mặc định hiển thị trang chủ
+

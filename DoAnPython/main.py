@@ -2,10 +2,6 @@ from interfaces.MH_DangNhap import MH_DangNhap
 from interfaces.MH_BanHang import MH_BanHang
 from interfaces.MH_Loading import MH_Loading
 
-class TaiKhoan:
-	def __init__(self, username, password):
-		self.username = username
-		self.password = password
 
 	
 # Thư viện giao diện
@@ -45,7 +41,7 @@ class App(tk.Tk):
             self.frames[F] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame(MH_DangNhap)
+        self.show_frame(MH_BanHang)
 
     def show_frame(self, page):
         """Hiển thị màn hình với hiệu ứng loading đơn giản 1 giây"""

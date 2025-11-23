@@ -1,5 +1,130 @@
 [
-	{
-		
-	}
+    {
+        "ma_ban": "01",
+        "ten_ban": "Bàn 1",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "02",
+        "ten_ban": "Bàn 2",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "03",
+        "ten_ban": "Bàn 3",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "04",
+        "ten_ban": "Bàn 4",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "05",
+        "ten_ban": "Bàn 5",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "06",
+        "ten_ban": "Bàn 6",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "07",
+        "ten_ban": "Bàn 7",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "08",
+        "ten_ban": "Bàn 8",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "09",
+        "ten_ban": "Bàn 9",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "10",
+        "ten_ban": "Bàn 10",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "11",
+        "ten_ban": "Bàn 11",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "12",
+        "ten_ban": "Bàn 12",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "13",
+        "ten_ban": "Bàn 13",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "14",
+        "ten_ban": "Bàn 14",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "15",
+        "ten_ban": "Bàn 15",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    },
+    {
+        "ma_ban": "16",
+        "ten_ban": "Bàn 16",
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "ds_mon": [],
+        "giam_gia": 0
+    }
 ]
