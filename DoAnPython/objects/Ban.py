@@ -32,6 +32,8 @@ class Ban:
             tong += mon.don_gia * mon.so_luong
         return tong - self.giam_gia
 
+    def __str__(self):
+        return f"{self.ma_ban}\t{self.ten_ban}\t{self.trang_thai}\t{self.thoi_gian}\t{self.ds_mon}\t{self.giam_gia}"
 
 class DanhSachBan:
     def __init__(self):
@@ -81,3 +83,9 @@ class DanhSachBan:
             if i.trang_thai == "Booked":
                 cnt += 1
         return cnt
+
+    def tim_ban(self, ma_ban):
+        for ban in self.ds:
+            if ban.ma_ban == ma_ban:
+                return ban
+        return None
