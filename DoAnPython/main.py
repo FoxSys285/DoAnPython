@@ -41,7 +41,7 @@ class App(tk.Tk):
             self.frames[F] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame(MH_BanHang)
+        self.show_frame(MH_DangNhap)
 
     def show_frame(self, page):
         """Hiển thị màn hình với hiệu ứng loading đơn giản 1 giây"""

@@ -87,8 +87,8 @@ class MH_BanHang(tk.Frame):
         self.bh_frame = tk.Frame(self.content_container, bg="#eaddcf")
         self.bh_frame.grid(row = 0, column = 0, sticky="nsew") # Đặt cùng vị trí với tt_frame
         
-        ban_frame = tk.Frame(self.bh_frame, bg = "white")
-        ban_frame.place(x = 10, y = 10, width = 500, height = 410) # Tăng height để đủ 16 bàn
+        ban_frame = tk.Frame(self.bh_frame, bg = "#f9f4ef")
+        ban_frame.place(x = 10, y = 10, width = 500, height = 420) # Tăng height để đủ 16 bàn
         
         du_lieu_ban_path = "data/du_lieu_ban.json"
         self.ds_ban = DanhSachBan()
@@ -105,14 +105,38 @@ class MH_BanHang(tk.Frame):
         self.menu_frame.place(x=0, y=0, width=860, height=120)
 
         # Bảng chú thích
-        note_frame = tk.Frame(self.bh_frame, bg = "white")
-        note_frame.place(x = 10, y = 430, width = 500, height = 80)
+        note_frame = tk.Frame(self.bh_frame, bg = "#eaddcf")
+        note_frame.place(x = 10, y = 440, width = 500, height = 80)
 
+        # "Free": "#4CAF50",    # Xanh lá cây
+        # "Serve": "#FFC107",   # Vàng (Đang phục vụ)
+        # "Booked": "#F44336",  # Đỏ (Đã đặt)
 
+        note_color_free = tk.Label(note_frame, bg = "#4CAF50", width = 10, height = 1)
+        note_color_free.place(x = 10, y = 10)
 
+        note_color_serve = tk.Label(note_frame, bg = "#FFC107", width = 10, height = 1)
+        note_color_serve.place(x = 10, y = 45)
+
+        note_color_booked = tk.Label(note_frame, bg = "#F44336", width = 10, height = 1)
+        note_color_booked.place(x = 250, y = 10)
+        #################################################################################
+        note_free_label = tk.Label(note_frame, text = "Bàn còn trống", fg="black", bg = "#eaddcf", font=("proxima-nova", 10, "bold"))
+        note_free_label.place(x = 100, y = 10)
+
+        note_serve_label = tk.Label(note_frame, text = "Bàn đang phục vụ", fg="black", bg = "#eaddcf", font=("proxima-nova", 10, "bold"))
+        note_serve_label.place(x = 100, y = 45)
+
+        note_booked_label = tk.Label(note_frame, text = "Bàn đã đặt", fg="black", bg = "#eaddcf", font=("proxima-nova", 10, "bold"))
+        note_booked_label.place(x = 340, y = 10)
+        #################################################################################
         info_table_frame = tk.Frame(self.bh_frame, bg = "white")
+        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
+
 
         info_order_frame = tk.Frame(self.bh_frame, bg = "white")
+        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
+
 
         # ============================ QTV =======================================
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
@@ -340,4 +364,3 @@ class MH_BanHang(tk.Frame):
         # Gọi hàm cập nhật ngay khi màn hình Bán Hàng chuẩn bị hiện
         self.update_user_display()
         self.show_page(self.tt_frame) # Mặc định hiển thị trang chủ
-
