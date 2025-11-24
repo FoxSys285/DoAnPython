@@ -158,5 +158,13 @@
         "so_luong": 1,
         "loai": "Chai",
         "ghi_chu": ""
+    },
+    {
+        "ma_mon": "M21",
+        "ten_mon": "Sinh tố dừa",
+        "don_gia": 30000,
+        "so_luong": 1,
+        "loai": "Sinh tố",
+        "ghi_chu": ""
     }
 ]
