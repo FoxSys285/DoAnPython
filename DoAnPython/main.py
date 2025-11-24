@@ -1,9 +1,8 @@
 from interfaces.MH_DangNhap import MH_DangNhap
 from interfaces.MH_BanHang import MH_BanHang
 from interfaces.MH_Loading import MH_Loading
+from interfaces.MH_QuanLy import MH_QuanLy
 
-
-	
 # Thư viện giao diện
 from tkinter import *
 import tkinter as tk
@@ -13,8 +12,6 @@ from PIL import Image, ImageTk
 
 # Thư viện lấy ngày, giờ
 from datetime import datetime
-
-
 # ================================================================
 # APP CHÍNH
 # ================================================================
@@ -36,7 +33,7 @@ class App(tk.Tk):
         self.frames = {}
 
         # Tạo tất cả màn hình
-        for F in (MH_DangNhap, MH_BanHang):
+        for F in (MH_DangNhap, MH_BanHang, MH_QuanLy):
             frame = F(parent=container, controller=self)
             self.frames[F] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
@@ -54,7 +51,7 @@ class App(tk.Tk):
         text.place(relx=0.5, rely=0.5, anchor="center")
 
         # Sau 1 giây chuyển sang trang thật
-        self.after(1000, lambda: self._show_page(page, loading))
+        self.after(800, lambda: self._show_page(page, loading))
 
     def fade_in(self, widget, alpha=0.0):
         """Hiệu ứng hiện dần"""
@@ -87,8 +84,6 @@ class App(tk.Tk):
         # ======================
             
         frame.tkraise()
-
-
 
 # ================================================================
 # CHẠY APP
