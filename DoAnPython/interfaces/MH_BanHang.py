@@ -130,13 +130,6 @@ class MH_BanHang(tk.Frame):
         note_booked_label = tk.Label(note_frame, text = "Bàn đã đặt", fg="black", bg = "#eaddcf", font=("proxima-nova", 10, "bold"))
         note_booked_label.place(x = 340, y = 10)
         #################################################################################
-
-        info_table_frame = tk.Frame(self.bh_frame, bg = "white")
-        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
-        info_order_frame = tk.Frame(self.bh_frame, bg = "white")
-        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
-
-
         # ============================ QTV =======================================
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
         qtv_frame.place(x=1080, y=40, width=160, height=60)
@@ -249,11 +242,27 @@ class MH_BanHang(tk.Frame):
 
     
 
-    def xu_ly_click_ban(self, so_ban):
+    #============================ CHỨC NĂNG CHÍNH ==========================#
+    def xu_ly_click_ban(self, ban):
         """Hàm xử lý khi click vào Button Bàn."""
-        print(f"Bàn số {so_ban} đã được chọn.")
-        # CHỨC NĂNG Ở ĐÂY: Mở màn hình gọi món hoặc hiển thị thông tin bàn
-        pass
+        print(f"{ban} đã được chọn.")
+        
+        #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
+        info_table_frame = tk.Frame(self.bh_frame, bg = "#f9f4ef")
+        info_order_frame = tk.Frame(self.bh_frame, bg = "white")   
+        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
+        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
+        #======================================================#
+        img_logo = Image.open("images/logo.png").resize((150,100), Image.Resampling.LANCZOS) 
+        photo_logo = ImageTk.PhotoImage(img_logo)
+        photo_label = tk.Label(info_table_frame, bd = 0, image = photo_logo)
+        photo_label.place(x = 30, y = 30)
+        photo_label.image = photo_logo
+
+        ten_ban_label = tk.Label(info_table_frame, text = "Bàn 1",font=("proxima-nova", 24, "bold"), bg="#f9f4ef")
+        ten_ban_label.place(x = 220, y = 30)
+        #======================================================#
+        # self.ds_ban
 
     def tao_danh_sach_ban(self, frame):
         """Tạo lưới 16 bàn (Button) và đặt vào frame."""

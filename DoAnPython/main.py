@@ -12,6 +12,7 @@ from PIL import Image, ImageTk
 
 # Thư viện lấy ngày, giờ
 from datetime import datetime
+
 # ================================================================
 # APP CHÍNH
 # ================================================================
@@ -25,6 +26,8 @@ class App(tk.Tk):
         self.current_user = None
         self.username = ""
         self.role = ""
+
+        self.iconbitmap("images/icon.ico")
 
         # Khung chứa toàn bộ màn hình
         container = tk.Frame(self)
