@@ -29,9 +29,9 @@ class MH_QuanLy(tk.Frame):
 
         # Nút chuyển trang
         menu_buttons = [
-            ("TRANG CHỦ", lambda: self.controller.show_frame(self._get_class("MH_BanHang"))),
-            ("BÁN HÀNG", lambda: self.controller.show_frame(self._get_class("MH_BanHang"))),
-            ("QUẢN LÝ", lambda: None),
+            ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
+            ("BÁN HÀNG", lambda: self.controller.show_frame("MH_BanHang")),
+            ("QUẢN LÝ", lambda: self.controller.show_frame("MH_QuanLy")),
             ("THỐNG KÊ", lambda: None),
             ("CREDITS", lambda: None),
         ]
@@ -75,7 +75,7 @@ class MH_QuanLy(tk.Frame):
             font=("proxima-nova", 10, "bold"),
             bg="#8c7851", fg="#fffffe",
             cursor="hand2", bd=2, relief="ridge",
-            command=lambda: self.controller.show_frame(self._get_class("MH_DangNhap"))
+            command=lambda: self.controller.show_frame("MH_DangNhap")
         ).place(x=0, y=40, width=180, height=25)
 
         # Cập nhật thời gian liên tục
@@ -186,14 +186,6 @@ class MH_QuanLy(tk.Frame):
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_mon_moi
         ).place(x=100, y=170, width=120, height=30)
-
-
-    def _get_class(self, name):
-        # Trợ giúp: lấy class frame từ controller.frames theo tên class
-        for cls, frame in self.controller.frames.items():
-            if cls.__name__ == name:
-                return cls
-        return None
 
     def on_show(self):
         current = self.controller.current_user

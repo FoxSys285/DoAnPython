@@ -73,15 +73,6 @@ class MH_BanHang(tk.Frame):
             self.bg_image_ref = None
         except NameError: # Xử lý nếu ImageTk chưa được định nghĩa (chưa import Pillow)
             self.bg_image_ref = None
-            
-        self.tt_frame = tk.Frame(self.content_container, bg = "white")
-        self.tt_frame.grid(row = 0, column = 0, sticky="nsew")
-
-        image_label = tk.Label(self.tt_frame, image=self.bg_image_ref)
-        image_label.pack(side="top", anchor="center")
-        # Giữ tham chiếu ảnh nền cho Label (QUAN TRỌNG)
-        image_label.image = self.bg_image_ref 
-
 
         # ===================== KHU VỰC BÁN HÀNG (bh_frame) =====================
         self.bh_frame = tk.Frame(self.content_container, bg="#eaddcf")
@@ -130,6 +121,7 @@ class MH_BanHang(tk.Frame):
         note_booked_label = tk.Label(note_frame, text = "Bàn đã đặt", fg="black", bg = "#eaddcf", font=("proxima-nova", 10, "bold"))
         note_booked_label.place(x = 340, y = 10)
         #################################################################################
+
         # ============================ QTV =======================================
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
         qtv_frame.place(x=1080, y=40, width=160, height=60)
@@ -146,8 +138,8 @@ class MH_BanHang(tk.Frame):
         # KHỞI TẠO CÁC NÚT CHUNG (Trang chủ, Bán hàng)
         self.buttons = []
         buttons_info = [
-            ("TRANG CHỦ", 40, lambda: self.show_page(self.tt_frame)), 
-            ("BÁN HÀNG", 200, lambda: self.show_page(self.bh_frame)), 
+            ("TRANG CHỦ", 40, lambda: self.controller.show_frame("MH_TrangChu")),
+            ("BÁN HÀNG", 200, lambda: self.controller.show_frame("MH_BanHang")),
         ]
         
         for text, xpos, cmd in buttons_info:
@@ -179,7 +171,7 @@ class MH_BanHang(tk.Frame):
         # TẠO VÀ LƯU CÁC NÚT ĐẶC QUYỀN
         self.manager_buttons = []
         manager_buttons_info = [
-            ("QUẢN LÝ", 360,  lambda: self.controller.show_frame(MH_QuanLy)), 
+            ("QUẢN LÝ", 360,  lambda: self.controller.show_frame("MH_QuanLy")), 
             ("THỐNG KÊ", 520, None), 
             ("CREDITS", 680, None)
         ]
@@ -237,14 +229,8 @@ class MH_BanHang(tk.Frame):
         # Gọi hàm tạo danh sách bàn sau khi self.ds_ban và self.button_bans đã sẵn sàng
         self.tao_danh_sach_ban(ban_frame)
 
-        # Hiển thị Frame Trang Chủ ban đầu
-        self.show_page(self.tt_frame) 
-
-    
-
-    #============================ CHỨC NĂNG CHÍNH ==========================#
+   #============================ CHỨC NĂNG CHÍNH ==========================#
     def xu_ly_click_ban(self, ban):
-        """Hàm xử lý khi click vào Button Bàn."""
         print(f"{ban} đã được chọn.")
         
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
@@ -358,9 +344,7 @@ class MH_BanHang(tk.Frame):
 
     # Chức năng thoát
     def logout(self):
-        # Đảm bảo MH_DangNhap đã được import ở file main app
-        from .MH_DangNhap import MH_DangNhap
-        self.controller.show_frame(MH_DangNhap)
+        self.controller.show_frame("MH_DangNhap")
 
     # Đổi tên từ show_frame thành show_page theo mã gốc của bạn
     def show_page(self, frame):
@@ -371,5 +355,5 @@ class MH_BanHang(tk.Frame):
         """Hàm được gọi khi màn hình được hiển thị."""
         # Gọi hàm cập nhật ngay khi màn hình Bán Hàng chuẩn bị hiện
         self.update_user_display()
-        self.show_page(self.tt_frame) # Mặc định hiển thị trang chủ
+        self.show_page(self.bh_frame) # Mặc định hiển thị trang chủ
 

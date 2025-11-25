@@ -84,10 +84,8 @@ class MH_DangNhap(tk.Frame):
                 controller.username = username
                 controller.role = result_data.role
                 print(f"Đăng nhập thành công! Quyền: {result_data.role}") 
-                # Chuyển màn hình
-                from .MH_BanHang import MH_BanHang
-                
-                controller.show_frame(MH_BanHang)
+                # Chuyển màn hình  
+                controller.show_frame("MH_TrangChu")
                 reset(username_entry, password_entry)
             else:
                 # Nếu đăng nhập thất bại, result_data là thông báo lỗi (chuỗi)

@@ -2,7 +2,7 @@ from interfaces.MH_DangNhap import MH_DangNhap
 from interfaces.MH_BanHang import MH_BanHang
 from interfaces.MH_Loading import MH_Loading
 from interfaces.MH_QuanLy import MH_QuanLy
-
+from interfaces.MH_TrangChu import MH_TrangChu
 # Thư viện giao diện
 from tkinter import *
 import tkinter as tk
@@ -36,25 +36,12 @@ class App(tk.Tk):
         self.frames = {}
 
         # Tạo tất cả màn hình
-        for F in (MH_DangNhap, MH_BanHang, MH_QuanLy):
-            frame = F(parent=container, controller=self)
-            self.frames[F] = frame
+        for F in (MH_TrangChu, MH_BanHang, MH_QuanLy, MH_DangNhap):
+            frame = F(container, self)
+            self.frames[F.__name__] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame(MH_DangNhap)
-
-    def show_frame(self, page):
-        """Hiển thị màn hình với hiệu ứng loading đơn giản 1 giây"""
-    
-        # Tạo màn hình loading tạm
-        loading = tk.Frame(self, bg="white")
-        loading.place(x=0, y=0, relwidth=1, relheight=1)
-
-        text = tk.Label(loading, text="Đang tải...", font=("Arial", 24, "bold"), bg="white")
-        text.place(relx=0.5, rely=0.5, anchor="center")
-
-        # Sau 1 giây chuyển sang trang thật
-        self.after(800, lambda: self._show_page(page, loading))
+        self.show_frame("MH_DangNhap")
 
     def fade_in(self, widget, alpha=0.0):
         """Hiệu ứng hiện dần"""
@@ -75,10 +62,25 @@ class App(tk.Tk):
         widget.attributes("-alpha", alpha)
         self.after(20, lambda: self.fade_out(widget, alpha))
 
-    def _show_page(self, page, loading_frame):
+    def show_frame(self, page):
+        """Hiển thị màn hình với hiệu ứng loading đơn giản 1 giây"""
+    
+        # Tạo màn hình loading tạm
+        loading = tk.Frame(self, bg="white")
+        loading.place(x=0, y=0, relwidth=1, relheight=1)
+
+        text = tk.Label(loading, text="Đang tải...", font=("Arial", 24, "bold"), bg="white")
+        text.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Sau 1 giây chuyển sang trang thật
+        self.after(800, lambda: self._show_page(page, loading))
+
+    
+
+    def _show_page(self, page_name, loading_frame):
         """Ẩn loading và hiện trang thật"""
         loading_frame.destroy()
-        frame = self.frames[page]
+        frame = self.frames[page_name]
         
         # === THÊM LOGIC NÀY ===
         # Gọi phương thức on_show() của frame nếu nó tồn tại
