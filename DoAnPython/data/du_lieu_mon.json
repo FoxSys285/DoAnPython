@@ -166,5 +166,13 @@
         "so_luong": 1,
         "loai": "Sinh tố",
         "ghi_chu": ""
+    },
+    {
+        "ma_mon": "M22",
+        "ten_mon": "Sinh tố dâu",
+        "don_gia": 25000,
+        "so_luong": 1,
+        "loai": "Sinh tố",
+        "ghi_chu": ""
     }
 ]

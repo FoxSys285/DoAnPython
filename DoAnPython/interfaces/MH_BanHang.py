@@ -5,39 +5,22 @@ from datetime import datetime
 
 from objects.Ban import Ban, DanhSachBan 
 from .MH_QuanLy import MH_QuanLy
-
-# Giả định lớp HoverButton
-class HoverButton(tk.Button):
-    def __init__(self, master, **kw):
-        tk.Button.__init__(self, master=master, **kw)
-        self.default_bg = kw.get('bg', self['bg'])
-        self.bind("<Enter>", self.on_enter)
-        self.bind("<Leave>", self.on_leave)
-
-    def on_enter(self, e):
-        self['bg'] = '#a99c80' # Màu hover
-    
-    def on_leave(self, e):
-        self['bg'] = self.default_bg
+from components.HoverButton import HoverButton
 
 # MÀN HÌNH BÁN HÀNG
 
 class MH_BanHang(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent, bg="#f9f4ef")
-        self.controller = controller
-        
-        # Biến tham chiếu ảnh nền Tcl/Tk (Cần thiết cho ảnh TT_frame)
-        self.bg_image_ref = None 
 
-        # KHỞI TẠO BIẾN THAM CHIẾU NÚT BÀN NGAY TẠI ĐÂY (Vị trí mới)
+        self.controller = controller
+        self.bg_image_ref = None 
         self.button_bans = [] 
 
-        table_icon_path = "images/ly_cafe.png" # Cần đảm bảo đường dẫn này đúng
+        table_icon_path = "images/ly_cafe.png"
         try:
             img_table = Image.open(table_icon_path)
             img_table = img_table.resize((75, 75), Image.Resampling.LANCZOS)
-            # Lưu đối tượng ImageTk.PhotoImage vào biến của lớp
             self.table_icon_ref = ImageTk.PhotoImage(img_table)
         except FileNotFoundError:
             print(f"Lỗi: Không tìm thấy icon bàn tại {table_icon_path}")
@@ -54,19 +37,15 @@ class MH_BanHang(tk.Frame):
         full_frame.place(x=0, y=0, width=1280, height=640)
         
         # ===================== KHU VỰC CHỨA CÁC FRAME CON =====================
-        # Khu vực này sẽ chứa tt_frame và bh_frame (chồng lên nhau)
         self.content_container = tk.Frame(full_frame, bg="#f9f4ef")
         self.content_container.place(x=0, y=120, width=1280, height=520)
 
 
         # ===================== TRANG CHỦ (tt_frame) ============================
-        # Tải ảnh nền
-        bg_path = "images/anh_nen.png" # Cần đảm bảo đường dẫn này đúng
+        bg_path = "images/anh_nen.png"
         try:
             img_bg = Image.open(bg_path)
-            # Giảm kích thước và làm ảnh nền hơi mờ đi (Tùy chọn)
             img_bg = img_bg.resize((1280, 520), Image.Resampling.LANCZOS)
-            # TẠO ĐỐI TƯỢNG PHOTOIMAGE VÀ LƯU VÀO THAM CHIẾU CỦA CLASS
             self.bg_image_ref = ImageTk.PhotoImage(img_bg)
         except FileNotFoundError:
             print(f"Lỗi: Không tìm thấy file ảnh tại đường dẫn {bg_path}")
@@ -76,10 +55,10 @@ class MH_BanHang(tk.Frame):
 
         # ===================== KHU VỰC BÁN HÀNG (bh_frame) =====================
         self.bh_frame = tk.Frame(self.content_container, bg="#eaddcf")
-        self.bh_frame.grid(row = 0, column = 0, sticky="nsew") # Đặt cùng vị trí với tt_frame
+        self.bh_frame.grid(row = 0, column = 0, sticky="nsew")
         
-        ban_frame = tk.Frame(self.bh_frame, bg = "#f9f4ef")
-        ban_frame.place(x = 10, y = 10, width = 500, height = 420) # Tăng height để đủ 16 bàn
+        ban_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
+        ban_frame.place(x = 10, y = 10, width = 500, height = 420)
         
         du_lieu_ban_path = "data/du_lieu_ban.json"
         self.ds_ban = DanhSachBan()
@@ -87,7 +66,6 @@ class MH_BanHang(tk.Frame):
 
         self.tao_danh_sach_ban(ban_frame)
         
-        # Cấu hình container chia đều không gian cho các frame con (nếu cần)
         self.content_container.grid_rowconfigure(0, weight=1)
         self.content_container.grid_columnconfigure(0, weight=1)
 
@@ -98,10 +76,6 @@ class MH_BanHang(tk.Frame):
         # Bảng chú thích
         note_frame = tk.Frame(self.bh_frame, bg = "#eaddcf")
         note_frame.place(x = 10, y = 440, width = 500, height = 80)
-
-        # "Free": "#4CAF50",    # Xanh lá cây
-        # "Serve": "#FFC107",   # Vàng (Đang phục vụ)
-        # "Booked": "#F44336",  # Đỏ (Đã đặt)
 
         note_color_free = tk.Label(note_frame, bg = "#4CAF50", width = 10, height = 1)
         note_color_free.place(x = 10, y = 10)
@@ -129,7 +103,7 @@ class MH_BanHang(tk.Frame):
         # Tạo Label QTV và lưu vào self.
         self.label_qtv = tk.Label(
             qtv_frame,
-            text="", # Để trống ban đầu, sẽ cập nhật sau
+            text="",
             fg="#716040", font=("proxima-nova", 12, "bold"),
             bg="#f9f4ef"
         )
@@ -144,7 +118,7 @@ class MH_BanHang(tk.Frame):
         
         for text, xpos, cmd in buttons_info:
             btn = HoverButton(
-                self.menu_frame, # Dùng self.menu_frame
+                self.menu_frame,
                 text=text,
                 font=("proxima-nova", 14, "bold"),
                 bg="#8c7851",
@@ -178,7 +152,7 @@ class MH_BanHang(tk.Frame):
         
         for text, xpos, cmd in manager_buttons_info:
             btn = HoverButton(
-                self.menu_frame, # Dùng self.menu_frame
+                self.menu_frame,
                 text=text,
                 font=("proxima-nova", 14, "bold"),
                 bg="#8c7851",
@@ -188,14 +162,13 @@ class MH_BanHang(tk.Frame):
                 relief="ridge",
                 command=cmd
             )
-            # Không place() ở đây, sẽ place() trong update_user_display()
+
             self.manager_buttons.append(btn)
             
         # ===================== NGÀY GIỜ =====================
         date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
         date_time_frame.place(x=860, y=0, width=220, height=40)
 
-        # KHÔNG DÙNG global, GÁN VÀO self.
         self.label_time = tk.Label(
             date_time_frame,
             fg="#00214d",
@@ -204,7 +177,7 @@ class MH_BanHang(tk.Frame):
         )
         self.label_time.pack(expand=True, anchor="nw")
 
-        update_time() # Gọi hàm update_time sau khi label đã được tạo
+        update_time() 
 
         # ===================== TRẠNG THÁI BÀN =====================
 
@@ -226,7 +199,6 @@ class MH_BanHang(tk.Frame):
         tk.Label(table_frame, textvariable=table_serve_var, fg="#716040",
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
         
-        # Gọi hàm tạo danh sách bàn sau khi self.ds_ban và self.button_bans đã sẵn sàng
         self.tao_danh_sach_ban(ban_frame)
 
    #============================ CHỨC NĂNG CHÍNH ==========================#
@@ -234,21 +206,74 @@ class MH_BanHang(tk.Frame):
         print(f"{ban} đã được chọn.")
         
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
-        info_table_frame = tk.Frame(self.bh_frame, bg = "#f9f4ef")
-        info_order_frame = tk.Frame(self.bh_frame, bg = "white")   
+        info_table_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
         info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
+        
+        info_order_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")   
         info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
+
+
+        img_menu = Image.open("images/menu.png").resize((400, 500), Image.Resampling.LANCZOS)
+        photo_menu = ImageTk.PhotoImage(img_menu)
+        photo_menu_label = tk.Label(info_order_frame, bd = 0, image = photo_menu)
+        photo_menu_label.place(x = 0, y = 0)
+        photo_menu_label.image = photo_menu
+
         #======================================================#
         img_logo = Image.open("images/logo.png").resize((150,100), Image.Resampling.LANCZOS) 
         photo_logo = ImageTk.PhotoImage(img_logo)
-        photo_label = tk.Label(info_table_frame, bd = 0, image = photo_logo)
-        photo_label.place(x = 30, y = 30)
-        photo_label.image = photo_logo
+        photo_logo_label = tk.Label(info_table_frame, bd = 0, image = photo_logo)
+        photo_logo_label.place(x = 30, y = 30)
+        photo_logo_label.image = photo_logo
 
-        ten_ban_label = tk.Label(info_table_frame, text = "Bàn 1",font=("proxima-nova", 24, "bold"), bg="#f9f4ef")
+        ten_ban_label = tk.Label(info_table_frame, text = "Bàn 1",font=("proxima-nova", 24, "bold"), bg="#FEF9E6")
         ten_ban_label.place(x = 220, y = 30)
+
+        now = datetime.now().strftime("%H:%M:%S  %d/%m/%Y")
+        gio_den_var = StringVar(value=f"Giờ đến: {now}")
+        gio_den_label = tk.Label(info_table_frame, textvariable = gio_den_var, font=("proxima-nova", 12, "bold"), bg="#FEF9E6")
+        gio_den_label.place(x = 30, y = 150)
+
+        status = "Còn trống"
+        if ban.trang_thai == "Serve":
+            status = "Đang phục vụ"
+        elif ban.trang_thai == "Booked":
+            status = "Đã đặt trước"
+
+        status_var = StringVar(value=f"{status}")
+
+        trang_thai_bh_label = tk.Label(info_table_frame, text = "Trạng thái:", font=("proxima-nova", 12, "bold"), fg = "#880015", bg="#FEF9E6")
+        trang_thai_bh_label.place(x = 30, y = 180)
+
+        status_label = tk.Label(info_table_frame, textvariable = status_var, font=("proxima-nova", 11, "bold"), bg="#FEF9E6")
+        status_label.place(x = 120, y = 180)
+
+        cross_bar_label = tk.Label(info_table_frame, width = 40, bg = "black")
+        cross_bar_label.place(x = 30, y = 210, height = 1)
+
+        dat_ban_button = tk.Button(info_table_frame, 
+            text = "Đặt bàn",
+            width = 11, 
+            height = 2,
+            font=("proxima-nova", 12, "bold"), 
+            bg="#8c7851", 
+            fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge")
+        dat_ban_button.place(x = 35, y = 230)
+
+        goi_mon_button = tk.Button(info_table_frame, 
+            text = "Gọi món",
+            width = 11, 
+            height = 2,
+            font=("proxima-nova", 12, "bold"), 
+            bg="#8c7851", 
+            fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge")
+        goi_mon_button.place(x = 190, y = 230)
+
         #======================================================#
-        # self.ds_ban
 
     def tao_danh_sach_ban(self, frame):
         """Tạo lưới 16 bàn (Button) và đặt vào frame."""
@@ -268,8 +293,7 @@ class MH_BanHang(tk.Frame):
                 
                 if index < len(ds_ban_hien_thi):
                     ban = ds_ban_hien_thi[index]
-                    
-                    # 1. Định nghĩa màu nền dựa trên trạng thái
+
                     trang_thai_mau = {
                         "Free": "#4CAF50",    # Xanh lá cây
                         "Serve": "#FFC107",   # Vàng (Đang phục vụ)
@@ -278,7 +302,7 @@ class MH_BanHang(tk.Frame):
 
                     btn_ban = tk.Button(
                         frame,
-                        text=f"{ban.ten_ban}", # Hiển thị tên bàn và trạng thái
+                        text=f"{ban.ten_ban}",
                         
                         image = self.table_icon_ref,
                         compound = "top",
@@ -289,7 +313,6 @@ class MH_BanHang(tk.Frame):
                         
                         padx = 5, 
 
-                        # Truyền chính đối tượng 'ban' vào command
                         command=lambda b_obj=ban: self.xu_ly_click_ban(b_obj)
                     )
                     
@@ -305,7 +328,7 @@ class MH_BanHang(tk.Frame):
                     self.button_bans.append(btn_ban) 
                 else:
                     # Tạo ô trống hoặc nút bị vô hiệu hóa nếu ít hơn 16 bàn
-                    empty_label = tk.Label(frame, text="", bg="lightgray")
+                    empty_label = tk.Label(frame, text="", bg="#FEF9E6")
                     empty_label.grid(row=hang, column=cot, padx=5, pady=5, sticky="nsew")
         
         for i in range(SO_HANG):

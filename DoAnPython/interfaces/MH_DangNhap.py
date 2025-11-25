@@ -15,37 +15,37 @@ class MH_DangNhap(tk.Frame):
         self.tb_text = tk.StringVar(value = "") # Thông báo đăng nhập
 
         list_user = DanhSachTaiKhoan()
-        list_user.doc_file(dulieu_path)
+        list_user.doc_file(dulieu_path) 
 
-        super().__init__(parent, bg="#f9f4ef")
+        super().__init__(parent, bg="#FCFAE5")
         self.controller = controller
 
-        full_frame = tk.Frame(self, bg="#f9f4ef")
+        full_frame = tk.Frame(self, bg="#FCFAE5")
         full_frame.place(x=0, y=0, relwidth=1, relheight=1)
 
         # ===================== TIÊU ĐỀ =====================
-        hien_thi = tk.Frame(self, bg="#f9f4ef")
+        hien_thi = tk.Frame(self, bg="#FCFAE5")
         hien_thi.place(x=470, y=340)
 
         tk.Label(
             hien_thi, text="Đăng nhập - Giao ca",
-            fg="#990000", bg="#f9f4ef",
+            fg="#990000", bg="#FCFAE5",
             font=("proxima-nova", 25, "bold")
         ).pack(fill="both", expand=True)
 
         # ===================== KHUNG ĐĂNG NHẬP =====================
-        dang_nhap_frame = tk.Frame(self, bg="#f9f4ef")
+        dang_nhap_frame = tk.Frame(self, bg="#FCFAE5")
         dang_nhap_frame.place(x=470, y= 400, width=300, height=60)
 
         tk.Label(dang_nhap_frame, text="Username",
-                 bg="#f9f4ef", fg="#003300",
+                 bg="#FCFAE5", fg="#003300",
                  font=("proxima-nova", 12, "bold")).place(x=0, y=0, width=100)
         username_entry = tk.Entry(dang_nhap_frame, width=30,
                                   font=("proxima-nova", 13))
         username_entry.place(x=100, y=0)
 
         tk.Label(dang_nhap_frame, text="Password",
-                 bg="#f9f4ef", fg="#003300",
+                 bg="#FCFAE5", fg="#003300",
                  font=("proxima-nova", 12, "bold")).place(x=0, y=30, width=100)
         password_entry = tk.Entry(dang_nhap_frame, width=30,
                                   font=("proxima-nova", 13), show="*")
@@ -60,8 +60,8 @@ class MH_DangNhap(tk.Frame):
 
         def login():
 
-            tb_frame = tk.Frame(self, bg="#f9f4ef", height=30, width=350)
-            tb_label = tk.Label(tb_frame, textvariable=self.tb_text,font=("proxima-nova", 12), fg="red", bg="#f9f4ef")
+            tb_frame = tk.Frame(self, bg="#FCFAE5", height=30, width=350)
+            tb_label = tk.Label(tb_frame, textvariable=self.tb_text,font=("proxima-nova", 12), fg="red", bg="#FCFAE5")
             tb_label.pack(side=LEFT)
             tb_frame.place(x=470, y=300)
             username = username_entry.get()
