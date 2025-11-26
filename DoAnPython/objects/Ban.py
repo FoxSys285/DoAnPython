@@ -32,6 +32,12 @@ class Ban:
             tong += mon.don_gia * mon.so_luong
         return tong - self.giam_gia
 
+    def check_serve(self):
+        if self.ds_mon:
+            self.trang_thai = "Serve"
+            return True
+        return False
+
     def __str__(self):
         return f"{self.ma_ban}\t{self.ten_ban}\t{self.trang_thai}\t{self.thoi_gian}\t{self.ds_mon}\t{self.giam_gia}"
 

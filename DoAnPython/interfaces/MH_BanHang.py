@@ -187,31 +187,32 @@ class MH_BanHang(tk.Frame):
         update_time() 
 
         # ===================== TRẠNG THÁI BÀN =====================
-
         table_free = self.ds_ban.free()
         table_reserved = self.ds_ban.serve()
         table_serve = self.ds_ban.booked()
 
-        table_free_var = StringVar(value=f"Bàn còn trống: {table_free:02d}")
-        table_reserved_var = StringVar(value=f"Bàn đã đặt: {table_reserved:02d}")
-        table_serve_var = StringVar(value=f"Bàn đang phục vụ: {table_serve:02d}")
-
+        self.table_free_var = StringVar()
+        self.table_reserved_var = StringVar()
+        self.table_serve_var = StringVar()
+        
         table_frame = tk.Frame(full_frame, bg="#f9f4ef")
         table_frame.place(x=860, y=40, width=220, height=60)
 
-        tk.Label(table_frame, textvariable=table_free_var, fg="#716040",
+        tk.Label(table_frame, textvariable=self.table_free_var, fg="#716040",
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
-        tk.Label(table_frame, textvariable=table_reserved_var, fg="#716040",
+        tk.Label(table_frame, textvariable=self.table_reserved_var, fg="#716040",
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
-        tk.Label(table_frame, textvariable=table_serve_var, fg="#716040",
+        tk.Label(table_frame, textvariable=self.table_serve_var, fg="#716040",
                  font=("proxima-nova", 10, "bold"), bg="#f9f4ef").pack(anchor="w")
         
-        self.tao_danh_sach_ban(ban_frame)
-
+        self.cap_nhat_thong_ke_ban()
    #============================ CHỨC NĂNG CHÍNH ==========================#
     def xu_ly_click_ban(self, ban):
         print(f"{ban} đã được chọn.")
         
+        now = "..."
+        gio_den_hien_thi = f"Giờ đến: {now}"
+
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
         info_table_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
         info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
@@ -235,11 +236,19 @@ class MH_BanHang(tk.Frame):
         photo_logo_label.place(x = 30, y = 30)
         photo_logo_label.image = photo_logo
 
-        ten_ban_label = tk.Label(info_table_frame, text = "Bàn 1",font=("proxima-nova", 24, "bold"), bg="#FEF9E6")
+        ten_ban_var = StringVar(value = f"{ban.ten_ban}")
+
+        ten_ban_label = tk.Label(info_table_frame, textvariable = ten_ban_var,font=("proxima-nova", 24, "bold"), bg="#FEF9E6")
         ten_ban_label.place(x = 220, y = 30)
 
-        now = datetime.now().strftime("%H:%M:%S  %d/%m/%Y")
-        gio_den_var = StringVar(value=f"Giờ đến: {now}")
+        if ban.trang_thai != "Free":
+            if ban.thoi_gian is None:
+                ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
+            gio_den_hien_thi = f"Giờ đến: {ban.thoi_gian}"
+        else:
+            ban.thoi_gian = None
+
+        gio_den_var = StringVar(value=gio_den_hien_thi)
         gio_den_label = tk.Label(info_table_frame, textvariable = gio_den_var, font=("proxima-nova", 12, "bold"), bg="#FEF9E6")
         gio_den_label.place(x = 30, y = 150)
 
@@ -260,16 +269,52 @@ class MH_BanHang(tk.Frame):
         cross_bar_label = tk.Label(info_table_frame, width = 40, bg = "black")
         cross_bar_label.place(x = 30, y = 210, height = 1)
 
+        dat_ban_text = "Huỷ đặt" if ban.trang_thai == "Booked" else "Đặt bàn"
+        dat_ban_var = StringVar(value = dat_ban_text)
+
+
+        def thay_doi_trang_thai():
+            if ban.trang_thai == "Free":
+                ban.trang_thai = "Booked"
+                dat_ban_var.set("Huỷ đặt")
+                status_var.set("Đã đặt trước")
+                ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
+                print("Đã đặt bàn")
+                gio_den_var.set(datetime.now().strftime("Giờ đến: %H:%M:%S %d/%m/%Y"))
+            elif ban.trang_thai == "Booked":
+                ban.trang_thai = "Free"
+                dat_ban_var.set("Đặt bàn")
+                status_var.set("Còn trống")
+                ban.thoi_gian = ""
+                print("Đã huỷ đặt")
+                gio_den_var.set("Giờ đến: ...")
+            self.cap_nhat_mau_nut_ban(ban)
+            self.ds_ban.ghi_file("data/du_lieu_ban.json")
+
+        goi_mon_frame = tk.Frame(info_order_frame, bg = "#FEF9E6")
+
+
+        def goi_mon():
+            goi_mon_frame.place(x = 0, y = 0 , width = 500, height = 500)
+            ban.trang_thai = "Serve"
+            status_var.set("Đang phục vụ")
+            gio_den_var.set(datetime.now().strftime("Giờ đến: %H:%M:%S %d/%m/%Y"))
+            self.cap_nhat_mau_nut_ban(ban)
+            self.ds_ban.ghi_file("data/du_lieu_ban.json")
+
         dat_ban_button = tk.Button(info_table_frame, 
-            text = "Đặt bàn",
+            textvariable = dat_ban_var,
             width = 11, 
             height = 2,
             font=("proxima-nova", 12, "bold"), 
             bg="#8c7851", 
             fg="#fffffe",
             cursor="hand2",
-            bd=3, relief="ridge")
+            bd=3, relief="ridge",
+            command = thay_doi_trang_thai)
         dat_ban_button.place(x = 35, y = 230)
+
+
 
         goi_mon_button = tk.Button(info_table_frame, 
             text = "Gọi món",
@@ -279,7 +324,8 @@ class MH_BanHang(tk.Frame):
             bg="#8c7851", 
             fg="#fffffe",
             cursor="hand2",
-            bd=3, relief="ridge")
+            bd=3, relief="ridge",
+            command = goi_mon)
         goi_mon_button.place(x = 190, y = 230)
 
         def raise_bh_bg():
@@ -300,24 +346,16 @@ class MH_BanHang(tk.Frame):
         #======================================================#
 
     def tao_danh_sach_ban(self, frame):
-        """Tạo lưới 16 bàn (Button) và đặt vào frame."""
-        
-        SO_COT = 4  # Số cột của lưới
-        SO_HANG = 4  # Số hàng của lưới
-        
-        frame.pack_propagate(False) # Ngăn không cho frame chứa bàn bị co lại
-
+        SO_COT = 4  
+        SO_HANG = 4  
+        frame.pack_propagate(False)
         ds_ban_hien_thi = self.ds_ban.ds[:SO_HANG * SO_COT]
-        
         for hang in range(SO_HANG):
             for cot in range(SO_COT):
-                
                 # Tính chỉ mục của bàn trong danh sách 
                 index = hang * SO_COT + cot
-                
                 if index < len(ds_ban_hien_thi):
                     ban = ds_ban_hien_thi[index]
-
                     trang_thai_mau = {
                         "Free": "#4CAF50",    # Xanh lá cây
                         "Serve": "#FFC107",   # Vàng (Đang phục vụ)
@@ -404,3 +442,27 @@ class MH_BanHang(tk.Frame):
         self.update_user_display()
         self.show_page(self.bh_frame) # Mặc định hiển thị trang chủ
 
+    def cap_nhat_mau_nut_ban(self, ban_obj):
+
+        trang_thai_mau = {
+            "Free": "#4CAF50",    # Xanh lá cây
+            "Serve": "#FFC107",   # Vàng (Đang phục vụ)
+            "Booked": "#F44336",  # Đỏ (Đã đặt)
+        }.get(ban_obj.trang_thai, "#9E9E9E")
+
+        for i, ban_hien_thi in enumerate(self.ds_ban.ds[:len(self.button_bans)]):
+            if ban_hien_thi.ten_ban == ban_obj.ten_ban:
+                btn = self.button_bans[i]
+                btn.config(bg=trang_thai_mau)
+                self.cap_nhat_thong_ke_ban()
+                break
+
+    def cap_nhat_thong_ke_ban(self):
+
+        table_free = self.ds_ban.free()
+        table_serve = self.ds_ban.serve()
+        table_booked = self.ds_ban.booked()
+
+        self.table_free_var.set(f"Bàn còn trống: {table_free:02d}")
+        self.table_reserved_var.set(f"Bàn đã đặt: {table_booked:02d}")
+        self.table_serve_var.set(f"Bàn đang phục vụ: {table_serve:02d}")
