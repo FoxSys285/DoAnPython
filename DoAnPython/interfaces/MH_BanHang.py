@@ -60,6 +60,13 @@ class MH_BanHang(tk.Frame):
         ban_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
         ban_frame.place(x = 10, y = 10, width = 500, height = 420)
         
+        img_bh_bg = Image.open("images/banhang_bg.png").resize((750, 500), Image.Resampling.LANCZOS)
+        photo_bh_bg = ImageTk.PhotoImage(img_bh_bg)
+        self.photo_bh_bg_label = tk.Label(self.bh_frame, bd = 0, image = photo_bh_bg) 
+        self.photo_bh_bg_label.place(x = 520, y = 10)
+        self.photo_bh_bg_ref = photo_bh_bg
+
+
         du_lieu_ban_path = "data/du_lieu_ban.json"
         self.ds_ban = DanhSachBan()
         self.ds_ban.doc_file(du_lieu_ban_path)
@@ -212,6 +219,8 @@ class MH_BanHang(tk.Frame):
         info_order_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")   
         info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
 
+        cross_bar_frame = tk.Frame(self.bh_frame, bg="#eaddcf")
+        cross_bar_frame.place(x = 860, y = 10, width = 10, height = 500)
 
         img_menu = Image.open("images/menu.png").resize((400, 500), Image.Resampling.LANCZOS)
         photo_menu = ImageTk.PhotoImage(img_menu)
@@ -272,6 +281,21 @@ class MH_BanHang(tk.Frame):
             cursor="hand2",
             bd=3, relief="ridge")
         goi_mon_button.place(x = 190, y = 230)
+
+        def raise_bh_bg():
+            self.photo_bh_bg_label.tkraise()
+
+        quay_lai = tk.Button(info_table_frame,
+            text = "<<<",
+            width = 11, 
+            height = 1,
+            font=("proxima-nova", 12, "bold"), 
+            bg="#8c7851", 
+            fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge",
+            command = raise_bh_bg)
+        quay_lai.place(x = 120, y = 300)
 
         #======================================================#
 

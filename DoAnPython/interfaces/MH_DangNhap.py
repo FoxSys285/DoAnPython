@@ -105,6 +105,7 @@ class MH_DangNhap(tk.Frame):
             self, text="Đăng nhập",
             bg="#fffffe", fg="#e45858",
             font=("proxima-nova", 10, "bold"),
+            default='active',
             command=login
         ).place(x=570, y=460, width=90, height=25)
 
@@ -113,6 +114,7 @@ class MH_DangNhap(tk.Frame):
             self, text="Thoát",
             bg="#fffffe", fg="#e45858",
             font=("proxima-nova", 10, "bold"),
+            default='active',
             command=controller.destroy
         ).place(x=680, y=460, width=90, height=25)
 
