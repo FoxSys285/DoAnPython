@@ -212,46 +212,32 @@ class MH_BanHang(tk.Frame):
         
         now = "..."
         gio_den_hien_thi = f"Giờ đến: {now}"
-
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
         info_table_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
-        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)
-        
         info_order_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")   
-        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
-
         cross_bar_frame = tk.Frame(self.bh_frame, bg="#eaddcf")
-        cross_bar_frame.place(x = 860, y = 10, width = 10, height = 500)
 
         img_menu = Image.open("images/menu.png").resize((400, 500), Image.Resampling.LANCZOS)
         photo_menu = ImageTk.PhotoImage(img_menu)
         photo_menu_label = tk.Label(info_order_frame, bd = 0, image = photo_menu)
-        photo_menu_label.place(x = 0, y = 0)
-        photo_menu_label.image = photo_menu
 
-        #======================================================#
         img_logo = Image.open("images/logo.png").resize((150,100), Image.Resampling.LANCZOS) 
         photo_logo = ImageTk.PhotoImage(img_logo)
         photo_logo_label = tk.Label(info_table_frame, bd = 0, image = photo_logo)
-        photo_logo_label.place(x = 30, y = 30)
-        photo_logo_label.image = photo_logo
 
         ten_ban_var = StringVar(value = f"{ban.ten_ban}")
-
         ten_ban_label = tk.Label(info_table_frame, textvariable = ten_ban_var,font=("proxima-nova", 24, "bold"), bg="#FEF9E6")
-        ten_ban_label.place(x = 220, y = 30)
 
         if ban.trang_thai != "Free":
-            if ban.thoi_gian is None:
+            if ban.thoi_gian == "":
                 ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
             gio_den_hien_thi = f"Giờ đến: {ban.thoi_gian}"
         else:
-            ban.thoi_gian = None
+            ban.thoi_gian = ""
 
         gio_den_var = StringVar(value=gio_den_hien_thi)
         gio_den_label = tk.Label(info_table_frame, textvariable = gio_den_var, font=("proxima-nova", 12, "bold"), bg="#FEF9E6")
-        gio_den_label.place(x = 30, y = 150)
-
+        
         status = "Còn trống"
         if ban.trang_thai == "Serve":
             status = "Đang phục vụ"
@@ -259,20 +245,15 @@ class MH_BanHang(tk.Frame):
             status = "Đã đặt trước"
 
         status_var = StringVar(value=f"{status}")
-
         trang_thai_bh_label = tk.Label(info_table_frame, text = "Trạng thái:", font=("proxima-nova", 12, "bold"), fg = "#880015", bg="#FEF9E6")
-        trang_thai_bh_label.place(x = 30, y = 180)
-
+        
         status_label = tk.Label(info_table_frame, textvariable = status_var, font=("proxima-nova", 11, "bold"), bg="#FEF9E6")
-        status_label.place(x = 120, y = 180)
-
-        cross_bar_label = tk.Label(info_table_frame, width = 40, bg = "black")
-        cross_bar_label.place(x = 30, y = 210, height = 1)
-
+        
         dat_ban_text = "Huỷ đặt" if ban.trang_thai == "Booked" else "Đặt bàn"
         dat_ban_var = StringVar(value = dat_ban_text)
 
-
+        goi_mon_frame = tk.Frame(info_order_frame, bg = "#FEF9E6")
+        #===========================================================#
         def thay_doi_trang_thai():
             if ban.trang_thai == "Free":
                 ban.trang_thai = "Booked"
@@ -291,17 +272,33 @@ class MH_BanHang(tk.Frame):
             self.cap_nhat_mau_nut_ban(ban)
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
 
-        goi_mon_frame = tk.Frame(info_order_frame, bg = "#FEF9E6")
-
-
         def goi_mon():
             goi_mon_frame.place(x = 0, y = 0 , width = 500, height = 500)
             ban.trang_thai = "Serve"
             status_var.set("Đang phục vụ")
+            ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
+            print("Đang gọi món")
             gio_den_var.set(datetime.now().strftime("Giờ đến: %H:%M:%S %d/%m/%Y"))
             self.cap_nhat_mau_nut_ban(ban)
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
+            dat_ban_button.place_forget()
+            goi_mon_button.place_forget()
+            huy_ban.place(x = 120, y = 230)
 
+        def huy_ban():
+            ban.trang_thai = "Free"
+            status_var.set("Còn trống")
+            dat_ban_button.place(x = 35, y = 230)
+            goi_mon_button.place(x = 190, y = 230)
+            huy_ban.place_forget()
+            gio_den_var.set("Giờ đến: ...")
+            ban.thoi_gian = ""
+            self.cap_nhat_mau_nut_ban(ban)
+            self.ds_ban.ghi_file("data/du_lieu_ban.json")
+
+        def raise_bh_bg():
+            self.photo_bh_bg_label.tkraise()
+        #======================================================#
         dat_ban_button = tk.Button(info_table_frame, 
             textvariable = dat_ban_var,
             width = 11, 
@@ -312,9 +309,6 @@ class MH_BanHang(tk.Frame):
             cursor="hand2",
             bd=3, relief="ridge",
             command = thay_doi_trang_thai)
-        dat_ban_button.place(x = 35, y = 230)
-
-
 
         goi_mon_button = tk.Button(info_table_frame, 
             text = "Gọi món",
@@ -326,11 +320,7 @@ class MH_BanHang(tk.Frame):
             cursor="hand2",
             bd=3, relief="ridge",
             command = goi_mon)
-        goi_mon_button.place(x = 190, y = 230)
-
-        def raise_bh_bg():
-            self.photo_bh_bg_label.tkraise()
-
+        
         quay_lai = tk.Button(info_table_frame,
             text = "<<<",
             width = 11, 
@@ -341,10 +331,40 @@ class MH_BanHang(tk.Frame):
             cursor="hand2",
             bd=3, relief="ridge",
             command = raise_bh_bg)
-        quay_lai.place(x = 120, y = 300)
 
+        huy_ban = tk.Button(info_table_frame,
+            text = "Huỷ bàn",
+            width = 11, 
+            height = 2,
+            font=("proxima-nova", 12, "bold"), 
+            bg="#8c7851", 
+            fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge",
+            command = huy_ban)
+        #===========================================================#
+        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)        
+        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
+        cross_bar_frame.place(x = 860, y = 10, width = 10, height = 500)
+        photo_logo_label.place(x = 30, y = 30)
+        photo_logo_label.image = photo_logo
+        ten_ban_label.place(x = 220, y = 30)
+        gio_den_label.place(x = 30, y = 150)
+        trang_thai_bh_label.place(x = 30, y = 180)
+        status_label.place(x = 120, y = 180)
+        cross_bar_label = tk.Label(info_table_frame, width = 40, bg = "black")
+        cross_bar_label.place(x = 30, y = 210, height = 1)
+
+        if ban.trang_thai == "Free" or ban.trang_thai == "Booked":
+            photo_menu_label.place(x = 0, y = 0)
+            photo_menu_label.image = photo_menu
+            dat_ban_button.place(x = 35, y = 230)
+            goi_mon_button.place(x = 190, y = 230)
+            quay_lai.place(x = 120, y = 300)
+        else:
+            huy_ban.place(x = 120, y = 230)
+            quay_lai.place(x = 120, y = 300)
         #======================================================#
-
     def tao_danh_sach_ban(self, frame):
         SO_COT = 4  
         SO_HANG = 4  
