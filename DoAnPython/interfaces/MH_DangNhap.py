@@ -59,7 +59,6 @@ class MH_DangNhap(tk.Frame):
         # Xử lí dữ liệu đăng nhập
 
         def login():
-
             tb_frame = tk.Frame(self, bg="#FCFAE5", height=30, width=350)
             tb_label = tk.Label(tb_frame, textvariable=self.tb_text,font=("proxima-nova", 12), fg="red", bg="#FCFAE5")
             tb_label.pack(side=LEFT)
@@ -85,6 +84,7 @@ class MH_DangNhap(tk.Frame):
                 controller.role = result_data.role
                 print(f"Đăng nhập thành công! Quyền: {result_data.role}") 
                 # Chuyển màn hình  
+                self.current_page = "MH_TrangChu"
                 controller.show_frame("MH_TrangChu")
                 reset(username_entry, password_entry)
             else:

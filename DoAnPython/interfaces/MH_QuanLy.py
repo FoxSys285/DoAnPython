@@ -111,12 +111,10 @@ class MH_QuanLy(tk.Frame):
             ).place(x=20, y=y, width=280, height=60)
             y += 90
 
-        # Khung phải – 3 nút hành động
         right_panel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
         right_panel.place(x=940, y=20, width=320, height=520)
 
 
-        # ✅ Sau đó mới đặt các nút hành động bên dưới
         action_buttons = [
             ("Thêm", lambda: self.handle_action("add")),
             ("Sửa", lambda: self.handle_action("edit")),

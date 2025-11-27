@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from PIL import Image, ImageTk, ImageEnhance # Import thêm ImageEnhance để làm mờ ảnh (tùy chọn)
+from PIL import Image, ImageTk, ImageEnhance
 from datetime import datetime
 
 from objects.Ban import Ban, DanhSachBan 
@@ -31,6 +31,7 @@ class MH_BanHang(tk.Frame):
             now = datetime.now().strftime("%H:%M:%S  %d/%m/%Y")
             self.label_time.config(text=now)
             self.label_time.after(1000, update_time)
+
 
         # FULL FRAME
         full_frame = tk.Frame(self, bg="#f9f4ef")

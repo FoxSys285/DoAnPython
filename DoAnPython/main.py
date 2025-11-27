@@ -1,6 +1,5 @@
 from interfaces.MH_DangNhap import MH_DangNhap
 from interfaces.MH_BanHang import MH_BanHang
-from interfaces.MH_Loading import MH_Loading
 from interfaces.MH_QuanLy import MH_QuanLy
 from interfaces.MH_TrangChu import MH_TrangChu
 # Thư viện giao diện
@@ -27,6 +26,8 @@ class App(tk.Tk):
         self.username = ""
         self.role = ""
 
+        self.current_page = None
+
         self.iconbitmap("images/icon.ico")
 
         # Khung chứa toàn bộ màn hình
@@ -41,7 +42,7 @@ class App(tk.Tk):
             self.frames[F.__name__] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame("MH_BanHang")
+        self.show_frame("MH_DangNhap")
 
     def fade_in(self, widget, alpha=0.0):
         """Hiệu ứng hiện dần"""
@@ -64,19 +65,26 @@ class App(tk.Tk):
 
     def show_frame(self, page):
         """Hiển thị màn hình với hiệu ứng loading đơn giản 1 giây"""
-    
-        # Tạo màn hình loading tạm
+        
+        if page == self.current_page:
+            print(f"Trang '{page}' đã là trang hiện tại. Bỏ qua chuyển đổi.")
+            return
+
+        self.current_page = page
+
+        # # Tạo màn hình loading tạm
         loading = tk.Frame(self, bg="white")
         loading.place(x=0, y=0, relwidth=1, relheight=1)
 
-        text = tk.Label(loading, text="Đang tải...", font=("Arial", 24, "bold"), bg="white")
-        text.place(relx=0.5, rely=0.5, anchor="center")
-
-        # Sau 1 giây chuyển sang trang thật
-        self.after(800, lambda: self._show_page(page, loading))
+        
+        if page == "MH_QuanLy":
+            text = tk.Label(loading, text="Đang tải...", font=("Arial", 24, "bold"), bg="white")
+            text.place(relx=0.5, rely=0.5, anchor="center")
+            self.after(600, lambda: self._show_page(page, loading))
+        else:
+            self.after(50, lambda: self._show_page(page, loading))
 
     
-
     def _show_page(self, page_name, loading_frame):
         """Ẩn loading và hiện trang thật"""
         loading_frame.destroy()
