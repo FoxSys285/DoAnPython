@@ -132,7 +132,7 @@ class MH_QuanLy(tk.Frame):
             y += 90
 
         self.frame_nhap_nhom = tk.Frame(right_panel, bg="#fffffe", bd=2, relief="ridge")
-        self.frame_nhap_nhom.place(x=20, y=250, width=200, height=190)  # đủ chỗ cho nút Lưu
+        self.frame_nhap_nhom.place(x=20, y=30, width=280, height=280)  # đủ chỗ cho nút Lưu
         self.frame_nhap_nhom.place_forget()
 
         tk.Label(self.frame_nhap_nhom, text="Tên nhóm", font=("Arial", 10), bg="#fffffe").place(x=10, y=10)
@@ -143,7 +143,7 @@ class MH_QuanLy(tk.Frame):
             self.frame_nhap_nhom, text="Lưu", font=("Arial", 10, "bold"),
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_nhom_mon
-        ).place(x=80, y=170, width=120, height=30)
+        ).place(x=80, y=50, width=120, height=30)
 
         # Khung trung tâm – placeholder để sau hiển thị bảng
         center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
@@ -209,23 +209,17 @@ class MH_QuanLy(tk.Frame):
             self.entry_mon[field] = entry
             y += 30
 
-        tk.Button(
-            self.frame_them_mon, text="Lưu", font=("Arial", 10, "bold"),
-            bg="#4CAF50", fg="white", cursor="hand2",
-            command=self.luu_mon_moi
-        ).place(x=80, y=170, width=120, height=30)
 
     def on_show(self):
         current = self.controller.current_user
         if current:
             self.label_qtv.config(text=f"QTV: {current.username}")
 
-    # Handlers trái
     def show_quan_ly_thuc_don(self):
         self.clear_center()
+        print("Chọn: Quản lý thực đơn")
         self.trang_hien_tai = "thuc_don"
         self.load_mon()
-        self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
         self.tree_mon.pack(fill="both", expand=True)
         self.frame_thuc_don.tkraise()
 
@@ -240,7 +234,7 @@ class MH_QuanLy(tk.Frame):
                 self.xoa_mon()
         elif self.trang_hien_tai == "nhom_mon":
             if action == "add":
-                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=280)
+                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=120)
                 self.entry_nhom.delete(0, tk.END)
                 self.dang_sua_nhom = False
             elif action == "edit":
@@ -251,7 +245,7 @@ class MH_QuanLy(tk.Frame):
                 ten_cu = self.tree_nhom.item(selected[0])["values"][0]
                 self.nhom_cu = ten_cu
                 self.dang_sua_nhom = True
-                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=280)
+                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=120)
                 self.entry_nhom.delete(0, tk.END)
                 self.entry_nhom.insert(0, ten_cu)
             elif action == "delete":
@@ -305,23 +299,8 @@ class MH_QuanLy(tk.Frame):
             self.tree_mon.pack_forget()
         except:
             pass
-        try:
-            self.tree_nhom.pack_forget()
-        except:
-            pass
-
-        # Ẩn khung nhập phụ
         self.frame_them_mon.place_forget()
-        self.frame_nhap_nhom.place_forget()
-
-        # Ẩn khung chính
-        self.frame_thuc_don.place_forget()
-        self.frame_nhom_mon.place_forget()
-
-        # Reset trạng thái
         self.trang_hien_tai = None
-        self.dang_sua = False
-        self.dang_sua_nhom = False
 
     # Xóa Món
     def xoa_mon(self):
@@ -388,6 +367,8 @@ class MH_QuanLy(tk.Frame):
 
 
                 ########
+    def show_quan_ly_nhom_mon(self):
+        print("Chọn: Quản lý nhóm món")
     
     def load_nhom_mon(self):
         self.tree_nhom.delete(*self.tree_nhom.get_children())
@@ -399,8 +380,6 @@ class MH_QuanLy(tk.Frame):
         self.clear_center()
         self.trang_hien_tai = "nhom_mon"
         self.load_nhom_mon()
-        self.frame_nhom_mon.place(x=0, y=0, relwidth=1, relheight=1)
-        self.tree_nhom.pack(fill="both", expand=True)
         self.frame_nhom_mon.tkraise()
 
     def luu_nhom_mon(self):

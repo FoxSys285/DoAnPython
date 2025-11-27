@@ -6,6 +6,7 @@ from datetime import datetime
 from objects.Ban import Ban, DanhSachBan 
 from .MH_QuanLy import MH_QuanLy
 from components.HoverButton import HoverButton
+from objects.DanhSachNhomMon import DanhSachNhomMon
 
 # MÀN HÌNH BÁN HÀNG
 
@@ -59,12 +60,12 @@ class MH_BanHang(tk.Frame):
         self.bh_frame.grid(row = 0, column = 0, sticky="nsew")
         
         ban_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
-        ban_frame.place(x = 10, y = 10, width = 500, height = 420)
+        ban_frame.place(x = 10, y = 10, width = 450, height = 420)
         
-        img_bh_bg = Image.open("images/banhang_bg.png").resize((750, 500), Image.Resampling.LANCZOS)
+        img_bh_bg = Image.open("images/banhang_bg.png").resize((800, 500), Image.Resampling.LANCZOS)
         photo_bh_bg = ImageTk.PhotoImage(img_bh_bg)
         self.photo_bh_bg_label = tk.Label(self.bh_frame, bd = 0, image = photo_bh_bg) 
-        self.photo_bh_bg_label.place(x = 520, y = 10)
+        self.photo_bh_bg_label.place(x = 470, y = 10)
         self.photo_bh_bg_ref = photo_bh_bg
 
 
@@ -83,7 +84,7 @@ class MH_BanHang(tk.Frame):
 
         # Bảng chú thích
         note_frame = tk.Frame(self.bh_frame, bg = "#eaddcf")
-        note_frame.place(x = 10, y = 440, width = 500, height = 80)
+        note_frame.place(x = 10, y = 440, width = 450, height = 80)
 
         note_color_free = tk.Label(note_frame, bg = "#4CAF50", width = 10, height = 1)
         note_color_free.place(x = 10, y = 10)
@@ -209,6 +210,10 @@ class MH_BanHang(tk.Frame):
         self.cap_nhat_thong_ke_ban()
    #============================ CHỨC NĂNG CHÍNH ==========================#
     def xu_ly_click_ban(self, ban):
+
+        ds_loai = DanhSachNhomMon()
+        ds_loai.doc_file("data/du_lieu_nhom_mon.json")
+
         print(f"{ban} đã được chọn.")
         
         now = "..."
@@ -216,9 +221,16 @@ class MH_BanHang(tk.Frame):
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
         info_table_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")
         info_order_frame = tk.Frame(self.bh_frame, bg = "#FEF9E6")   
-        cross_bar_frame = tk.Frame(self.bh_frame, bg="#eaddcf")
+        
+        type_frame = tk.Frame(self.bh_frame, bg="#FEF9E6")
+        temp_frame = tk.Frame(self.bh_frame, bg="#FEF9E6")
 
-        img_menu = Image.open("images/menu.png").resize((400, 500), Image.Resampling.LANCZOS)
+
+        cross_bar_1_frame = tk.Frame(self.bh_frame, bg="#eaddcf")
+        cross_bar_2_frame = tk.Frame(self.bh_frame, bg="#eaddcf")
+
+
+        img_menu = Image.open("images/menu.png").resize((350, 500), Image.Resampling.LANCZOS)
         photo_menu = ImageTk.PhotoImage(img_menu)
         photo_menu_label = tk.Label(info_order_frame, bd = 0, image = photo_menu)
 
@@ -284,21 +296,32 @@ class MH_BanHang(tk.Frame):
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
             dat_ban_button.place_forget()
             goi_mon_button.place_forget()
-            huy_ban.place(x = 120, y = 230)
+            huy_ban_button.place(x = 120, y = 230)
+            type_frame.place(x = 820, y = 10, width = 90, height = 500)
+            temp_frame.place_forget()
 
         def huy_ban():
             ban.trang_thai = "Free"
             status_var.set("Còn trống")
             dat_ban_button.place(x = 35, y = 230)
             goi_mon_button.place(x = 190, y = 230)
-            huy_ban.place_forget()
+            huy_ban_button.place_forget()
             gio_den_var.set("Giờ đến: ...")
             ban.thoi_gian = ""
+            self.ds_ban.ghi_file("data/du_lieu_ban.json")
+            type_frame.place_forget()
             self.cap_nhat_mau_nut_ban(ban)
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
+            goi_mon_frame.place_forget()
+            photo_menu_label.place(x = 0, y = 0) 
+            photo_menu_label.image = photo_menu
+            temp_frame.place(x = 820, y = 10, width = 90, height = 500)
 
         def raise_bh_bg():
             self.photo_bh_bg_label.tkraise()
+
+        def xu_ly_click_loai_mon(loai):
+            print(f"Đã chọn loại món: {loai}")
         #======================================================#
         dat_ban_button = tk.Button(info_table_frame, 
             textvariable = dat_ban_var,
@@ -322,7 +345,7 @@ class MH_BanHang(tk.Frame):
             bd=3, relief="ridge",
             command = goi_mon)
         
-        quay_lai = tk.Button(info_table_frame,
+        quay_lai_button = tk.Button(info_table_frame,
             text = "<<<",
             width = 11, 
             height = 1,
@@ -333,7 +356,7 @@ class MH_BanHang(tk.Frame):
             bd=3, relief="ridge",
             command = raise_bh_bg)
 
-        huy_ban = tk.Button(info_table_frame,
+        huy_ban_button = tk.Button(info_table_frame,
             text = "Huỷ bàn",
             width = 11, 
             height = 2,
@@ -343,28 +366,57 @@ class MH_BanHang(tk.Frame):
             cursor="hand2",
             bd=3, relief="ridge",
             command = huy_ban)
+
         #===========================================================#
-        info_table_frame.place(x = 520, y = 10, width = 340, height = 500)        
-        info_order_frame.place(x = 870, y = 10, width = 400, height = 500)
-        cross_bar_frame.place(x = 860, y = 10, width = 10, height = 500)
+        cross_bar_1_frame.place(x = 910, y = 10 ,width = 10, height = 500)
+        cross_bar_2_frame.place(x = 810, y = 10 ,width = 10, height = 500)
+
+        info_table_frame.place(x = 470, y = 10, width = 340, height = 500)        
+        info_order_frame.place(x = 920, y = 10, width = 350, height = 500)
+
+        temp_frame.place(x = 820, y = 10, width = 90, height = 500)
+
         photo_logo_label.place(x = 30, y = 30)
         photo_logo_label.image = photo_logo
+
         ten_ban_label.place(x = 220, y = 30)
         gio_den_label.place(x = 30, y = 150)
+
         trang_thai_bh_label.place(x = 30, y = 180)
         status_label.place(x = 120, y = 180)
-        cross_bar_label = tk.Label(info_table_frame, width = 40, bg = "black")
-        cross_bar_label.place(x = 30, y = 210, height = 1)
+
+        type_label = tk.Label(info_table_frame, width = 40, bg = "black")
+        type_label.place(x = 30, y = 210, height = 1)
 
         if ban.trang_thai == "Free" or ban.trang_thai == "Booked":
             photo_menu_label.place(x = 0, y = 0)
             photo_menu_label.image = photo_menu
             dat_ban_button.place(x = 35, y = 230)
             goi_mon_button.place(x = 190, y = 230)
-            quay_lai.place(x = 120, y = 300)
+            quay_lai_button.place(x = 120, y = 300)
         else:
-            huy_ban.place(x = 120, y = 230)
-            quay_lai.place(x = 120, y = 300)
+            huy_ban_button.place(x = 120, y = 230)
+            quay_lai_button.place(x = 120, y = 300)
+
+        #======================================================#
+        y_position = 20
+        padding = 5 
+        
+        for nhom_mon in ds_loai.ds:
+            loai_button = tk.Button(type_frame, 
+                text = nhom_mon,
+                width = 10, 
+                height = 1,
+                font=("proxima-nova", 9, "bold"), 
+                bg= "#B8860B", 
+                fg= "#4B0000",
+                cursor="hand2",
+                bd=3, relief="raised",
+                command = lambda nm=nhom_mon: xu_ly_click_loai_mon(nm)) 
+            
+            loai_button.place(x = 4, y = y_position)
+            
+            y_position += 2 * 20 + padding
         #======================================================#
     def tao_danh_sach_ban(self, frame):
         SO_COT = 4  

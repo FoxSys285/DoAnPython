@@ -51,3 +51,10 @@ class DanhSachMon:
 
     def to_dict(self):
         return [m.to_dict() for m in self.ds]
+
+    def tim_mon_theo_loai(self, loai):
+        ds = []
+        for mon in self.ds:
+            if mon.loai == loai:
+                ds.append(mon)
+        return ds
