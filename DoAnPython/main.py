@@ -42,7 +42,7 @@ class App(tk.Tk):
             self.frames[F.__name__] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame("MH_BanHang")
+        self.show_frame("MH_DangNhap")
 
     def fade_in(self, widget, alpha=0.0):
         """Hiệu ứng hiện dần"""
@@ -104,3 +104,4 @@ class App(tk.Tk):
 if __name__ == "__main__":
     app = App()
     app.mainloop()
+
