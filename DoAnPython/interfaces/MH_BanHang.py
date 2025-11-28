@@ -215,7 +215,7 @@ class MH_BanHang(tk.Frame):
         ds_loai.doc_file("data/du_lieu_nhom_mon.json")
 
         print(f"{ban} đã được chọn.")
-        
+
         now = "..."
         gio_den_hien_thi = f"Giờ đến: {now}"
         #============ TẠO KHUNG THÔNG TIN BÀN VÀ CHỌN MÓN======#
@@ -241,7 +241,7 @@ class MH_BanHang(tk.Frame):
         ten_ban_var = StringVar(value = f"{ban.ten_ban}")
         ten_ban_label = tk.Label(info_table_frame, textvariable = ten_ban_var,font=("proxima-nova", 24, "bold"), bg="#FEF9E6")
 
-        if ban.trang_thai != "Free":
+        if ban.trang_thai == "Serve":
             if ban.thoi_gian == "":
                 ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
             gio_den_hien_thi = f"Giờ đến: {ban.thoi_gian}"
@@ -372,7 +372,12 @@ class MH_BanHang(tk.Frame):
         info_table_frame.place(x = 470, y = 10, width = 340, height = 500)        
         info_order_frame.place(x = 920, y = 10, width = 350, height = 500)
 
-        temp_frame.place(x = 820, y = 10, width = 90, height = 500)
+        if ban.trang_thai == "Serve":
+            temp_frame.place_forget()
+            type_frame.place(x = 820, y = 10, width = 90, height = 500)
+        else:
+            temp_frame.place(x = 820, y = 10, width = 90, height = 500)
+            type_frame.place_forget()
 
         photo_logo_label.place(x = 30, y = 30)
         photo_logo_label.image = photo_logo
@@ -397,7 +402,7 @@ class MH_BanHang(tk.Frame):
             quay_lai_button.place(x = 120, y = 300)
 
         #======================================================#
-        y_position = 20
+        y_position = 50
         padding = 5 
         
         for nhom_mon in ds_loai.ds:
