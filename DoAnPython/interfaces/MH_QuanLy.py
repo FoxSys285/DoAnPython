@@ -197,7 +197,7 @@ class MH_QuanLy(tk.Frame):
         ##################### Thêm món##################################
         self.frame_them_mon = tk.Frame(right_panel, bg="#fffffe", bd=2, relief="ridge")
         self.frame_them_mon.place(x=20, y=250, width=280, height=220)
-        self.frame_them_mon.place_forget()  # ẩn ban đầu
+        self.frame_them_mon.place_forget()
 
         fields = ["Mã món", "Tên món", "Đơn giá", "Loại", "Ghi chú"]
         self.entry_mon = {}
@@ -284,12 +284,10 @@ class MH_QuanLy(tk.Frame):
         mon_moi = Mon(ma, ten, gia, 1, loai, ghi_chu)
 
         if hasattr(self, "dang_sua") and self.dang_sua:
-            # ✅ SỬA món
             self.ds_mon.ds[self.mon_dang_sua_index] = mon_moi
             print(f"Đã cập nhật món: {ten}")
             self.dang_sua = False
         else:
-            # ✅ THÊM món
             self.ds_mon.ds.append(mon_moi)
             print(f"Đã thêm món mới: {ten}")
 

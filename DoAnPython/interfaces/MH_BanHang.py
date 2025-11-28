@@ -267,14 +267,12 @@ class MH_BanHang(tk.Frame):
 
         goi_mon_frame = tk.Frame(info_order_frame, bg = "#FEF9E6")
         #===========================================================#
-        def thay_doi_trang_thai():
+        def dat_ban():
             if ban.trang_thai == "Free":
                 ban.trang_thai = "Booked"
                 dat_ban_var.set("Huỷ đặt")
                 status_var.set("Đã đặt trước")
-                ban.thoi_gian = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
                 print("Đã đặt bàn")
-                gio_den_var.set(datetime.now().strftime("Giờ đến: %H:%M:%S %d/%m/%Y"))
             elif ban.trang_thai == "Booked":
                 ban.trang_thai = "Free"
                 dat_ban_var.set("Đặt bàn")
@@ -332,7 +330,7 @@ class MH_BanHang(tk.Frame):
             fg="#fffffe",
             cursor="hand2",
             bd=3, relief="ridge",
-            command = thay_doi_trang_thai)
+            command = dat_ban)
 
         goi_mon_button = tk.Button(info_table_frame, 
             text = "Gọi món",
