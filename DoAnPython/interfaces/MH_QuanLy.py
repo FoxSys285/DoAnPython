@@ -12,7 +12,7 @@ class MH_QuanLy(tk.Frame):
         self.tree_mon.delete(*self.tree_mon.get_children())
         for i, mon in enumerate(self.ds_mon.ds, start=1):
             self.tree_mon.insert("", "end", values=(
-                i, mon.ma_mon, mon.ten_mon, mon.don_gia, mon.loai, mon.ghi_chu
+                i, mon.ma_mon, mon.ten_mon, mon.don_gia, mon.loai, mon.dvt
             ))
         self.tree_mon.pack(fill="both", expand=True) 
     
@@ -151,7 +151,7 @@ class MH_QuanLy(tk.Frame):
         
         self.frame_thuc_don = tk.Frame(center_panel, bg="#eaddcf")
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
-        columns = ("stt", "ma_mon", "ten_mon", "don_gia", "loai", "ghi_chu")
+        columns = ("stt", "ma_mon", "ten_mon", "don_gia", "loai", "dvt")
         self.tree_mon = ttk.Treeview(self.frame_thuc_don, columns=columns, show="headings")
 
         self.frame_nhom_mon = tk.Frame(center_panel, bg="#eaddcf")
@@ -178,8 +178,8 @@ class MH_QuanLy(tk.Frame):
         self.tree_mon.heading("loai", text="Loại")
         self.tree_mon.column("loai", width=80, anchor="center")
 
-        self.tree_mon.heading("ghi_chu", text="Ghi chú")
-        self.tree_mon.column("ghi_chu", width=110, anchor="center")
+        self.tree_mon.heading("dvt", text="Đơn vị tính")
+        self.tree_mon.column("dvt", width=110, anchor="center")
           
         self.ds_mon = DanhSachMon()
         self.ds_mon.doc_file("data/du_lieu_mon.json")
@@ -199,7 +199,7 @@ class MH_QuanLy(tk.Frame):
         self.frame_them_mon.place(x=20, y=250, width=280, height=220)
         self.frame_them_mon.place_forget()
 
-        fields = ["Mã món", "Tên món", "Đơn giá", "Loại", "Ghi chú"]
+        fields = ["Mã món", "Tên món", "Đơn giá", "Loại", "Đơn vị tính"]
         self.entry_mon = {}
         y = 10
         for field in fields:
@@ -269,7 +269,7 @@ class MH_QuanLy(tk.Frame):
         ten = self.entry_mon["Tên món"].get()
         gia = self.entry_mon["Đơn giá"].get()
         loai = self.entry_mon["Loại"].get()
-        ghi_chu = self.entry_mon["Ghi chú"].get()
+        dvt = self.entry_mon["Đơn vị tính"].get()
 
         if not ma or not ten or not gia:
             print("Thiếu thông tin bắt buộc")
@@ -281,7 +281,7 @@ class MH_QuanLy(tk.Frame):
             return
 
         from objects.Mon import Mon
-        mon_moi = Mon(ma, ten, gia, 1, loai, ghi_chu)
+        mon_moi = Mon(ma, ten, gia, 1, loai, dvt)
 
         if hasattr(self, "dang_sua") and self.dang_sua:
             self.ds_mon.ds[self.mon_dang_sua_index] = mon_moi
@@ -376,8 +376,8 @@ class MH_QuanLy(tk.Frame):
             self.entry_mon["Loại"].delete(0, tk.END)
             self.entry_mon["Loại"].insert(0, mon.loai)
 
-            self.entry_mon["Ghi chú"].delete(0, tk.END)
-            self.entry_mon["Ghi chú"].insert(0, mon.ghi_chu)
+            self.entry_mon["Đơn vị tính"].delete(0, tk.END)
+            self.entry_mon["Đơn vị tính"].insert(0, mon.dvt)
 
             self.dang_sua = True  # ✅ đánh dấu đang sửa
             print(f"Đang sửa món: {mon.ten_mon}")

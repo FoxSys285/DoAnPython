@@ -1,13 +1,13 @@
 import json
 
 class Mon:
-    def __init__(self, ma_mon, ten_mon, don_gia, so_luong, loai, ghi_chu):
+    def __init__(self, ma_mon, ten_mon, don_gia, so_luong, loai, dvt):
         self.ma_mon = ma_mon
         self.ten_mon = ten_mon
         self.don_gia = don_gia
         self.so_luong = so_luong
         self.loai = loai
-        self.ghi_chu = ghi_chu
+        self.dvt = dvt
 
     def to_dict(self):
         return {
@@ -16,9 +16,11 @@ class Mon:
             "don_gia": self.don_gia,
             "so_luong": self.so_luong,
             "loai": self.loai,
-            "ghi_chu": self.ghi_chu
+            "dvt": self.dvt
         }
 
+    def __str__(self):
+        return f"{self.ma_mon} | {self.ten_mon} | {self.don_gia} | {self.so_luong} | {self.loai} | {self.dvt}"
 
 class DanhSachMon:
     def __init__(self):
@@ -35,7 +37,7 @@ class DanhSachMon:
                         m["don_gia"],
                         m["so_luong"],
                         m["loai"],
-                        m["ghi_chu"]
+                        m["dvt"]
                     )
                     for m in du_lieu
                 ]

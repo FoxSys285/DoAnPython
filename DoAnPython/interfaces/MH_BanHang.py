@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import *
+import math
 from PIL import Image, ImageTk, ImageEnhance
 from datetime import datetime
 
+from objects.Mon import Mon, DanhSachMon
 from objects.Ban import Ban, DanhSachBan 
 from .MH_QuanLy import MH_QuanLy
 from components.HoverButton import HoverButton
@@ -17,6 +19,7 @@ class MH_BanHang(tk.Frame):
         self.controller = controller
         self.bg_image_ref = None 
         self.button_bans = [] 
+        self.button_mons = []
 
         table_icon_path = "images/ly_cafe.png"
         try:
@@ -41,8 +44,6 @@ class MH_BanHang(tk.Frame):
         # ===================== KHU VỰC CHỨA CÁC FRAME CON =====================
         self.content_container = tk.Frame(full_frame, bg="#f9f4ef")
         self.content_container.place(x=0, y=120, width=1280, height=520)
-
-
         # ===================== TRANG CHỦ (tt_frame) ============================
         bg_path = "images/anh_nen.png"
         try:
@@ -209,6 +210,23 @@ class MH_BanHang(tk.Frame):
         
         self.cap_nhat_thong_ke_ban()
    #============================ CHỨC NĂNG CHÍNH ==========================#
+    def xu_ly_click_mon(self, mon):
+        print(f"Bạn đã chọn món {mon}")
+        popup = tk.Toplevel(self)
+        popup.title("Nhập số lượng")
+        popup_width = 250
+        popup_height = 150
+
+        # Lấy kích thước màn hình
+        screen_width = popup.winfo_screenwidth()
+        screen_height = popup.winfo_screenheight()
+
+        # Tính vị trí giữa màn hình
+        x = (screen_width - popup_width) // 2
+        y = (screen_height - popup_height) // 2
+
+        popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
+
     def xu_ly_click_ban(self, ban):
 
         ds_loai = DanhSachNhomMon()
@@ -266,6 +284,11 @@ class MH_BanHang(tk.Frame):
         dat_ban_var = StringVar(value = dat_ban_text)
 
         goi_mon_frame = tk.Frame(info_order_frame, bg = "#FEF9E6")
+
+        chon_mon_label = tk.Label(info_order_frame, text = "Chọn món", font=("proxima-nova", 14, "bold"), fg="#F9F4EF", bg = "#C58747")
+
+        mon_an_frame = tk.Frame(info_order_frame, bg="#FEF9E6")
+        
         #===========================================================#
         def dat_ban():
             if ban.trang_thai == "Free":
@@ -294,9 +317,11 @@ class MH_BanHang(tk.Frame):
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
             dat_ban_button.place_forget()
             goi_mon_button.place_forget()
-            huy_ban_button.place(x = 120, y = 230)
+            huy_ban_button.place(x = 10, y = 460, width = 90, height = 30)
             type_frame.place(x = 820, y = 10, width = 90, height = 500)
             temp_frame.place_forget()
+            chon_mon_label.place(x = 10, y = 10, width = 330, height = 40)
+            quay_lai_button.place(x = 240, y = 460, width = 90, height = 30)
 
         def huy_ban():
             ban.trang_thai = "Free"
@@ -314,12 +339,52 @@ class MH_BanHang(tk.Frame):
             photo_menu_label.place(x = 0, y = 0) 
             photo_menu_label.image = photo_menu
             temp_frame.place(x = 820, y = 10, width = 90, height = 500)
+            chon_mon_label.place_forget()
+            mon_an_frame.place_forget()
+            quay_lai_button.place(x = 120, y = 300, width = 100, height = 40)
 
         def raise_bh_bg():
             self.photo_bh_bg_label.tkraise()
 
         def xu_ly_click_loai_mon(loai):
-            print(f"Đã chọn loại món: {loai}")
+            ds_mon = DanhSachMon()
+            ds_mon.doc_file("data/du_lieu_mon.json")
+
+            ds_mon_theo_loai = ds_mon.tim_mon_theo_loai(loai)
+            so_luong = len(ds_mon_theo_loai)
+
+            #=========== TẠO CÁC NÚT CHỌN MÓN ============#
+            cot_mon_an = 3
+            hang_mon_an = math.ceil(so_luong / cot_mon_an)
+
+            button_mon_an_width = 100
+            button_mon_an_height = 60
+            spacing = 15
+
+            for widget in mon_an_frame.winfo_children():
+                widget.destroy()
+
+            for r in range(hang_mon_an):
+                for c in range(cot_mon_an):
+                    index = r * cot_mon_an + c
+                    if index >= so_luong:
+                        break 
+
+                    mon = ds_mon_theo_loai[index]
+                    btn_mon = tk.Button(mon_an_frame, 
+                        text=f"{mon.ten_mon}\n {mon.don_gia:,} VND".replace(",", "."),
+                        command=lambda mon_obj=mon: self.xu_ly_click_mon(mon_obj))
+
+                    btn_mon.place(
+                        x = c*(button_mon_an_width + spacing),
+                        y = r*(button_mon_an_height + spacing),
+                        width = button_mon_an_width, height = button_mon_an_height
+                    )
+                    self.button_mons.append(btn_mon) 
+            #============================================#
+            mon_an_frame.place(x = 10, y = 60, width = 330, height = 430)
+
+            
         #======================================================#
         dat_ban_button = tk.Button(info_table_frame, 
             textvariable = dat_ban_var,
@@ -372,13 +437,6 @@ class MH_BanHang(tk.Frame):
         info_table_frame.place(x = 470, y = 10, width = 340, height = 500)        
         info_order_frame.place(x = 920, y = 10, width = 350, height = 500)
 
-        if ban.trang_thai == "Serve":
-            temp_frame.place_forget()
-            type_frame.place(x = 820, y = 10, width = 90, height = 500)
-        else:
-            temp_frame.place(x = 820, y = 10, width = 90, height = 500)
-            type_frame.place_forget()
-
         photo_logo_label.place(x = 30, y = 30)
         photo_logo_label.image = photo_logo
 
@@ -396,23 +454,28 @@ class MH_BanHang(tk.Frame):
             photo_menu_label.image = photo_menu
             dat_ban_button.place(x = 35, y = 230)
             goi_mon_button.place(x = 190, y = 230)
-            quay_lai_button.place(x = 120, y = 300)
+            quay_lai_button.place(x = 120, y = 300, width = 100, height = 40)
+            temp_frame.place(x = 820, y = 10, width = 90, height = 500)
+            type_frame.place_forget()
         else:
-            huy_ban_button.place(x = 120, y = 230)
-            quay_lai_button.place(x = 120, y = 300)
+            huy_ban_button.place(x = 10, y = 460, width = 90, height = 30)
+            quay_lai_button.place(x = 240, y = 460, width = 90, height = 30)
+            temp_frame.place_forget()
+            type_frame.place(x = 820, y = 10, width = 90, height = 500)
+            chon_mon_label.place(x = 10, y = 10, width = 330, height = 40)
 
         #======================================================#
         y_position = 50
         padding = 5 
-        
+
         for nhom_mon in ds_loai.ds:
             loai_button = tk.Button(type_frame, 
                 text = nhom_mon,
                 width = 10, 
                 height = 1,
                 font=("proxima-nova", 9, "bold"), 
-                bg= "#B8860B", 
-                fg= "#4B0000",
+                bg= "#C58745", 
+                fg= "#F9F4EF",
                 cursor="hand2",
                 bd=3, relief="raised",
                 command = lambda nm=nhom_mon: xu_ly_click_loai_mon(nm)) 
@@ -483,8 +546,8 @@ class MH_BanHang(tk.Frame):
             user_role = current.role
         else:
             # Trường hợp lỗi/đăng xuất (fallback)
-            username = "N/A"
-            user_role = ""
+            username = "ADMIN"
+            user_role = "Manager"
             
         # 1. Cập nhật tên QTV
         self.label_qtv.config(text=f"QTV: {username}")

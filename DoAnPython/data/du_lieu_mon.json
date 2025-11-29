@@ -5,7 +5,7 @@
         "don_gia": 20000,
         "so_luong": 1,
         "loai": "Cafe",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M02",
@@ -13,7 +13,7 @@
         "don_gia": 25000,
         "so_luong": 1,
         "loai": "Cafe",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M03",
@@ -21,7 +21,7 @@
         "don_gia": 28000,
         "so_luong": 1,
         "loai": "Cafe",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M04",
@@ -29,7 +29,7 @@
         "don_gia": 35000,
         "so_luong": 1,
         "loai": "Cafe",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M05",
@@ -37,7 +37,7 @@
         "don_gia": 35000,
         "so_luong": 1,
         "loai": "Cafe",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M06",
@@ -45,7 +45,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Trà",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M07",
@@ -53,7 +53,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Trà",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M08",
@@ -61,7 +61,7 @@
         "don_gia": 15000,
         "so_luong": 1,
         "loai": "Trà",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M09",
@@ -69,7 +69,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Trà",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M10",
@@ -77,7 +77,7 @@
         "don_gia": 15000,
         "so_luong": 1,
         "loai": "Trà",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M11",
@@ -85,7 +85,7 @@
         "don_gia": 35000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M12",
@@ -93,7 +93,7 @@
         "don_gia": 35000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M13",
@@ -101,7 +101,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M14",
@@ -109,7 +109,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M15",
@@ -117,7 +117,7 @@
         "don_gia": 35000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M16",
@@ -125,7 +125,7 @@
         "don_gia": 39000,
         "so_luong": 1,
         "loai": "Đá xay",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M17",
@@ -133,7 +133,7 @@
         "don_gia": 39000,
         "so_luong": 1,
         "loai": "Đá xay",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M18",
@@ -141,23 +141,23 @@
         "don_gia": 39000,
         "so_luong": 1,
         "loai": "Đá xay",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M19",
         "ten_mon": "Nước suối",
         "don_gia": 10000,
         "so_luong": 1,
-        "loai": "Nước",
-        "ghi_chu": ""
+        "loai": "Nước - Chai",
+        "dvt": "Chai"
     },
     {
         "ma_mon": "M20",
         "ten_mon": "Coca",
         "don_gia": 15000,
         "so_luong": 1,
-        "loai": "Nước",
-        "ghi_chu": ""
+        "loai": "Nước - Lon",
+        "dvt": "Lon"
     },
     {
         "ma_mon": "M21",
@@ -165,7 +165,7 @@
         "don_gia": 30000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
     },
     {
         "ma_mon": "M22",
@@ -173,6 +173,14 @@
         "don_gia": 25000,
         "so_luong": 1,
         "loai": "Sinh tố",
-        "ghi_chu": ""
+        "dvt": "Ly"
+    },
+    {
+        "ma_mon": "M22",
+        "ten_mon": "Thuốc lá",
+        "don_gia": 30000,
+        "so_luong": 1,
+        "loai": "Khác",
+        "dvt": "Hộp"
     }
 ]

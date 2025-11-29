@@ -19,14 +19,28 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Ứng dụng quản lý quán cafe mini")
-        self.geometry("1280x640")
         self.resizable(False, False)
 
+        # Kích thước cửa sổ
+        window_width = 1280
+        window_height = 640
+
+        # Lấy kích thước màn hình
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+
+        # Tính tọa độ để cửa sổ nằm giữa màn hình
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+
+        # Đặt geometry kèm tọa độ
+        self.geometry(f"{window_width}x{window_height}+{x}+{y}")
+
+
         self.current_user = None
+        self.current_page = None
         self.username = ""
         self.role = ""
-
-        self.current_page = None
 
         self.iconbitmap("images/icon.ico")
 
