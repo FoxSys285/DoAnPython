@@ -1,45 +1,34 @@
 import json
 from objects.Mon import Mon, DanhSachMon
+from objects.HoaDon import HoaDon, DanhSachHoaDon
 
 class Ban:
-    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, ds_mon, giam_gia=0):
+    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, hoa_don: HoaDon | None):
         self.ma_ban = ma_ban
         self.ten_ban = ten_ban
         self.trang_thai = trang_thai
         self.thoi_gian = thoi_gian
-        # Khi đọc file, ds_mon có thể chỉ là danh sách dict,
-        # cần đảm bảo chuyển đổi nó thành đối tượng Mon nếu cần thiết
-        if all(isinstance(m, dict) for m in ds_mon):
-            self.ds_mon = [Mon(m['ma_mon'], m['ten_mon'], m['don_gia'], m['so_luong']) for m in ds_mon]
-        else:
-            self.ds_mon = ds_mon
-
-        self.giam_gia = giam_gia
+        self.hoa_don = hoa_don # Giờ là một đối tượng HoaDon hoặc None
 
     def to_dict(self):
+        hoa_don_dict = self.hoa_don.to_dict() if self.hoa_don else None
+        
         return {
             "ma_ban": self.ma_ban,
             "ten_ban": self.ten_ban,
             "trang_thai": self.trang_thai,
             "thoi_gian": self.thoi_gian,
-            "ds_mon": [mon.to_dict() for mon in self.ds_mon],
-            "giam_gia": self.giam_gia
+            "hoa_don": hoa_don_dict
         }
 
-    def thanh_tien(self):
-        tong = 0
-        for mon in self.ds_mon:
-            tong += mon.don_gia * mon.so_luong
-        return tong - self.giam_gia
-
     def check_serve(self):
-        if self.ds_mon:
+        if self.hoa_don:
             self.trang_thai = "Serve"
             return True
         return False
 
     def __str__(self):
-        return f"{self.ma_ban}\t{self.ten_ban}\t{self.trang_thai}\t{self.thoi_gian}\t{self.ds_mon}\t{self.giam_gia}"
+        return f"---------------------------------\nMã bàn: {self.ma_ban}\nTên bàn: {self.ten_ban}\nTrạng thái: {self.trang_thai}\nGiờ lập: {self.thoi_gian}\n---------------------------------"
 
 class DanhSachBan:
     def __init__(self):
@@ -49,24 +38,56 @@ class DanhSachBan:
         try:
             with open(filename, "r", encoding="utf-8") as f:
                 du_lieu = json.load(f)
-                # Dữ liệu đọc từ JSON là list of dicts, cần chuyển về list of Ban objects
-                self.ds = [Ban(
-                    i["ma_ban"],
-                    i["ten_ban"],
-                    i["trang_thai"],
-                    i["thoi_gian"],
-                    i["ds_mon"], # Danh sách món ở đây đang là list of dicts, class Ban sẽ xử lý
-                    i["giam_gia"]
-                ) for i in du_lieu]
+                temp_ds = []
+                
+                for i in du_lieu:
+                    hoa_don_obj = None
+                    hoa_don_data = i.get("hoa_don")
+                    
+                    # 1. Tái tạo đối tượng HoaDon nếu có dữ liệu
+                    if hoa_don_data and isinstance(hoa_don_data, dict):
+                        
+                        # Tái tạo DanhSachMon
+                        ds_mon_obj = DanhSachMon()
+                        for mon_dict in hoa_don_data.get("dsMon", []):
+                            ds_mon_obj.ds.append(Mon(
+                                mon_dict["ma_mon"],
+                                mon_dict["ten_mon"],
+                                mon_dict["don_gia"],
+                                mon_dict["so_luong"],
+                                mon_dict["loai"],
+                                mon_dict["dvt"]
+                            ))
+                        
+                        # Tái tạo HoaDon
+                        hoa_don_obj = HoaDon(
+                            hoa_don_data["maHD"],
+                            hoa_don_data["gioLap"],
+                            ds_mon_obj, # Truyền đối tượng DanhSachMon đã tái tạo
+                            hoa_don_data.get("tongTien", 0),
+                            hoa_don_data.get("maBan")
+                        )
+
+                    # 2. Tạo đối tượng Ban
+                    temp_ds.append(Ban(
+                        i["ma_ban"],
+                        i["ten_ban"],
+                        i["trang_thai"],
+                        i["thoi_gian"],
+                        hoa_don_obj # Lưu đối tượng HoaDon (hoặc None)
+                    ))
+                
+                self.ds = temp_ds
+                
         except Exception as loi:
-            print("Lỗi đọc file: ", loi)
+            print("Lỗi đọc file ban: ", loi)
 
     def ghi_file(self, filename):
         try:
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump([i.to_dict() for i in self.ds], f, ensure_ascii=False, indent=4)
         except Exception as loi:
-            print("Lỗi ghi file: ", loi)
+            print("Lỗi ghi file Bàn: ", loi)
 
 
     def free(self):

@@ -1,20 +1,25 @@
 import json
-
+from objects.Mon import Mon, DanhSachMon
 class HoaDon:
-    def __init__(self, maHD, gioLap, dsMon, tongTien, giamGia, maBan):
+    def __init__(self, maHD, gioLap, dsMon = DanhSachMon(), tongTien = 0, maBan = None):
         self.maHD=maHD
         self.gioLap=gioLap
         self.dsMon=dsMon
         self.tongTien=tongTien
-        self.giamGia=giamGia
         self.maBan = maBan
 
     def to_dict(self):
-        return {"maHD":self.maHD,"gioLap":self.gioLap,"dsMon":self.dsMon,"tongTien":self.tongTien,"giamGia":self.giamGia,"maBan":self.maBan}
-    def __str__(self):
-        return f"{self.maHD:<8}{self.gioLap:<15}{self.dsMon:<8}{self.tongTien:>8}{self.giamGia:>5}"
+        return {"maHD":self.maHD,"gioLap":self.gioLap,"dsMon":self.dsMon.to_dict(),"tongTien":self.tongTien,"maBan":self.maBan}
+    def xuat(self):
+        return f"Mã hóa đơn: {self.maHD}\n\tGiờ lập: {self.gioLap}\n\tTổng tiền: {self.tongTien}\n\tDanh sách món: {self.dsMon.xuat_ds()}"
     def TinhThanhTien(self):
-        return self.tongTien - self.giamGia * self.tongTien
+        return self.tongTien
+    def check_mon(self, mon):
+        for i in self.dsMon:
+            if mon.ma_mon == i.ma_mon:
+                return True
+        return False
+
 
 class DanhSachHoaDon:
     def __init__(self):
@@ -23,7 +28,29 @@ class DanhSachHoaDon:
         try:
             with open(file,'r',encoding='utf-8') as f:
                 du_lieu=json.load(f)
-                self.dsHD=[HoaDon(i["maHD"],i["gioLap"],i["dsMon"],i["tongTien"],i["giamGia"],i["maBan"]) for i in du_lieu]
+                temp_dsHD = []
+                for i in du_lieu:
+
+                    ds_mon_obj = DanhSachMon()
+
+                    for mon_dict in i["dsMon"]:
+                        ds_mon_obj.ds.append(Mon(
+                            mon_dict["ma_mon"],
+                            mon_dict["ten_mon"],
+                            mon_dict["don_gia"],
+                            mon_dict["so_luong"],
+                            mon_dict["loai"],
+                            mon_dict["dvt"]
+                        ))
+
+                    temp_dsHD.append(HoaDon(
+                        i["maHD"],
+                        i["gioLap"],
+                        ds_mon_obj,
+                        i["tongTien"],
+                        i["maBan"]
+                    ))
+                self.dsHD = temp_dsHD
                 print("Doc file thanh cong!")
         except FileNotFoundError:
             print("Doc file ko thanh cong")
@@ -32,7 +59,8 @@ class DanhSachHoaDon:
     def ghi_file(self,file):
        try:
            with open(file,'w',encoding='utf-8') as f:
-               json.dump([i.to_dict() for i in self.dsHD],f,ensure_ascii=False,indent=4)
+               list_to_dump = [i.to_dict() for i in self.dsHD if i is not None] 
+               json.dump(list_to_dump, f, ensure_ascii=False, indent=4)
                print("Ghi file mon thanh cong!")
        except Exception as loi:
-           print("Ghi file bi loi ",loi)
+           print("Ghi file bi loi hóa đơn:",loi)

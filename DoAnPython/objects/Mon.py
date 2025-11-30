@@ -49,7 +49,7 @@ class DanhSachMon:
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump([m.to_dict() for m in self.ds], f, ensure_ascii=False, indent=4)
         except Exception as loi:
-            print("Lỗi ghi file:", loi)
+            print("Lỗi ghi file Món:", loi)
 
     def to_dict(self):
         return [m.to_dict() for m in self.ds]
@@ -60,3 +60,10 @@ class DanhSachMon:
             if mon.loai == loai:
                 ds.append(mon)
         return ds
+
+    def xuat_ds(self):
+        chuoi_ds = ""
+        for mon in self.ds:
+            # Thêm dấu tab và xuống dòng để định dạng rõ hơn khi hiển thị trong hóa đơn
+            chuoi_ds += f"\n\t\t - {mon}" 
+        return chuoi_ds

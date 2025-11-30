@@ -1,0 +1,34 @@
+[
+    {
+        "maHD": "HD20251130171118",
+        "gioLap": "30/11/2025 17:11:18",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M05",
+                "ten_mon": "Cappuccino",
+                "don_gia": 35000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M02",
+                "ten_mon": "Cà phê sữa",
+                "don_gia": 25000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 140000,
+        "maBan": "Bàn 2"
+    }
+]
