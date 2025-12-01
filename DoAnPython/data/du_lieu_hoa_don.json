@@ -1,0 +1,218 @@
+[
+    {
+        "maHD": "HD20251130171118",
+        "gioLap": "30/11/2025 17:11:18",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M05",
+                "ten_mon": "Cappuccino",
+                "don_gia": 35000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M02",
+                "ten_mon": "Cà phê sữa",
+                "don_gia": 25000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 140000,
+        "maBan": "Bàn 2"
+    },
+    {
+        "maHD": "HD20251130220313",
+        "gioLap": "30/11/2025 22:03:13",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M03",
+                "ten_mon": "Bạc xỉu",
+                "don_gia": 28000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Thuốc lá",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Khác",
+                "dvt": "Hộp"
+            }
+        ],
+        "tongTien": 98000,
+        "maBan": "Bàn 1"
+    },
+    {
+        "maHD": "HD20251130220352",
+        "gioLap": "30/11/2025 22:03:52",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M05",
+                "ten_mon": "Cappuccino",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M04",
+                "ten_mon": "Matcha Latte",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M08",
+                "ten_mon": "Trà tắc",
+                "don_gia": 15000,
+                "so_luong": 1,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M09",
+                "ten_mon": "Trà sữa truyền thống",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M20",
+                "ten_mon": "Coca",
+                "don_gia": 15000,
+                "so_luong": 2,
+                "loai": "Nước - Lon",
+                "dvt": "Lon"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Thuốc lá",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Khác",
+                "dvt": "Hộp"
+            },
+            {
+                "ma_mon": "M15",
+                "ten_mon": "Sinh tố bơ",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M19",
+                "ten_mon": "Nước suối",
+                "don_gia": 10000,
+                "so_luong": 3,
+                "loai": "Nước - Chai",
+                "dvt": "Chai"
+            },
+            {
+                "ma_mon": "M18",
+                "ten_mon": "Matcha đá xay",
+                "don_gia": 39000,
+                "so_luong": 1,
+                "loai": "Đá xay",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 319000,
+        "maBan": "Bàn 16"
+    },
+    {
+        "maHD": "HD20251130222459",
+        "gioLap": "30/11/2025 22:24:59",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 2,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M05",
+                "ten_mon": "Cappuccino",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Thuốc lá",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Khác",
+                "dvt": "Hộp"
+            }
+        ],
+        "tongTien": 105000,
+        "maBan": "Bàn 1"
+    },
+    {
+        "maHD": "HD20251201170803",
+        "gioLap": "01/12/2025 17:08:03",
+        "dsMon": [
+            {
+                "ma_mon": "M14",
+                "ten_mon": "Nước ép táo",
+                "don_gia": 30000,
+                "so_luong": 4,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Sinh tố dâu",
+                "don_gia": 25000,
+                "so_luong": 2,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M21",
+                "ten_mon": "Sinh tố dừa",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 200000,
+        "maBan": "Bàn 4"
+    }
+]
