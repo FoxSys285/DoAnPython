@@ -335,6 +335,15 @@ class MH_BanHang(tk.Frame):
     #==========================================================================================#
     def xu_ly_click_ban(self, ban):
 
+        current = self.controller.current_user
+        if current:
+            username = current.username
+            user_role = current.role
+        else:
+            username = "ADMIN"
+            user_role = "Manager"
+
+        ban.nguoi_lap = username
         ds_loai = DanhSachNhomMon()
         ds_loai.doc_file("data/du_lieu_nhom_mon.json")
 
@@ -496,6 +505,10 @@ class MH_BanHang(tk.Frame):
             self.lbl_tong_tien_value.config(text="0 VNĐ")
 
         def thanh_toan(ban):
+            if not ban.hoa_don.dsMon.ds:
+                print("Bàn chưa đặt món")
+                return
+            ban.hoa_don.gioRa = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             popup = tk.Toplevel(self, bg = "#FEF9E6")
             popup.title("Thanh toán")
             popup_width = 350

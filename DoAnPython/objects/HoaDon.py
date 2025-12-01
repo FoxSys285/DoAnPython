@@ -1,17 +1,18 @@
 import json
 from objects.Mon import Mon, DanhSachMon
 class HoaDon:
-    def __init__(self, maHD, gioLap, dsMon = DanhSachMon(), tongTien = 0, maBan = None):
+    def __init__(self, maHD, gioLap, dsMon = DanhSachMon(), tongTien = 0, maBan = None, gioRa = None):
         self.maHD=maHD
         self.gioLap=gioLap
         self.dsMon=dsMon
         self.tongTien=tongTien
         self.maBan = maBan
+        self.gioRa = gioRa
 
     def to_dict(self):
-        return {"maHD":self.maHD,"gioLap":self.gioLap,"dsMon":self.dsMon.to_dict(),"tongTien":self.tongTien,"maBan":self.maBan}
+        return {"maHD":self.maHD,"gioLap":self.gioLap,"dsMon":self.dsMon.to_dict(),"tongTien":self.tongTien,"maBan":self.maBan,"gioRa":self.gioRa}
     def xuat(self):
-        return f"Mã hóa đơn: {self.maHD}\n\tGiờ lập: {self.gioLap}\n\tTổng tiền: {self.tongTien}\n\tDanh sách món: {self.dsMon.xuat_ds()}"
+        return f"Mã hóa đơn: {self.maHD}\n\tGiờ lập: {self.gioLap}\n\tTổng tiền: {self.tongTien}\n\tDanh sách món: {self.dsMon.xuat_ds()}\n\tGiờ ra: {self.gioRa}"
     def TinhThanhTien(self):
         return self.tongTien
     def check_mon(self, mon):
@@ -48,7 +49,8 @@ class DanhSachHoaDon:
                         i["gioLap"],
                         ds_mon_obj,
                         i["tongTien"],
-                        i["maBan"]
+                        i["maBan"],
+                        i["gioRa"]
                     ))
                 self.dsHD = temp_dsHD
                 print("Doc file thanh cong!")

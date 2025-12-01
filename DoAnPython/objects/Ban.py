@@ -3,12 +3,13 @@ from objects.Mon import Mon, DanhSachMon
 from objects.HoaDon import HoaDon, DanhSachHoaDon
 
 class Ban:
-    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, hoa_don: HoaDon | None):
+    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, hoa_don: HoaDon | None, nguoi_lap = None):
         self.ma_ban = ma_ban
         self.ten_ban = ten_ban
         self.trang_thai = trang_thai
         self.thoi_gian = thoi_gian
-        self.hoa_don = hoa_don # Giờ là một đối tượng HoaDon hoặc None
+        self.hoa_don = hoa_don
+        self.nguoi_lap = nguoi_lap
 
     def to_dict(self):
         hoa_don_dict = self.hoa_don.to_dict() if self.hoa_don else None
@@ -18,7 +19,8 @@ class Ban:
             "ten_ban": self.ten_ban,
             "trang_thai": self.trang_thai,
             "thoi_gian": self.thoi_gian,
-            "hoa_don": hoa_don_dict
+            "hoa_don": hoa_don_dict,
+            "nguoi_lap": self.nguoi_lap
         }
 
     def check_serve(self):
@@ -28,7 +30,7 @@ class Ban:
         return False
 
     def __str__(self):
-        return f"---------------------------------\nMã bàn: {self.ma_ban}\nTên bàn: {self.ten_ban}\nTrạng thái: {self.trang_thai}\nGiờ lập: {self.thoi_gian}\n---------------------------------"
+        return f"---------------------------------\nMã bàn: {self.ma_ban}\nTên bàn: {self.ten_ban}\nTrạng thái: {self.trang_thai}\nGiờ lập: {self.thoi_gian}\nNgười lập: {self.nguoi_lap}\n---------------------------------"
 
 class DanhSachBan:
     def __init__(self):
@@ -63,7 +65,7 @@ class DanhSachBan:
                         hoa_don_obj = HoaDon(
                             hoa_don_data["maHD"],
                             hoa_don_data["gioLap"],
-                            ds_mon_obj, # Truyền đối tượng DanhSachMon đã tái tạo
+                            ds_mon_obj,
                             hoa_don_data.get("tongTien", 0),
                             hoa_don_data.get("maBan")
                         )
@@ -74,7 +76,8 @@ class DanhSachBan:
                         i["ten_ban"],
                         i["trang_thai"],
                         i["thoi_gian"],
-                        hoa_don_obj # Lưu đối tượng HoaDon (hoặc None)
+                        hoa_don_obj,
+                        i["nguoi_lap"]
                     ))
                 
                 self.ds = temp_ds

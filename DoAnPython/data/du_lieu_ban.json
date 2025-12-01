@@ -2,144 +2,145 @@
     {
         "ma_ban": "01",
         "ten_ban": "Bàn 1",
-        "trang_thai": "Booked",
-        "thoi_gian": "",
-        "hoa_don": null
+        "trang_thai": "Serve",
+        "thoi_gian": "17:45:54 01/12/2025",
+        "hoa_don": {
+            "maHD": "HD20251201174554",
+            "gioLap": "01/12/2025 17:45:54",
+            "dsMon": [
+                {
+                    "ma_mon": "M01",
+                    "ten_mon": "Cà phê đen",
+                    "don_gia": 20000,
+                    "so_luong": 2,
+                    "loai": "Cafe",
+                    "dvt": "Ly"
+                }
+            ],
+            "tongTien": 40000,
+            "maBan": "Bàn 1",
+            "gioRa": null
+        },
+        "nguoi_lap": "test"
     },
     {
         "ma_ban": "02",
         "ten_ban": "Bàn 2",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "03",
         "ten_ban": "Bàn 3",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "04",
         "ten_ban": "Bàn 4",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "05",
         "ten_ban": "Bàn 5",
-        "trang_thai": "Serve",
-        "thoi_gian": "17:07:41 01/12/2025",
-        "hoa_don": null
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "06",
         "ten_ban": "Bàn 6",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "07",
         "ten_ban": "Bàn 7",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "08",
         "ten_ban": "Bàn 8",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "09",
         "ten_ban": "Bàn 9",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "10",
         "ten_ban": "Bàn 10",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "11",
         "ten_ban": "Bàn 11",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "12",
         "ten_ban": "Bàn 12",
-        "trang_thai": "Serve",
-        "thoi_gian": "17:07:33 01/12/2025",
-        "hoa_don": {
-            "maHD": "HD20251201170733",
-            "gioLap": "01/12/2025 17:07:33",
-            "dsMon": [
-                {
-                    "ma_mon": "M01",
-                    "ten_mon": "Cà phê đen",
-                    "don_gia": 20000,
-                    "so_luong": 1,
-                    "loai": "Cafe",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M05",
-                    "ten_mon": "Cappuccino",
-                    "don_gia": 35000,
-                    "so_luong": 1,
-                    "loai": "Cafe",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M22",
-                    "ten_mon": "Thuốc lá",
-                    "don_gia": 30000,
-                    "so_luong": 1,
-                    "loai": "Khác",
-                    "dvt": "Hộp"
-                }
-            ],
-            "tongTien": 85000,
-            "maBan": "Bàn 12"
-        }
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "13",
         "ten_ban": "Bàn 13",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "14",
         "ten_ban": "Bàn 14",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "15",
         "ten_ban": "Bàn 15",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     },
     {
         "ma_ban": "16",
         "ten_ban": "Bàn 16",
         "trang_thai": "Free",
         "thoi_gian": "",
-        "hoa_don": null
+        "hoa_don": null,
+        "nguoi_lap": null
     }
 ]
