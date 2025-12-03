@@ -550,6 +550,7 @@ class MH_BanHang(tk.Frame):
                     tien_thua_var.set(f"{tien_thua:,} VNĐ".replace(",", "."))
                     
                     khach_dua_var.set(f"{khach_dua:,}".replace(",", "."))
+                    return tien_thua
                     
                 except ValueError:
                     # Xử lý nếu ô nhập rỗng hoặc không phải số
@@ -557,6 +558,7 @@ class MH_BanHang(tk.Frame):
                     khach_dua_var.set("0")
                 
                 entry_khach_dua.icursor(tk.END)
+                
                 
             khach_dua_var.trace_add("write", tinh_tien_thua)
             
@@ -572,9 +574,12 @@ class MH_BanHang(tk.Frame):
             lbl_tien_thua.place(x=180, y=160)
             # Hàm xác nhận thanh toán cuối cùng
             def xac_nhan_thanh_toan():
+                if tinh_tien_thua() < 0:
+                    print("Giá trị ko hợp lệ")
+                    return
                 if ban.hoa_don:
                     # 2. Cập nhật trạng thái Hóa đơn
-                    ban.hoa_don.trangThai = "Paid" # Giả sử có thuộc tính trangThai trong HoaDon object
+                    ban.hoa_don.trangThai = "Paid" 
                     ban.hoa_don.tongTien = tong_tien_phai_tra # Cập nhật lại tổng tiền lần cuối
                     ban.hoa_don.thoiGianKetThuc = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -583,7 +588,6 @@ class MH_BanHang(tk.Frame):
                 
                 # 4. Dọn dẹp trạng thái bàn và giao diện
                 huy_ban() 
-
                 # Đóng popup
                 popup.destroy()
 
@@ -598,30 +602,7 @@ class MH_BanHang(tk.Frame):
 
             ban.trang_thai = "Free"
             status_var.set("Còn trống")
-            dat_ban_button.place(x = 35, y = 230)
-            goi_mon_button.place(x = 190, y = 230)
-            huy_ban_button.place_forget()
-            gio_den_var.set("Giờ đến: ...")
-            ban.thoi_gian = ""
-            self.ds_ban.ghi_file("data/du_lieu_ban.json")
-            type_frame.place_forget()
-            self.cap_nhat_mau_nut_ban(ban)
-            ban.hoa_don = None
-            self.ds_ban.ghi_file("data/du_lieu_ban.json")
-            goi_mon_frame.place_forget()
-            photo_menu_label.place(x = 0, y = 0) 
-            photo_menu_label.image = photo_menu
-            temp_frame.place(x = 820, y = 10, width = 90, height = 500)
-            chon_mon_label.place_forget()
-            mon_an_frame.place_forget()
-            quay_lai_button.place(x = 120, y = 300, width = 100, height = 40)
-            hoa_don_frame.place_forget()
-            thanh_toan_button.place_forget()
-            self.lbl_tong_tien_value.config(text="0 VNĐ")
-
-
-            self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
-            self.lbl_tong_tien_value.config(text="0 VNĐ")
+            
 
 
         def raise_bh_bg():
@@ -843,7 +824,6 @@ class MH_BanHang(tk.Frame):
             username = current.username
             user_role = current.role
         else:
-            # Trường hợp lỗi/đăng xuất (fallback)
             username = "ADMIN"
             user_role = "Manager"
             
@@ -875,9 +855,8 @@ class MH_BanHang(tk.Frame):
 
     def on_show(self):
         """Hàm được gọi khi màn hình được hiển thị."""
-        # Gọi hàm cập nhật ngay khi màn hình Bán Hàng chuẩn bị hiện
         self.update_user_display()
-        self.show_page(self.bh_frame) # Mặc định hiển thị trang chủ
+        self.show_page(self.bh_frame)
 
     def cap_nhat_mau_nut_ban(self, ban_obj):
 

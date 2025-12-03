@@ -21,23 +21,40 @@ class MH_TrangChu(tk.Frame):
         self.menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
         self.menu_frame.place(x=0, y=0, width=860, height=120)
 
-        menu_buttons = [
-            ("TRANG CHỦ", lambda: controller.show_frame("MH_TrangChu")),
-            ("BÁN HÀNG",  lambda: controller.show_frame("MH_BanHang")),
-            ("QUẢN LÝ",   lambda: controller.show_frame("MH_QuanLy")),
-            ("THỐNG KÊ",  lambda: None),
-            ("CREDITS",   lambda: None),
+        # Danh sách các nút chung
+        common_buttons = [
+            ("TRANG CHỦ", 40, lambda: controller.show_frame("MH_TrangChu")),
+            ("BÁN HÀNG",  200, lambda: controller.show_frame("MH_BanHang")),
+
         ]
-        x = 40
-        for text, cmd in menu_buttons:
+        
+        # Tạo và đặt các nút chung
+        for text, xpos, cmd in common_buttons:
             tk.Button(
                 self.menu_frame, text=text,
                 font=("proxima-nova", 14, "bold"),
                 bg="#8c7851", fg="#fffffe", cursor="hand2",
                 bd=3, relief="ridge",
                 command=cmd
-            ).place(x=x, y=40, width=125, height=60)
-            x += 160
+            ).place(x=xpos, y=40, width=125, height=60)
+
+        self.manager_buttons = []
+        manager_buttons_info = [
+            ("QUẢN LÝ", 360,  lambda: controller.show_frame("MH_QuanLy")), 
+            ("THỐNG KÊ", 520,  lambda: None),
+            ("CREDITS", 680,  lambda: None)
+        ]
+        
+        for text, xpos, cmd in manager_buttons_info:
+            btn = tk.Button(
+                self.menu_frame, text=text,
+                font=("proxima-nova", 14, "bold"),
+                bg="#8c7851", fg="#fffffe", cursor="hand2",
+                bd=3, relief="ridge",
+                command=cmd
+            )
+            
+            self.manager_buttons.append(btn)
 
         # ========== NGÀY GIỜ bên phải ==========
         date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
@@ -123,7 +140,34 @@ class MH_TrangChu(tk.Frame):
         self.table_serve_var.set(f"Bàn đang phục vụ: {table_serve:02d}")
 
     def on_show(self):
+        self.update_user_display() 
+        self.update_table_status()
+
+    def update_user_display(self):
+        """Cập nhật tên QTV và hiển thị/ẩn các nút đặc quyền dựa trên role."""
+        
         current = self.controller.current_user
         if current:
-            self.label_qtv.config(text=f"QTV: {current.username}")
-        self.update_table_status()
+            username = current.username
+            user_role = current.role
+        else:
+            # Trường hợp lỗi/đăng xuất (fallback)
+            username = "ADMIN"
+            user_role = "Manager"
+            
+        # 1. Cập nhật tên QTV
+        self.label_qtv.config(text=f"QTV: {username}")
+        
+        # 2. Xử lý nút đặc quyền (Manager)
+        is_manager = user_role.lower() == "manager"
+        
+        # Danh sách tọa độ cho các nút đặc quyền
+        manager_xpos = [360, 520, 680]
+        
+        for i, btn in enumerate(self.manager_buttons):
+            if is_manager:
+                # Hiện nút nếu là Manager
+                btn.place(x=manager_xpos[i], y=40, width=125, height=60)
+            else:
+                # Ẩn nút nếu không phải Manager
+                btn.place_forget()

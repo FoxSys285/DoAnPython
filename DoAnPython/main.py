@@ -104,8 +104,6 @@ class App(tk.Tk):
         loading_frame.destroy()
         frame = self.frames[page_name]
         
-        # === THÊM LOGIC NÀY ===
-        # Gọi phương thức on_show() của frame nếu nó tồn tại
         if hasattr(frame, 'on_show'):
             frame.on_show()
         # ======================

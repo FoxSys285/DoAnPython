@@ -22,6 +22,116 @@
         ],
         "tongTien": 110000,
         "maBan": "Bàn 1",
-        "gioRa": "01/12/2025 17:39:20"
+        "gioRa": "03/12/2025 20:11:01"
+    },
+    {
+        "maHD": "HD20251203200744",
+        "gioLap": "03/12/2025 20:07:44",
+        "dsMon": [
+            {
+                "ma_mon": "M19",
+                "ten_mon": "Nước suối",
+                "don_gia": 10000,
+                "so_luong": 3,
+                "loai": "Nước - Chai",
+                "dvt": "Chai"
+            }
+        ],
+        "tongTien": 30000,
+        "maBan": "Bàn 3",
+        "gioRa": "03/12/2025 20:07:48"
+    },
+    {
+        "maHD": "HD20251203201123",
+        "gioLap": "03/12/2025 20:11:23",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 3,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 60000,
+        "maBan": "Bàn 1",
+        "gioRa": "03/12/2025 20:12:03"
+    },
+    {
+        "maHD": "HD20251203201211",
+        "gioLap": "03/12/2025 20:12:11",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 20000,
+        "maBan": "Bàn 1",
+        "gioRa": "03/12/2025 20:12:15"
+    },
+    {
+        "maHD": "HD20251203201329",
+        "gioLap": "03/12/2025 20:13:29",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 4,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 80000,
+        "maBan": "Bàn 1",
+        "gioRa": "03/12/2025 20:13:32"
+    },
+    {
+        "maHD": "HD20251203201343",
+        "gioLap": "03/12/2025 20:13:43",
+        "dsMon": [
+            {
+                "ma_mon": "M14",
+                "ten_mon": "Nước ép táo",
+                "don_gia": 30000,
+                "so_luong": 2,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 60000,
+        "maBan": "Bàn 1",
+        "gioRa": "03/12/2025 20:13:58"
+    },
+    {
+        "maHD": "HD20251203201441",
+        "gioLap": "03/12/2025 20:14:41",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 4,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M05",
+                "ten_mon": "Cappuccino",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 115000,
+        "maBan": "Bàn 1",
+        "gioRa": "03/12/2025 21:25:40"
     }
 ]
