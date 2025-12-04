@@ -151,7 +151,7 @@ class MH_BanHang(tk.Frame):
         HoverButton(
             qtv_frame,
             text="Đăng xuất",
-            font=("proxima-nova", 14, "bold"),
+            font=("proxima-nova", 12, "bold"),
             bg="#8c7851", fg="#fffffe",
             cursor="hand2",
             bd=3, relief="ridge",
@@ -163,7 +163,7 @@ class MH_BanHang(tk.Frame):
         manager_buttons_info = [
             ("QUẢN LÝ", 360,  lambda: self.controller.show_frame("MH_QuanLy")), 
             ("THỐNG KÊ", 520, None), 
-            ("CREDITS", 680, None)
+            ("CREDITS", 680, lambda: self.controller.show_frame("MH_Credits"))
         ]
         
         for text, xpos, cmd in manager_buttons_info:
