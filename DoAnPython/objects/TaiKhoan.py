@@ -1,4 +1,5 @@
 import json
+from objects.NhanVien import NhanVien, DanhSachNhanVien
 
 class TaiKhoan:
 	def __init__(self, username, password, role = "Employee"):
@@ -63,10 +64,13 @@ class DanhSachTaiKhoan:
 			print("Lỗi ghi file:", loi)
 
 	def check_login(self, username_input, password_input):
-
+		ds_nv = DanhSachNhanVien()
+		ds_nv.doc_file("data/du_lieu_nv.json")
 		account = self.ds.get(username_input)
 		if account:
 			if account.password == password_input:
+				nv = ds_nv.find_by_username(username_input)
+				print(nv)
 				return True, account
 			else:
 				return False, "Sai mật khẩu."

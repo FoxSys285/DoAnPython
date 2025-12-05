@@ -3,6 +3,8 @@ from interfaces.MH_BanHang import MH_BanHang
 from interfaces.MH_QuanLy import MH_QuanLy
 from interfaces.MH_TrangChu import MH_TrangChu
 from interfaces.MH_Credits import MH_Credits
+from interfaces.MH_ThongKe import MH_ThongKe
+
 # Thư viện giao diện
 from tkinter import *
 import tkinter as tk
@@ -52,12 +54,12 @@ class App(tk.Tk):
         self.frames = {}
 
         # Tạo tất cả màn hình
-        for F in (MH_TrangChu, MH_BanHang, MH_QuanLy, MH_DangNhap, MH_Credits):
+        for F in (MH_TrangChu, MH_BanHang, MH_QuanLy, MH_DangNhap, MH_Credits, MH_ThongKe):
             frame = F(container, self)
             self.frames[F.__name__] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame("MH_Credits")
+        self.show_frame("MH_DangNhap")
 
     def fade_in(self, widget, alpha=0.0):
         """Hiệu ứng hiện dần"""

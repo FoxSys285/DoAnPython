@@ -1,4 +1,5 @@
 from objects.TaiKhoan import TaiKhoan, DanhSachTaiKhoan
+from objects.NhanVien import NhanVien, DanhSachNhanVien
 
 import tkinter as tk
 from tkinter import *
@@ -10,12 +11,15 @@ from datetime import datetime
 class MH_DangNhap(tk.Frame):
     def __init__(self, parent, controller):
 
-        dulieu_path = "data/du_lieu_tk.json"
 
         self.tb_text = tk.StringVar(value = "") # Thông báo đăng nhập
 
         list_user = DanhSachTaiKhoan()
-        list_user.doc_file(dulieu_path) 
+        list_user.doc_file("data/du_lieu_tk.json") 
+
+        list_nv = DanhSachNhanVien()
+        list_nv.doc_file("data/du_lieu_nv.json")
+
 
         super().__init__(parent, bg="#FCFAE5")
         self.controller = controller
@@ -77,8 +81,6 @@ class MH_DangNhap(tk.Frame):
     
             if is_successful:
                 self.tb_text.set("")
-                
-                # result_data ở đây là đối tượng TaiKhoan (bao gồm cả role)
                 controller.current_user = result_data
                 controller.username = username
                 controller.role = result_data.role

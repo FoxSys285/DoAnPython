@@ -141,7 +141,7 @@ class MH_Credits(tk.Frame):
             user_role = "Manager"
             
         # 1. Cập nhật tên QTV
-        self.label_qtv.config(text=f"QTV: {username}")
+        self.label_qtv.config(text=f"QTV: {username.upper()}")
         
         # 2. Xử lý nút đặc quyền (Manager)
         is_manager = user_role.lower() == "manager"

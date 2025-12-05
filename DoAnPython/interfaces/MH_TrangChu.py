@@ -144,7 +144,6 @@ class MH_TrangChu(tk.Frame):
         self.update_table_status()
 
     def update_user_display(self):
-        """Cập nhật tên QTV và hiển thị/ẩn các nút đặc quyền dựa trên role."""
         
         current = self.controller.current_user
         if current:
@@ -156,7 +155,7 @@ class MH_TrangChu(tk.Frame):
             user_role = "Manager"
             
         # 1. Cập nhật tên QTV
-        self.label_qtv.config(text=f"QTV: {username}")
+        self.label_qtv.config(text=f"QTV: {username.upper()}")
         
         # 2. Xử lý nút đặc quyền (Manager)
         is_manager = user_role.lower() == "manager"

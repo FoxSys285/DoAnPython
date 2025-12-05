@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from .MyButton import HoverButton  # dùng nút hover đã có
+from .MyButton import HoverButton 
 from datetime import datetime
 from tkinter import ttk
 from objects.Mon import DanhSachMon
@@ -539,7 +539,7 @@ class MH_QuanLy(tk.Frame):
 
         if 0 <= index < len(self.ds_mon.ds):
             mon = self.ds_mon.ds[index]
-            self.mon_dang_sua_index = index  # ✅ lưu lại vị trí để sửa
+            self.mon_dang_sua_index = index 
 
             self.frame_them_mon.place(x=20, y=250, width=280, height=220)
             self.entry_mon["Mã món"].delete(0, tk.END)
@@ -557,7 +557,7 @@ class MH_QuanLy(tk.Frame):
             self.entry_mon["Đơn vị tính"].delete(0, tk.END)
             self.entry_mon["Đơn vị tính"].insert(0, mon.dvt)
 
-            self.dang_sua = True  # ✅ đánh dấu đang sửa
+            self.dang_sua = True 
             print(f"Đang sửa món: {mon.ten_mon}")
         else:
             print("Không tìm thấy món để sửa")
@@ -624,6 +624,7 @@ class MH_QuanLy(tk.Frame):
             print("Không thể xóa nhóm")
                 ###########
     def show_quan_ly_ban(self):
+        self.ds_ban.doc_file("data/du_lieu_ban.json")
         print("Chọn: Quản lý bàn")
         self.clear_center()
         self.trang_hien_tai = "ban"
@@ -667,23 +668,51 @@ class MH_QuanLy(tk.Frame):
 
                 ###############
     def show_quan_ly_tai_khoan(self):
-        print("Chọn: Quản lý tài khoản")
-        self.clear_center()
-        self.trang_hien_tai = "tai_khoan"
-        self.load_tai_khoan()
-        self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
-        self.tree_tai_khoan.pack(fill="both", expand=True)
-        self.frame_tai_khoan.tkraise()
+        pass
+        # print("Chọn: Quản lý tài khoản")
+        # self.clear_center()
+        # self.trang_hien_tai = "tai_khoan"
+        # self.load_tai_khoan()
+        # self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
+        # self.tree_tai_khoan.pack(fill="both", expand=True)
+        # self.frame_tai_khoan.tkraise()
 
     def load_tai_khoan(self):
-        self.tree_tai_khoan.delete(*self.tree_tai_khoan.get_children())
-        for i, tk in enumerate(self.ds_tai_khoan.ds, start=1):
-            self.tree_tai_khoan.insert("", "end", values=(i, tk.ten_dang_nhap, tk.ho_ten, tk.vai_tro))
-        self.tree_tai_khoan.pack(fill="both", expand=True)
+        pass
+        # self.tree_tai_khoan.delete(*self.tree_tai_khoan.get_children())
+        # for i, tk in enumerate(self.ds_tai_khoan.ds, start=1):
+        #     self.tree_tai_khoan.insert("", "end", values=(i, tk.ten_dang_nhap, tk.ho_ten, tk.vai_tro))
+        # self.tree_tai_khoan.pack(fill="both", expand=True)
 
 
 
-
+    def update_user_display(self):
+        
+        current = self.controller.current_user
+        if current:
+            username = current.username
+            user_role = current.role
+        else:
+            # Trường hợp lỗi/đăng xuất (fallback)
+            username = "ADMIN"
+            user_role = "Manager"
+            
+        # 1. Cập nhật tên QTV
+        self.label_qtv.config(text=f"QTV: {username.upper()}")
+        
+        # 2. Xử lý nút đặc quyền (Manager)
+        is_manager = user_role.lower() == "manager"
+        
+        # Danh sách tọa độ cho các nút đặc quyền
+        manager_xpos = [360, 520, 680]
+        
+        for i, btn in enumerate(self.manager_buttons):
+            if is_manager:
+                # Hiện nút nếu là Manager
+                btn.place(x=manager_xpos[i], y=40, width=125, height=60)
+            else:
+                # Ẩn nút nếu không phải Manager
+                btn.place_forget()
 
 
 
