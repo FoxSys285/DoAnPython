@@ -162,7 +162,7 @@ class MH_BanHang(tk.Frame):
         self.manager_buttons = []
         manager_buttons_info = [
             ("QUẢN LÝ", 360,  lambda: self.controller.show_frame("MH_QuanLy")), 
-            ("THỐNG KÊ", 520, None), 
+            ("THỐNG KÊ", 520, lambda: self.controller.show_frame("MH_ThongKe")), 
             ("CREDITS", 680, lambda: self.controller.show_frame("MH_Credits"))
         ]
         
