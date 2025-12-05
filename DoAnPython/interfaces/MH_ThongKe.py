@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 from datetime import datetime
 from objects.Ban import DanhSachBan
 
-class MH_Credits(tk.Frame):
+class MH_ThongKe(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent, bg="#f9f4ef")
         self.controller = controller
@@ -38,7 +38,7 @@ class MH_Credits(tk.Frame):
         self.manager_buttons = []
         manager_buttons_info = [
             ("QUẢN LÝ", 360,  lambda: controller.show_frame("MH_QuanLy")), 
-            ("THỐNG KÊ", 520,  lambda: controller.show_frame("MH_ThongKe")),
+            ("THỐNG KÊ", 520,  lambda: controller.show_frame("MH_QuanLy")),
             ("CREDITS", 680,  lambda: controller.show_frame("MH_Credits"))
         ]
         
@@ -92,44 +92,12 @@ class MH_Credits(tk.Frame):
         ).place(x=0, y=30, width=160, height=30)
 
 
-        main_frame = tk.Frame(full_frame, bg = "white")
-        main_frame.place(x = 20, y =120, width = 1240, height = 500)
         
-        tk.Label(main_frame, text = "THÔNG TIN ĐỒ ÁN", font=("proxima-nova", 26, "bold"),bg="white").place(x = 370, y = 20, width = 500, height = 60)
-
-        boder_frame = tk.Frame(main_frame, bg = "#f9f4ef", bd = 5, relief = "ridge")
-        boder_frame.place(x = 100, y = 100, width = 1040, height = 340)
-
-        cross_bar_1_frame = tk.Frame(boder_frame, bg="#eaddcf")
-        cross_bar_1_frame.place(x = 520, y = 0 ,width = 10, height = 330)
-
-        tk.Label(boder_frame, text = "Môn: Lập trình Python",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 10)
-        tk.Label(boder_frame, text = "Đồ án: Ứng dụng quản lý quán cafe mini",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 50)
-        tk.Label(boder_frame, text = "Yêu cầu:",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 90)
-        tk.Label(boder_frame, text = "      -  Sử dụng ngôn ngữ lập trình Python và thư viện",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 130)
-        tk.Label(boder_frame, text = "          tkinter để tạo giao diện người dùng.",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 170)
-        tk.Label(boder_frame, text = "      -  Ứng dụng là một hệ thống quản lý thông tin với",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 210)
-        tk.Label(boder_frame, text = "          các chức năng CRUD, sử dụng file JSON để",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 250)
-        tk.Label(boder_frame, text = "          lưu trữ dữ liệu thay vì sử dụng CSDL.",font=("proxima-nova", 14, "bold"),bg="#f9f4ef").place(x = 10, y = 290)
-
-        cross_bar_2_frame = tk.Frame(boder_frame, bg="#eaddcf")
-        cross_bar_2_frame.place(x = 540, y = 155 ,width = 480, height = 10)
-        
-        tk.Label(boder_frame, text = "THÀNH VIÊN 1", bg = "#f9f4ef", font=("proxima-nova", 18, "bold")).place(x = 560, y = 20)
-        tk.Label(boder_frame, text = "THÀNH VIÊN 2", bg = "#f9f4ef",font=("proxima-nova", 18, "bold")).place(x = 560, y = 185)
-
-        tk.Label(boder_frame, text = "Họ tên: Nguyễn Thành Nam",bg = "#f9f4ef",font=("proxima-nova", 14, "bold")).place(x = 560, y = 70)
-        tk.Label(boder_frame, text = "MSSV: 2001240286",bg = "#f9f4ef",font=("proxima-nova", 14, "bold")).place(x = 560, y = 110)
-
-        tk.Label(boder_frame, text = "Họ tên: Trần Nguyên",bg = "#f9f4ef",font=("proxima-nova", 14, "bold")).place(x = 560, y = 235)
-        tk.Label(boder_frame, text = "MSSV: 2001240313",bg = "#f9f4ef",font=("proxima-nova", 14, "bold")).place(x = 560, y = 275)
-
 
     def on_show(self):
         self.update_user_display() 
 
     def update_user_display(self):
-        """Cập nhật tên QTV và hiển thị/ẩn các nút đặc quyền dựa trên role."""
         
         current = self.controller.current_user
         if current:
