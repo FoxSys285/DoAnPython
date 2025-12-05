@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import *
-from .MyButton import HoverButton
+from .MyButton import HoverButton  # dùng nút hover đã có
 from datetime import datetime
 from tkinter import ttk
 from objects.Mon import DanhSachMon
-from objects.DanhSachNhomMon import DanhSachNhomMon # Import thêm
+
 
 class MH_QuanLy(tk.Frame):
 
@@ -14,12 +14,8 @@ class MH_QuanLy(tk.Frame):
             self.tree_mon.insert("", "end", values=(
                 i, mon.ma_mon, mon.ten_mon, mon.don_gia, mon.loai, mon.dvt
             ))
-
-    def load_nhom_mon(self):
-        self.tree_nhom.delete(*self.tree_nhom.get_children())
-        for ten in self.ds_nhom.lay_danh_sach():
-            self.tree_nhom.insert("", "end", values=(ten,))
-
+        self.tree_mon.pack(fill="both", expand=True) 
+    
     def __init__(self, parent, controller):
         super().__init__(parent, bg="#f9f4ef")
         self.controller = controller
@@ -28,9 +24,15 @@ class MH_QuanLy(tk.Frame):
         full_frame = tk.Frame(self, bg="#f9f4ef")
         full_frame.place(x=0, y=0, width=1280, height=640)
 
+        # Thanh menu trên cùng (tái sử dụng phong cách)
         menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        menu_frame.place(x=0, y=0, width=860, height=120)
+        menu_frame.place(x=0, y=0, width=1280, height=80)
 
+        from objects.TaiKhoan import DanhSachTaiKhoan
+        self.ds_tai_khoan = DanhSachTaiKhoan()
+        self.ds_tai_khoan.doc_file("data/du_lieu_tk.json")
+
+        # Nút chuyển trang
         menu_buttons = [
             ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
             ("BÁN HÀNG", lambda: self.controller.show_frame("MH_BanHang")),
@@ -46,44 +48,42 @@ class MH_QuanLy(tk.Frame):
                 bg="#8c7851", fg="#fffffe",
                 cursor="hand2", bd=3, relief="ridge",
                 command=cmd
-            ).place(x=x, y=40, width=125, height=60)
-            x += 160
+            ).place(x=x, y=20, width=150, height=60)
+            x += 170
 
-        qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        qtv_frame.place(x=1020, y=40, width=160, height=60)
+        qtv_frame = tk.Frame(menu_frame, bg="#f9f4ef")
+        qtv_frame.place(x=1080, y=10, width=180, height=60)
 
-        date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        date_time_frame.place(x=1000, y=0, width=220, height=40)
         # Thời gian
         self.label_time = tk.Label(
-            date_time_frame,
+            qtv_frame,
             fg="#00214d",
             bg="#f9f4ef",
-            font=("proxima-nova", 14, "bold")
+            font=("proxima-nova", 12, "bold")
         )
-        self.label_time.pack(expand=True, anchor="nw")
+        self.label_time.place(x=0, y=0, width=180, height=20)
 
         # Tên QTV
         self.label_qtv = tk.Label(
             qtv_frame,
-            text="",
+            text="",  # sẽ cập nhật trong on_show()
             fg="#716040",
             font=("proxima-nova", 12, "bold"),
             bg="#f9f4ef"
         )
-        self.label_qtv.place(x=0, y=0, width=160, height=30)
+        self.label_qtv.place(x=0, y=20, width=180, height=20)
 
+        # Nút đăng xuất
         HoverButton(
             qtv_frame,
             text="Đăng xuất",
-            font=("proxima-nova", 12, "bold"),
+            font=("proxima-nova", 10, "bold"),
             bg="#8c7851", fg="#fffffe",
-            cursor="hand2",
-            bd=3, relief="ridge",
+            cursor="hand2", bd=2, relief="ridge",
             command=lambda: self.controller.show_frame("MH_DangNhap")
-        ).place(x=0, y=30, width=160, height=30)
+        ).place(x=0, y=40, width=180, height=25)
 
-        # Cập nhật thời gian liên tục (giữ nguyên)
+        # Cập nhật thời gian liên tục
         def update_time():
             now = datetime.now().strftime("%H:%M:%S  %d/%m/%Y")
             self.label_time.config(text=now)
@@ -92,11 +92,11 @@ class MH_QuanLy(tk.Frame):
 
         # Vùng nội dung bên dưới thanh menu
         content_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        content_frame.place(x=0, y=100, width=1280, height=520)
+        content_frame.place(x=0, y=80, width=1280, height=560)
 
-        # Khung trái – 4 nút quản lý (giữ nguyên)
+        # Khung trái – 4 nút quản lý
         left_panel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
-        left_panel.place(x=20, y=20, width=320, height=500)
+        left_panel.place(x=20, y=20, width=320, height=520)
 
         left_buttons = [
             ("QUẢN LÝ THỰC ĐƠN", self.show_quan_ly_thuc_don),
@@ -115,19 +115,19 @@ class MH_QuanLy(tk.Frame):
             ).place(x=20, y=y, width=280, height=60)
             y += 90
 
-        right_panel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
-        right_panel.place(x=940, y=20, width=320, height=500)
 
+        self.right_pannel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
+        self.right_pannel.place(x=940, y=20, width=320, height=520)
 
         action_buttons = [
             ("Thêm", lambda: self.handle_action("add")),
             ("Sửa", lambda: self.handle_action("edit")),
             ("Xóa", lambda: self.handle_action("delete"))
         ]
-        y = 30
+        y = 30  # bắt đầu sau khung nhập
         for text, cmd in action_buttons:
             HoverButton(
-                right_panel, text=text,
+                self.right_pannel, text=text,
                 font=("proxima-nova", 14, "bold"),
                 bg="#8c7851", fg="#fffffe",
                 cursor="hand2", bd=3, relief="ridge",
@@ -135,9 +135,31 @@ class MH_QuanLy(tk.Frame):
             ).place(x=20, y=y, width=280, height=80)
             y += 90
 
-        # Khung nhập nhóm món (giữ nguyên)
-        self.frame_nhap_nhom = tk.Frame(right_panel, bg="#fffffe", bd=2, relief="ridge")
-        self.frame_nhap_nhom.place(x=20, y=250, width=280, height=220)
+        #Xử lý Nhóm Bàn
+        self.frame_nhap_ban = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
+        self.frame_nhap_ban.place(x=20, y=30, width=280, height=280)
+        self.frame_nhap_ban.place_forget()
+
+        fields_ban = ["Mã bàn", "Tên bàn", "Trạng thái", "Thời gian","Người lập"]
+        self.entry_ban = {}
+        y = 10
+        for field in fields_ban:
+            tk.Label(self.frame_nhap_ban, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
+            entry = tk.Entry(self.frame_nhap_ban, font=("Arial", 10))
+            entry.place(x=100, y=y, width=170)
+            self.entry_ban[field] = entry
+            y += 30
+
+        tk.Button(
+            self.frame_nhap_ban, text="Lưu", font=("Arial", 10, "bold"),
+            bg="#4CAF50", fg="white", cursor="hand2",
+            command=self.luu_ban
+        ).place(x=80, y=200, width=120, height=30)
+
+            #################################
+
+        self.frame_nhap_nhom = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
+        self.frame_nhap_nhom.place(x=20, y=30, width=200, height=80)  # đủ chỗ cho nút Lưu
         self.frame_nhap_nhom.place_forget()
 
         tk.Label(self.frame_nhap_nhom, text="Tên nhóm", font=("Arial", 10), bg="#fffffe").place(x=10, y=10)
@@ -148,70 +170,99 @@ class MH_QuanLy(tk.Frame):
             self.frame_nhap_nhom, text="Lưu", font=("Arial", 10, "bold"),
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_nhom_mon
-        ).place(x=80, y=170, width=120, height=30)
-
+        ).place(x=80, y=50, width=120, height=30)
 
         # Khung trung tâm – placeholder để sau hiển thị bảng
-        center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2)
-        center_panel.place(x=360, y=20, width=560, height=500)
-        
-        ### THÊM SCROLLBAR CHO QUẢN LÝ THỰC ĐƠN ###
+        center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
+        center_panel.place(x=360, y=20, width=580, height=520)
+        #Khung quản lý thực đơn
         self.frame_thuc_don = tk.Frame(center_panel, bg="#eaddcf")
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
-        
-        # 1. Tạo Scrollbar
-        scrollbar_mon = ttk.Scrollbar(self.frame_thuc_don, orient="vertical")
-
         columns = ("stt", "ma_mon", "ten_mon", "don_gia", "loai", "dvt")
-        # 2. Tạo Treeview và liên kết với Scrollbar
-        self.tree_mon = ttk.Treeview(self.frame_thuc_don, columns=columns, show="headings",
-                                     yscrollcommand=scrollbar_mon.set)
-        scrollbar_mon.config(command=self.tree_mon.yview)
-
-        # 3. Đặt Treeview và Scrollbar
-        scrollbar_mon.pack(side="right", fill="y")
-        self.tree_mon.pack(fill="both", expand=True, side="left")
-        
-        self.tree_mon.heading("stt", text="STT")
-        self.tree_mon.column("stt", width=50, anchor="center")
-        self.tree_mon.heading("ma_mon", text="Mã món")
-        self.tree_mon.column("ma_mon", width=80, anchor="center")
-        self.tree_mon.heading("ten_mon", text="Tên món")
-        self.tree_mon.column("ten_mon", width=160, anchor="center")
-        self.tree_mon.heading("don_gia", text="Đơn giá")
-        self.tree_mon.column("don_gia", width=80, anchor="center")
-        self.tree_mon.heading("loai", text="Loại")
-        self.tree_mon.column("loai", width=80, anchor="center")
-        self.tree_mon.heading("dvt", text="Đơn vị tính")
-        self.tree_mon.column("dvt", width=110, anchor="center")
-        ### HẾT SCROLLBAR CHO QUẢN LÝ THỰC ĐƠN ###
-
-        ### THÊM SCROLLBAR CHO QUẢN LÝ NHÓM MÓN ###
+        self.tree_mon = ttk.Treeview(self.frame_thuc_don, columns=columns, show="headings")
+        #Khung quản lý nhóm món
         self.frame_nhom_mon = tk.Frame(center_panel, bg="#eaddcf")
         self.frame_nhom_mon.place(x=0, y=0, relwidth=1, relheight=1)
+        #Khung quản lý bàn
+        self.frame_ban = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_ban.place(x=0, y=0, relwidth=1, relheight=1)
 
-        # 1. Tạo Scrollbar
-        scrollbar_nhom = ttk.Scrollbar(self.frame_nhom_mon, orient="vertical")
+        columns_ban = ("stt", "ma_ban", "ten_ban", "trang_thai", "thoi_gian","nguoi_lap")
+        self.tree_ban = ttk.Treeview(self.frame_ban, columns=columns_ban, show="headings")
 
-        # 2. Tạo Treeview và liên kết với Scrollbar
-        self.tree_nhom = ttk.Treeview(self.frame_nhom_mon, columns=("ten_nhom",), show="headings",
-                                      yscrollcommand=scrollbar_nhom.set)
-        scrollbar_nhom.config(command=self.tree_nhom.yview)
+        self.tree_ban.heading("stt", text="STT")
+        self.tree_ban.column("stt", width=50, anchor="center")
 
-        # 3. Đặt Treeview và Scrollbar
-        scrollbar_nhom.pack(side="right", fill="y")
-        self.tree_nhom.pack(fill="both", expand=True, side="left")
+        self.tree_ban.heading("ma_ban", text="Mã bàn")
+        self.tree_ban.column("ma_ban", width=70, anchor="center")
 
+        self.tree_ban.heading("ten_ban", text="Tên bàn")
+        self.tree_ban.column("ten_ban", width=100, anchor="center")
+
+        self.tree_ban.heading("trang_thai", text="Trạng thái")
+        self.tree_ban.column("trang_thai", width=80, anchor="center")
+
+        self.tree_ban.heading("thoi_gian", text="Thời gian")
+        self.tree_ban.column("thoi_gian", width=130, anchor="center")
+
+        self.tree_ban.heading("nguoi_lap", text="Người lập")
+        self.tree_ban.column("nguoi_lap", width=90, anchor="center")
+
+        self.tree_ban.pack(fill="both", expand=True)
+
+        self.tree_nhom = ttk.Treeview(self.frame_nhom_mon, columns=("ten_nhom",), show="headings")
         self.tree_nhom.heading("ten_nhom", text="Tên nhóm món")
         self.tree_nhom.column("ten_nhom", anchor="center", width=540)
-        ### HẾT SCROLLBAR CHO QUẢN LÝ NHÓM MÓN ###
+        self.tree_nhom.pack(fill="both", expand=True)
+        #Khung quản lý tài khoản
+        self.frame_tai_khoan = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
+        columns_tk = ("stt", "ten_dang_nhap", "ho_ten", "vai_tro")
+        self.tree_tai_khoan = ttk.Treeview(self.frame_tai_khoan, columns=columns_tk, show="headings")
 
-        # Tải dữ liệu ban đầu
+        self.tree_tai_khoan.heading("stt", text="STT")
+        self.tree_tai_khoan.column("stt", width=50, anchor="center")
+
+        self.tree_tai_khoan.heading("ten_dang_nhap", text="Tên đăng nhập")
+        self.tree_tai_khoan.column("ten_dang_nhap", width=150, anchor="center")
+
+        self.tree_tai_khoan.heading("ho_ten", text="Họ tên")
+        self.tree_tai_khoan.column("ho_ten", width=180, anchor="center")
+
+        self.tree_tai_khoan.heading("vai_tro", text="Vai trò")
+        self.tree_tai_khoan.column("vai_tro", width=100, anchor="center")
+
+        self.tree_tai_khoan.pack(fill="both", expand=True)
+
+        # Cấu hình từng cột
+        self.tree_mon.heading("stt", text="STT")
+        self.tree_mon.column("stt", width=50, anchor="center")
+
+        self.tree_mon.heading("ma_mon", text="Mã món")
+        self.tree_mon.column("ma_mon", width=80, anchor="center")
+
+        self.tree_mon.heading("ten_mon", text="Tên món")
+        self.tree_mon.column("ten_mon", width=160, anchor="center")
+
+        self.tree_mon.heading("don_gia", text="Đơn giá")
+        self.tree_mon.column("don_gia", width=80, anchor="center")
+
+        self.tree_mon.heading("loai", text="Loại")
+        self.tree_mon.column("loai", width=80, anchor="center")
+
+        self.tree_mon.heading("dvt", text="Đơn vị tính")
+        self.tree_mon.column("dvt", width=110, anchor="center")
+          
         self.ds_mon = DanhSachMon()
         self.ds_mon.doc_file("data/du_lieu_mon.json")
         
+        from objects.DanhSachNhomMon import DanhSachNhomMon
         self.ds_nhom = DanhSachNhomMon()
         self.ds_nhom.doc_file("data/du_lieu_nhom_mon.json")
+
+        from objects.Ban import DanhSachBan
+        self.ds_ban = DanhSachBan()
+        self.ds_ban.doc_file("data/du_lieu_ban.json")
 
         tk.Label(
             center_panel, text="Khu vực nội dung (bảng danh sách)",
@@ -220,7 +271,7 @@ class MH_QuanLy(tk.Frame):
         ).place(relx=0.5, rely=0.5, anchor="center")
 
         ##################### Thêm món##################################
-        self.frame_them_mon = tk.Frame(right_panel, bg="#fffffe", bd=2, relief="ridge")
+        self.frame_them_mon = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
         self.frame_them_mon.place(x=20, y=250, width=280, height=220)
         self.frame_them_mon.place_forget()
 
@@ -230,7 +281,7 @@ class MH_QuanLy(tk.Frame):
         for field in fields:
             tk.Label(self.frame_them_mon, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
             entry = tk.Entry(self.frame_them_mon, font=("Arial", 10))
-            entry.place(x=100, y=y, width=160) # Chỉnh width entry
+            entry.place(x=100, y=y, width=200)
             self.entry_mon[field] = entry
             y += 30
 
@@ -239,7 +290,11 @@ class MH_QuanLy(tk.Frame):
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_mon_moi
         ).place(x=80, y=170, width=120, height=30)
- 
+
+    def on_show(self):
+        current = self.controller.current_user
+        if current:
+            self.label_qtv.config(text=f"QTV: {current.username}")
 
     # Handlers trái
     def show_quan_ly_thuc_don(self):
@@ -247,6 +302,7 @@ class MH_QuanLy(tk.Frame):
         self.trang_hien_tai = "thuc_don"
         self.load_mon()
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
+        self.tree_mon.pack(fill="both", expand=True)
         self.frame_thuc_don.tkraise()
 
     def handle_action(self, action):
@@ -260,7 +316,7 @@ class MH_QuanLy(tk.Frame):
                 self.xoa_mon()
         elif self.trang_hien_tai == "nhom_mon":
             if action == "add":
-                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=220) # Chỉnh kích thước
+                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
                 self.entry_nhom.delete(0, tk.END)
                 self.dang_sua_nhom = False
             elif action == "edit":
@@ -268,16 +324,114 @@ class MH_QuanLy(tk.Frame):
                 if not selected:
                     print("Chưa chọn nhóm để sửa")
                     return
+
                 ten_cu = self.tree_nhom.item(selected[0])["values"][0]
                 self.nhom_cu = ten_cu
                 self.dang_sua_nhom = True
-                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=220) # Chỉnh kích thước
+
+                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
+                self.entry_nhom.delete(0, tk.END)
+                self.entry_nhom.insert(0, ten_cu)
+                print(f"Đang sửa nhóm: {ten_cu}")
+            elif action == "delete":
+                selected = self.tree_nhom.selection()
+                if not selected:
+                    print("Chưa chọn nhóm để xóa")
+                    return
+
+                ten = self.tree_nhom.item(selected[0])["values"][0]
+
+                from tkinter import messagebox
+                confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhóm '{ten}' không?")
+                if not confirm:
+                    print("Hủy xóa nhóm")
+                    return
+
+                if self.ds_nhom.xoa_nhom(ten):
+                    print(f"Đã xóa nhóm: {ten}")
+                    self.ds_nhom.ghi_file("data/du_lieu_nhom_mon.json")
+                    self.load_nhom_mon()
+                else:
+                    print("Không thể xóa nhóm")
+        elif self.trang_hien_tai == "ban":
+            if action == "add":
+                print("Đang thêm bàn mới")
+                self.frame_nhap_ban.place(x=20, y=120, width=280, height=250)
+                for entry in self.entry_ban.values():
+                    entry.delete(0, tk.END)
+                self.dang_sua_ban = False
+            elif action == "delete":
+                selected = self.tree_ban.selection()
+                if not selected:
+                    print("Chưa chọn bàn để xóa")
+                    return
+
+                item = self.tree_ban.item(selected[0])
+                stt = item["values"][0]
+                ten_ban = item["values"][2]
+
+                from tkinter import messagebox
+                confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa bàn '{ten_ban}' không?")
+                if not confirm:
+                    print("Hủy xóa bàn")
+                    return
+
+                index = stt - 1
+                if 0 <= index < len(self.ds_ban.ds):
+                    del self.ds_ban.ds[index]
+                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
+                    self.load_ban()
+                    print(f"Đã xóa bàn: {ten_ban}")
+                else:
+                    print("Không tìm thấy bàn để xóa")
+
+                ten_cu = self.tree_nhom.item(selected[0])["values"][0]
+                self.nhom_cu = ten_cu
+                self.dang_sua_nhom = True
+                self.frame_nhap_nhom.place(x=20, y=30, width=280, height=280)
                 self.entry_nhom.delete(0, tk.END)
                 self.entry_nhom.insert(0, ten_cu)
             elif action == "delete":
                 self.xoa_nhom_mon()
 
+            elif action == "edit":
+                selected = self.tree_ban.selection()
+                if not selected:
+                    print("Chưa chọn bàn để sửa")
+                    return
+
+                item = self.tree_ban.item(selected[0])
+                stt = item["values"][0]
+                index = stt - 1
+
+                if 0 <= index < len(self.ds_ban.ds):
+                    ban = self.ds_ban.ds[index]
+                    self.ban_dang_sua_index = index
+                    self.dang_sua_ban = True
+
+                    self.frame_nhap_ban.place(x=20, y=120, width=280, height=290)
+
+                    self.entry_ban["Mã bàn"].delete(0, tk.END)
+                    self.entry_ban["Mã bàn"].insert(0, ban.ma_ban)
+
+                    self.entry_ban["Tên bàn"].delete(0, tk.END)
+                    self.entry_ban["Tên bàn"].insert(0, ban.ten_ban)
+
+                    self.entry_ban["Trạng thái"].delete(0, tk.END)
+                    self.entry_ban["Trạng thái"].insert(0, ban.trang_thai)
+
+                    self.entry_ban["Thời gian"].delete(0, tk.END)
+                    self.entry_ban["Thời gian"].insert(0, ban.thoi_gian)
+
+                    self.entry_ban["Người lập"].delete(0, tk.END)
+                    self.entry_ban["Người lập"].insert(0, getattr(ban, "nguoi_lap", ""))
+
+                    print(f"Đang sửa bàn: {ban.ten_ban}")
+                else:
+                    print("Không tìm thấy bàn để sửa")
+
     def hien_khung_them_mon(self):
+        # Xóa nội dung cũ
         print("Đang hiển thị khung thêm món")
         self.frame_them_mon.place(x=20, y=250, width=280, height=220)
         for entry in self.entry_mon.values():
@@ -318,22 +472,34 @@ class MH_QuanLy(tk.Frame):
         self.clear_center()
 
     def clear_center(self):
-        # KHÔNG CẦN pack_forget() VÌ ĐÃ DÙNG place_forget() CỦA FRAME CHỨA NÓ
-        
+        try:
+            self.tree_mon.pack_forget()
+        except:
+            pass
+        try:
+            self.tree_nhom.pack_forget()
+        except:
+            pass
+        try:
+            self.tree_ban.pack_forget()
+        except:
+            pass
+
         # Ẩn khung nhập phụ
         self.frame_them_mon.place_forget()
         self.frame_nhap_nhom.place_forget()
-
+        self.frame_nhap_ban.place_forget()
         # Ẩn khung chính
         self.frame_thuc_don.place_forget()
         self.frame_nhom_mon.place_forget()
-
+        self.frame_ban.place_forget()
         # Reset trạng thái
         self.trang_hien_tai = None
         self.dang_sua = False
         self.dang_sua_nhom = False
+        self.dang_sua_ban = False
 
-    # Xóa Món (giữ nguyên)
+    # Xóa Món
     def xoa_mon(self):
         selected = self.tree_mon.selection()
         if not selected:
@@ -341,9 +507,10 @@ class MH_QuanLy(tk.Frame):
             return
 
         item = self.tree_mon.item(selected[0])
-        stt = item["values"][0]
-        ten_mon = item["values"][2]
+        stt = item["values"][0]  # STT là số thứ tự hiển thị
+        ten_mon = item["values"][2]  # Tên món để hiển thị xác nhận
 
+        # Hộp thoại xác nhận
         from tkinter import messagebox
         confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa món '{ten_mon}' không?")
         if not confirm:
@@ -359,7 +526,7 @@ class MH_QuanLy(tk.Frame):
         else:
             print("Không tìm thấy món để xóa")
 
-    #Sửa món (giữ nguyên)
+    #Sửa món
     def hien_khung_sua_mon(self):
         selected = self.tree_mon.selection()
         if not selected:
@@ -372,7 +539,7 @@ class MH_QuanLy(tk.Frame):
 
         if 0 <= index < len(self.ds_mon.ds):
             mon = self.ds_mon.ds[index]
-            self.mon_dang_sua_index = index
+            self.mon_dang_sua_index = index  # ✅ lưu lại vị trí để sửa
 
             self.frame_them_mon.place(x=20, y=250, width=280, height=220)
             self.entry_mon["Mã món"].delete(0, tk.END)
@@ -390,10 +557,18 @@ class MH_QuanLy(tk.Frame):
             self.entry_mon["Đơn vị tính"].delete(0, tk.END)
             self.entry_mon["Đơn vị tính"].insert(0, mon.dvt)
 
-            self.dang_sua = True
+            self.dang_sua = True  # ✅ đánh dấu đang sửa
             print(f"Đang sửa món: {mon.ten_mon}")
         else:
             print("Không tìm thấy món để sửa")
+
+
+                ########
+    
+    def load_nhom_mon(self):
+        self.tree_nhom.delete(*self.tree_nhom.get_children())
+        for ten in self.ds_nhom.lay_danh_sach():
+            self.tree_nhom.insert("", "end", values=(ten,))
 
     def show_quan_ly_nhom_mon(self):
         print("Chọn: Quản lý nhóm món")
@@ -401,7 +576,7 @@ class MH_QuanLy(tk.Frame):
         self.trang_hien_tai = "nhom_mon"
         self.load_nhom_mon()
         self.frame_nhom_mon.place(x=0, y=0, relwidth=1, relheight=1)
-        # self.tree_nhom.pack(fill="both", expand=True) # KHÔNG CẦN pack() Ở ĐÂY NỮA
+        self.tree_nhom.pack(fill="both", expand=True)
         self.frame_nhom_mon.tkraise()
 
     def luu_nhom_mon(self):
@@ -447,25 +622,75 @@ class MH_QuanLy(tk.Frame):
             self.load_nhom_mon()
         else:
             print("Không thể xóa nhóm")
-
+                ###########
     def show_quan_ly_ban(self):
         print("Chọn: Quản lý bàn")
+        self.clear_center()
+        self.trang_hien_tai = "ban"
+        self.load_ban()
+        self.frame_ban.place(x=0, y=0, relwidth=1, relheight=1)
+        self.tree_ban.pack(fill="both", expand=True)
+        self.frame_ban.tkraise()
 
+    def load_ban(self):
+        self.tree_ban.delete(*self.tree_ban.get_children())
+        for i, ban in enumerate(self.ds_ban.ds, start=1):
+            self.tree_ban.insert("", "end", values=(
+                i, ban.ma_ban, ban.ten_ban, ban.trang_thai, ban.thoi_gian, getattr(ban, "nguoi_lap", "")
+            ))
+
+    def luu_ban(self):
+        ma = self.entry_ban["Mã bàn"].get()
+        ten = self.entry_ban["Tên bàn"].get()
+        tt = self.entry_ban["Trạng thái"].get()
+        tg = self.entry_ban["Thời gian"].get()
+        nl = self.entry_ban["Người lập"].get()
+
+        if not ma or not ten:
+            print("Thiếu thông tin bàn")
+            return
+
+        from objects.Ban import Ban
+        ban_moi = Ban(ma, ten, tt or "Free", tg or "", None, nl or "")
+
+        if getattr(self, "dang_sua_ban", False):
+            self.ds_ban.ds[self.ban_dang_sua_index] = ban_moi
+            print(f"Đã sửa bàn: {ten}")
+            self.dang_sua_ban = False
+        else:
+            self.ds_ban.ds.append(ban_moi)
+            print(f"Đã thêm bàn mới: {ten}")
+
+        self.ds_ban.ghi_file("data/du_lieu_ban.json")
+        self.load_ban()
+        self.frame_nhap_ban.place_forget()
+
+                ###############
     def show_quan_ly_tai_khoan(self):
         print("Chọn: Quản lý tài khoản")
+        self.clear_center()
+        self.trang_hien_tai = "tai_khoan"
+        self.load_tai_khoan()
+        self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
+        self.tree_tai_khoan.pack(fill="both", expand=True)
+        self.frame_tai_khoan.tkraise()
 
-    def update_user_display(self):
-        current = self.controller.current_user
-        if current:
-            username = current.username
-            user_role = current.role
-        else:
-            # Trường hợp lỗi/đăng xuất (fallback)
-            username = "ADMIN"
-            user_role = "Manager"
-            
-        self.label_qtv.config(text=f"QTV: {username}")
+    def load_tai_khoan(self):
+        self.tree_tai_khoan.delete(*self.tree_tai_khoan.get_children())
+        for i, tk in enumerate(self.ds_tai_khoan.ds, start=1):
+            self.tree_tai_khoan.insert("", "end", values=(i, tk.ten_dang_nhap, tk.ho_ten, tk.vai_tro))
+        self.tree_tai_khoan.pack(fill="both", expand=True)
 
-    def on_show(self):
-        self.update_user_display() 
-        self.update_user_display()
+
+
+
+
+
+
+
+
+
+
+
+
+              
