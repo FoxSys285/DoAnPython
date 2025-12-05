@@ -5,8 +5,13 @@
         "role": "Manager"
     },
     {
-        "username": "test",
+        "username": "nv002",
         "password": "123456",
-        "role": "Employee"
+        "role": "Cashier"
+    },
+    {
+        "username": "nv003",
+        "password": "123456",
+        "role": "Cashier"
     }
 ]
