@@ -28,9 +28,9 @@ class MH_QuanLy(tk.Frame):
         menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
         menu_frame.place(x=0, y=0, width=1280, height=80)
 
-        from objects.TaiKhoan import DanhSachTaiKhoan
-        self.ds_tai_khoan = DanhSachTaiKhoan()
-        self.ds_tai_khoan.doc_file("data/du_lieu_tk.json")
+        from objects.NhanVien import DanhSachNhanVien
+        self.ds_nhan_vien = DanhSachNhanVien()
+        self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
 
         # Nút chuyển trang
         menu_buttons = [
@@ -102,7 +102,7 @@ class MH_QuanLy(tk.Frame):
             ("QUẢN LÝ THỰC ĐƠN", self.show_quan_ly_thuc_don),
             ("QUẢN LÝ NHÓM MÓN", self.show_quan_ly_nhom_mon),
             ("QUẢN LÝ BÀN", self.show_quan_ly_ban),
-            ("QUẢN LÝ TÀI KHOẢN", self.show_quan_ly_tai_khoan),
+            ("QUẢN LÝ NHÂN VIÊN", self.show_quan_ly_nhan_vien),
         ]
         y = 30
         for text, cmd in left_buttons:
@@ -214,25 +214,49 @@ class MH_QuanLy(tk.Frame):
         self.tree_nhom.heading("ten_nhom", text="Tên nhóm món")
         self.tree_nhom.column("ten_nhom", anchor="center", width=540)
         self.tree_nhom.pack(fill="both", expand=True)
-        #Khung quản lý tài khoản
-        self.frame_tai_khoan = tk.Frame(center_panel, bg="#eaddcf")
-        self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
-        columns_tk = ("stt", "ten_dang_nhap", "ho_ten", "vai_tro")
-        self.tree_tai_khoan = ttk.Treeview(self.frame_tai_khoan, columns=columns_tk, show="headings")
+        #Khung quản lý nhân viên
+        self.frame_nhan_vien = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
+        columns_nv = ("stt", "ma_nv", "ten_nv", "role", "luong", "username")
+        self.tree_nhan_vien = ttk.Treeview(self.frame_nhan_vien, columns=columns_nv, show="headings")
 
-        self.tree_tai_khoan.heading("stt", text="STT")
-        self.tree_tai_khoan.column("stt", width=50, anchor="center")
+        self.tree_nhan_vien.heading("stt", text="STT")
+        self.tree_nhan_vien.column("stt", width=50, anchor="center")
 
-        self.tree_tai_khoan.heading("ten_dang_nhap", text="Tên đăng nhập")
-        self.tree_tai_khoan.column("ten_dang_nhap", width=150, anchor="center")
+        self.tree_nhan_vien.heading("ma_nv", text="Mã NV")
+        self.tree_nhan_vien.column("ma_nv", width=80, anchor="center")
 
-        self.tree_tai_khoan.heading("ho_ten", text="Họ tên")
-        self.tree_tai_khoan.column("ho_ten", width=180, anchor="center")
+        self.tree_nhan_vien.heading("ten_nv", text="Tên nhân viên")
+        self.tree_nhan_vien.column("ten_nv", width=150, anchor="center")
 
-        self.tree_tai_khoan.heading("vai_tro", text="Vai trò")
-        self.tree_tai_khoan.column("vai_tro", width=100, anchor="center")
+        self.tree_nhan_vien.heading("role", text="Chức vụ")
+        self.tree_nhan_vien.column("role", width=90, anchor="center")
 
-        self.tree_tai_khoan.pack(fill="both", expand=True)
+        self.tree_nhan_vien.heading("luong", text="Lương")
+        self.tree_nhan_vien.column("luong", width=100, anchor="center")
+
+        self.tree_nhan_vien.heading("username", text="Tài khoản")
+        self.tree_nhan_vien.column("username", width=100, anchor="center")
+
+        self.frame_nhap_nv = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
+        self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
+        self.frame_nhap_nv.place_forget()
+
+        fields_nv = ["Mã NV", "Tên nhân viên", "Chức vụ", "Lương", "Tài khoản"]
+        self.entry_nv = {}
+        y = 10
+        for field in fields_nv:
+            tk.Label(self.frame_nhap_nv, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
+            entry = tk.Entry(self.frame_nhap_nv, font=("Arial", 10))
+            entry.place(x=110, y=y, width=160)
+            self.entry_nv[field] = entry
+            y += 30
+
+        tk.Button(
+            self.frame_nhap_nv, text="Lưu", font=("Arial", 10, "bold"),
+            bg="#4CAF50", fg="white", cursor="hand2",
+            command=self.luu_nhan_vien_moi
+        ).place(x=80, y=220, width=120, height=30)
 
         # Cấu hình từng cột
         self.tree_mon.heading("stt", text="STT")
@@ -429,6 +453,14 @@ class MH_QuanLy(tk.Frame):
                     print(f"Đang sửa bàn: {ban.ten_ban}")
                 else:
                     print("Không tìm thấy bàn để sửa")
+        elif self.trang_hien_tai == "nhan_vien":
+            if action == "add":
+                self.hien_khung_them_nv()
+            elif action == "delete":
+                self.xoa_nhan_vien()
+            elif action == "edit":
+                self.hien_khung_sua_nv()
+            
 
     def hien_khung_them_mon(self):
         # Xóa nội dung cũ
@@ -484,7 +516,10 @@ class MH_QuanLy(tk.Frame):
             self.tree_ban.pack_forget()
         except:
             pass
-
+        try:
+            self.frame_nhap_nv.place_forget()
+        except:
+            pass
         # Ẩn khung nhập phụ
         self.frame_them_mon.place_forget()
         self.frame_nhap_nhom.place_forget()
@@ -623,6 +658,7 @@ class MH_QuanLy(tk.Frame):
         else:
             print("Không thể xóa nhóm")
                 ###########
+    
     def show_quan_ly_ban(self):
         self.ds_ban.doc_file("data/du_lieu_ban.json")
         print("Chọn: Quản lý bàn")
@@ -666,25 +702,27 @@ class MH_QuanLy(tk.Frame):
         self.load_ban()
         self.frame_nhap_ban.place_forget()
 
+
                 ###############
-    def show_quan_ly_tai_khoan(self):
-        pass
-        # print("Chọn: Quản lý tài khoản")
-        # self.clear_center()
-        # self.trang_hien_tai = "tai_khoan"
-        # self.load_tai_khoan()
-        # self.frame_tai_khoan.place(x=0, y=0, relwidth=1, relheight=1)
-        # self.tree_tai_khoan.pack(fill="both", expand=True)
-        # self.frame_tai_khoan.tkraise()
+    
+    def show_quan_ly_nhan_vien(self):
+        print("Chọn: Quản lý nhân viên")
+        self.clear_center()
+        self.trang_hien_tai = "nhan_vien"
+        self.load_nhan_vien()
+        self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
+        self.tree_nhan_vien.pack(fill="both", expand=True)
+        self.frame_nhan_vien.tkraise()
 
-    def load_tai_khoan(self):
-        pass
-        # self.tree_tai_khoan.delete(*self.tree_tai_khoan.get_children())
-        # for i, tk in enumerate(self.ds_tai_khoan.ds, start=1):
-        #     self.tree_tai_khoan.insert("", "end", values=(i, tk.ten_dang_nhap, tk.ho_ten, tk.vai_tro))
-        # self.tree_tai_khoan.pack(fill="both", expand=True)
-
-
+    def load_nhan_vien(self):
+        self.tree_nhan_vien.delete(*self.tree_nhan_vien.get_children())
+        for i, nv in enumerate(self.ds_nhan_vien.ds.values(), start=1):
+            self.tree_nhan_vien.insert("", "end", values=(
+                i, nv.ma_nv, nv.ten_nv, nv.role, nv.luong, nv.username
+            ))
+        print("Số nhân viên:", len(self.ds_nhan_vien.ds))
+        for nv in self.ds_nhan_vien.ds.values():
+            print(nv)
 
     def update_user_display(self):
         
@@ -708,18 +746,123 @@ class MH_QuanLy(tk.Frame):
         
         for i, btn in enumerate(self.manager_buttons):
             if is_manager:
-                # Hiện nút nếu là Manager
-                btn.place(x=manager_xpos[i], y=40, width=125, height=60)
+                nv = self.ds_nhan_vien.find_by_username(username)
+                if nv and hasattr(nv, "password"):
+                    print(f"Mật khẩu của Manager {nv.ten_nv}: {nv.password}")
             else:
                 # Ẩn nút nếu không phải Manager
                 btn.place_forget()
 
+    def hien_khung_them_nv(self):
+        print("Đang hiển thị khung thêm nhân viên")
+        self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
+        for entry in self.entry_nv.values():
+            entry.delete(0, tk.END)
+        self.dang_sua_nv = False
+
+    def luu_nhan_vien_moi(self):
+        ma = self.entry_nv["Mã NV"].get().strip()
+        ten = self.entry_nv["Tên nhân viên"].get().strip()
+        role = self.entry_nv["Chức vụ"].get().strip()
+        luong = self.entry_nv["Lương"].get().strip()
+        username = self.entry_nv["Tài khoản"].get().strip()
+
+        if not ma or not ten or not role or not luong or not username:
+            print("Thiếu thông tin bắt buộc")
+            return
+        try:
+            luong = int(luong)
+        except:
+            print("Lương phải là số")
+            return
+
+        from objects.NhanVien import NhanVien
+        nv_moi = NhanVien(ma, ten, role, luong, username)
+
+        if getattr(self, "dang_sua_nv", False):
+            self.ds_nhan_vien.ds[self.ma_nv_dang_sua] = nv_moi
+            print(f"Đã cập nhật nhân viên: {ten}")
+        else:
+            if self.ds_nhan_vien.add_nv(nv_moi):
+                print(f"Đã thêm nhân viên: {ten}")
+            else:
+                print("Mã NV đã tồn tại")
+                return
+
+    # Ghi file và reload
+        self.ds_nhan_vien.ghi_file("data/du_lieu_nv.json")
+        self.load_nhan_vien()
+        self.frame_nhap_nv.place_forget()
+        self.dang_sua_nv = False
+
+    def xoa_nhan_vien(self):
+        selected = self.tree_nhan_vien.selection()
+        if not selected:
+            print("Chưa chọn nhân viên để xóa")
+            return
+
+        item = self.tree_nhan_vien.item(selected[0])
+        stt = item["values"][0]       # số thứ tự
+        ma_nv = item["values"][1]     # mã NV
+        ten_nv = item["values"][2]    # tên NV
+
+        from tkinter import messagebox
+        confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhân viên '{ten_nv}' ({ma_nv}) không?")
+        if not confirm:
+            print("Hủy xóa nhân viên")
+            return
+
+        # Xóa trong dict
+        if ma_nv in self.ds_nhan_vien.ds:
+            self.ds_nhan_vien.remove_nv(ma_nv)
+            self.ds_nhan_vien.ghi_file("data/du_lieu_nv.json")
+            self.load_nhan_vien()
+            print(f"Đã xóa nhân viên: {ten_nv}")
+        else:
+            print("Không tìm thấy nhân viên để xóa")
 
 
+    def hien_khung_sua_nv(self):
+        selected = self.tree_nhan_vien.selection()
+        if not selected:
+            print("Chưa chọn nhân viên để sửa")
+            return
 
+        item = self.tree_nhan_vien.item(selected[0])
+        ma_nv = item["values"][1]
 
+        nv = self.ds_nhan_vien.ds.get(ma_nv)
+        if not nv:
+            print("Không tìm thấy nhân viên để sửa")
+            return
 
+        # Hiện khung nhập
+        self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
 
+        # Đổ dữ liệu vào các ô nhập
+        self.entry_nv["Mã NV"].delete(0, tk.END)
+        self.entry_nv["Mã NV"].insert(0, nv.ma_nv)
 
+        self.entry_nv["Tên nhân viên"].delete(0, tk.END)
+        self.entry_nv["Tên nhân viên"].insert(0, nv.ten_nv)
 
-              
+        self.entry_nv["Chức vụ"].delete(0, tk.END)
+        self.entry_nv["Chức vụ"].insert(0, nv.role)
+
+        self.entry_nv["Lương"].delete(0, tk.END)
+        self.entry_nv["Lương"].insert(0, nv.luong)
+
+        self.entry_nv["Tài khoản"].delete(0, tk.END)
+        self.entry_nv["Tài khoản"].insert(0, nv.username)
+
+        # Đánh dấu đang sửa
+        self.dang_sua_nv = True
+        self.ma_nv_dang_sua = ma_nv
+
+    def reset_quan_ly(self):
+        self.clear_center()
+        self.trang_hien_tai = None
+        # Hiện label mặc định nếu muốn
+        self.label_mac_dinh = tk.Label(self.center_panel, text="Chọn chức năng quản lý bên trái", font=("Arial", 14), bg="#eaddcf")
+        self.label_mac_dinh.place(relx=0.5, rely=0.5, anchor="center")
+                
