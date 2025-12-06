@@ -32,16 +32,15 @@ class DanhSachNhanVien:
                 
                 self.ds = {}
                 for nv_data in data:
-                    nhan_vien = NhanVien(
-                        nv_data["ma_nv"], 
-                        nv_data["ten_nv"], 
-                        nv_data["role"],  
-                        nv_data["luong"], 
-                        nv_data["username"] 
+                    nv = NhanVien(
+                        nv_data["ma_nv"],
+                        nv_data["ten_nv"],
+                        nv_data["role"],
+                        nv_data["luong"],
+                        nv_data["username"]
                     )
-                    self.ds[nhan_vien.ma_nv] = nhan_vien
-                
-                print("Đọc file nhân viên thành công")
+                    self.ds[nv.ma_nv] = nv
+            print("Đọc file nhân viên thành công")
         except FileNotFoundError:
             print(f"Lỗi đọc file: Không tìm thấy tệp {filename}")
             self.ds = {}
