@@ -48,6 +48,7 @@ class DanhSachMon:
         try:
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump([m.to_dict() for m in self.ds], f, ensure_ascii=False, indent=4)
+                print("Ghi file thành công")
         except Exception as loi:
             print("Lỗi ghi file Món:", loi)
 
@@ -67,3 +68,9 @@ class DanhSachMon:
             # Thêm dấu tab và xuống dòng để định dạng rõ hơn khi hiển thị trong hóa đơn
             chuoi_ds += f"\n\t\t - {mon}" 
         return chuoi_ds
+
+    def xoa_mon(self, ten_mon):
+        for i in self.ds:
+            if i.ten_mon == ten_mon:
+                self.ds.remove(i)
+                return

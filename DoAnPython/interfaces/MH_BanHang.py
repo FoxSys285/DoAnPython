@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import *
+from tkinter import ttk  
+
 import math
 from PIL import Image, ImageTk, ImageEnhance
 from datetime import datetime
@@ -23,6 +25,8 @@ class MH_BanHang(tk.Frame):
         self.button_bans = [] 
         self.button_mons = []
 
+        self.ds_mon_an = DanhSachMon()
+        self.ds_mon_an.doc_file("data/du_lieu_mon.json")
 
         self.ds_hoa_don = DanhSachHoaDon()
         self.ds_hoa_don.doc_file("data/du_lieu_hoa_don.json")
@@ -217,8 +221,6 @@ class MH_BanHang(tk.Frame):
         self.cap_nhat_thong_ke_ban()
    #============================ CHỨC NĂNG CHÍNH ==========================#
     def xu_ly_click_mon(self, mon, ban, hoa_don_listbox):
-
-
         popup = tk.Toplevel(self, bg = "#FEF9E6")
         popup.title("Nhập số lượng món")
         popup_width = 350
@@ -324,6 +326,7 @@ class MH_BanHang(tk.Frame):
             popup.destroy()
             self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
 
+
         xac_nhan_button = tk.Button(popup, text = "Xác nhận", font=("proxima-nova", 11, "bold"), bg= "#8c7851", fg="#fffffe", cursor = "hand2", command = xac_nhan)
         xac_nhan_button.place(x = 30, y = 220, width = 110, height = 30)
 
@@ -348,10 +351,8 @@ class MH_BanHang(tk.Frame):
         ds_loai.doc_file("data/du_lieu_nhom_mon.json")
 
         print(f"{ban}")
-        # === THÊM ĐOẠN CODE NÀY (Để tải hóa đơn từ file) ===
-        self.ds_hoa_don.doc_file("data/du_lieu_hoa_don.json")
-        ban.hoa_don = None 
 
+        # self.ds_hoa_don.doc_file("data/du_lieu_hoa_don.json")
         if ban.trang_thai == "Serve":
             # Tìm hóa đơn đang hoạt động của bàn này
             for hd in reversed(self.ds_hoa_don.dsHD):
@@ -466,6 +467,7 @@ class MH_BanHang(tk.Frame):
             temp_frame.place_forget()
             chon_mon_label.place(x = 10, y = 10, width = 330, height = 40)
             hoa_don_frame.place(x = 10, y = 220, width = 330, height = 170)
+            chinh_sua_button.place(x = 120, y = 400, width = 100, height = 40)
 
             
             # ======= TẠO HÓA ĐƠN MỚI =======
@@ -502,7 +504,10 @@ class MH_BanHang(tk.Frame):
             quay_lai_button.place(x = 120, y = 300, width = 100, height = 40)
             hoa_don_frame.place_forget()
             thanh_toan_button.place_forget()
+            chinh_sua_button.place_forget()
             self.lbl_tong_tien_value.config(text="0 VNĐ")
+            ban.hoa_don = None
+            self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
 
         def thanh_toan(ban):
             if not ban.hoa_don.dsMon.ds:
@@ -578,17 +583,26 @@ class MH_BanHang(tk.Frame):
                     print("Giá trị ko hợp lệ")
                     return
                 if ban.hoa_don:
-                    # 2. Cập nhật trạng thái Hóa đơn
-                    ban.hoa_don.trangThai = "Paid" 
-                    ban.hoa_don.tongTien = tong_tien_phai_tra # Cập nhật lại tổng tiền lần cuối
+
+                    ban.hoa_don.tongTien = tong_tien_phai_tra 
                     ban.hoa_don.thoiGianKetThuc = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
                     # 3. Lưu danh sách hóa đơn vào file
                     self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
+
+                # Lưu số lượng món để thống kê
+                for i in ban.hoa_don.dsMon.ds:
+                    for mon in self.ds_mon_an.ds:
+                        if mon.ma_mon == i.ma_mon:
+                            mon.so_luong += i.so_luong
+                            break
+                            
+                self.ds_mon_an.ghi_file("data/du_lieu_mon.json")
                 
-                # 4. Dọn dẹp trạng thái bàn và giao diện
                 huy_ban() 
                 # Đóng popup
+                ban.trang_thai = "Free"
+                status_var.set("Còn trống")
                 popup.destroy()
 
             # Nút Xác nhận Thanh toán
@@ -599,11 +613,103 @@ class MH_BanHang(tk.Frame):
             btn_huy = tk.Button(popup, text = "Hủy", font=("proxima-nova", 11, "bold"), bg= "#8c7851", fg="#fffffe", cursor = "hand2", command = popup.destroy)
             btn_huy.place(x = 150, y = 240, width = 110, height = 30)
 
-
-            ban.trang_thai = "Free"
-            status_var.set("Còn trống")
             
+            
+        def chinh_sua(ban):
+            popup = tk.Toplevel(self, bg = "#FEF9E6")
+            popup.title("Điều chỉnh số lượng")
+            popup_width = 350
+            popup_height = 300
 
+            # Lấy kích thước màn hình
+            screen_width = popup.winfo_screenwidth()
+            screen_height = popup.winfo_screenheight()
+
+            # Tính vị trí giữa màn hình
+            x = (screen_width - popup_width) // 2
+            y = (screen_height - popup_height) // 2
+
+            popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
+            popup.resizable(False, False)
+
+            tree = ttk.Treeview(popup, column = ("ten_mon", "so_luong"), show = "headings")
+            tree.heading("ten_mon", text = "Tên món")
+            tree.heading("so_luong", text = "Số lượng")
+
+            tree.place(x = 10, y = 120, width = 330, height = 130)
+            
+            tk.Label(popup, text = "Tên món:",bg = "#FEF9E6").place(x = 30, y = 30)
+            tk.Label(popup, text = "Số lượng:",bg = "#FEF9E6").place(x = 30, y = 60)
+            
+            text = tk.StringVar(value = "")
+            tk.Label(popup, textvariable = text,bg = "#FEF9E6", fg = "red").place(x = 30, y = 90)
+
+            ten_entry = tk.Entry(popup)
+            so_luong_entry = tk.Entry(popup)
+
+            ten_entry.place(x = 90, y = 30, width = 100, height = 20)
+            so_luong_entry.place(x = 90, y = 60, width = 100, height = 20)
+            
+            def on_tree_select(event):
+                selected_item = tree.focus()
+                if not selected_item:
+                    return
+
+                values = tree.item(selected_item, 'values')
+                
+                ten_entry.delete(0, tk.END)
+                ten_entry.insert(0, values[0])
+
+                so_luong_entry.delete(0, tk.END)
+                so_luong_entry.insert(0, values[1])
+
+            for mon in ban.hoa_don.dsMon.ds:
+                tree.insert("","end",values=(mon.ten_mon, mon.so_luong))
+
+            def xac_nhan():
+                ten_mon = ten_entry.get()
+                so_luong = int(so_luong_entry.get())
+                
+                if ban.kiem_tra_co_mon(ten_mon) == False:
+                    text.set("Không có món này trong hóa đơn")
+                    return
+
+                if so_luong <= 0:
+                    ban.hoa_don.dsMon.xoa_mon(ten_mon)
+                    print("Đã xóa món")
+                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
+                    self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
+                    huy()
+                else:
+                    ban.cap_nhat_so_luong(ten_mon, so_luong)
+                    print("Cập nhật số lượng thành công")
+                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
+                    self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
+                    huy()
+
+            xac_nhan_button = tk.Button(popup, text = "Xác nhận",
+                font=("proxima-nova", 12, "bold"), 
+                bg="#8c7851", 
+                fg="#fffffe",
+                cursor="hand2",
+                bd=3, relief="ridge",
+                command = xac_nhan)
+
+            def huy():
+                popup.destroy()
+
+            huy_button = tk.Button(popup,text = "Hủy",
+                font=("proxima-nova", 12, "bold"), 
+                bg="#8c7851", 
+                fg="#fffffe",
+                cursor="hand2",
+                bd=3, relief="ridge",
+                command = huy)
+
+            xac_nhan_button.place(x = 10, y = 260, width = 100, height = 30)
+            huy_button.place(x = 240, y = 260, width = 100, height = 30)
+
+            tree.bind("<<TreeviewSelect>>", on_tree_select)
 
         def raise_bh_bg():
             self.photo_bh_bg_label.tkraise()
@@ -703,7 +809,16 @@ class MH_BanHang(tk.Frame):
             bd=3, relief="ridge",
             command=lambda b_obj=ban: thanh_toan(b_obj))
 
-        
+        chinh_sua_button = tk.Button(info_table_frame,
+            text = "Chỉnh sửa", 
+            width = 11, 
+            height = 1,
+            font=("proxima-nova", 12, "bold"), 
+            bg="#8c7851", 
+            fg="#fffffe",
+            cursor="hand2",
+            bd=3, relief="ridge",
+            command=lambda b_obj=ban: chinh_sua(b_obj))
         #===========================================================#
         if ban.trang_thai == "Serve":
             # Gọi hàm cập nhật sau khi tất cả GUI đã sẵn sàng
@@ -741,6 +856,7 @@ class MH_BanHang(tk.Frame):
             hoa_don_frame.place(x = 10, y = 220, width = 330, height = 170)
             huy_ban_button.place(x = 10, y = 400, width = 100, height = 40)
             thanh_toan_button.place(x = 230, y = 400, width = 100, height = 40)
+            chinh_sua_button.place(x = 120, y = 400, width = 100, height = 40)
 
 
         #======================================================#

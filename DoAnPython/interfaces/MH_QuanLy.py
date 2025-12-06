@@ -24,9 +24,8 @@ class MH_QuanLy(tk.Frame):
         full_frame = tk.Frame(self, bg="#f9f4ef")
         full_frame.place(x=0, y=0, width=1280, height=640)
 
-        # Thanh menu trên cùng (tái sử dụng phong cách)
         menu_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        menu_frame.place(x=0, y=0, width=1280, height=80)
+        menu_frame.place(x=0, y=0, width=820, height=120)
 
         from objects.NhanVien import DanhSachNhanVien
         self.ds_nhan_vien = DanhSachNhanVien()
@@ -37,7 +36,7 @@ class MH_QuanLy(tk.Frame):
             ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
             ("BÁN HÀNG", lambda: self.controller.show_frame("MH_BanHang")),
             ("QUẢN LÝ", lambda: self.controller.show_frame("MH_QuanLy")),
-            ("THỐNG KÊ", lambda: None),
+            ("THỐNG KÊ", lambda: self.controller.show_frame("MH_ThongKe")),
             ("CREDITS", lambda: self.controller.show_frame("MH_Credits")),
         ]
         x = 40
@@ -48,20 +47,23 @@ class MH_QuanLy(tk.Frame):
                 bg="#8c7851", fg="#fffffe",
                 cursor="hand2", bd=3, relief="ridge",
                 command=cmd
-            ).place(x=x, y=20, width=150, height=60)
-            x += 170
+            ).place(x=x, y=40, width=125, height=60)
+            x += 160
 
-        qtv_frame = tk.Frame(menu_frame, bg="#f9f4ef")
-        qtv_frame.place(x=1080, y=10, width=180, height=60)
+        qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
+        qtv_frame.place(x=1020, y=40, width=160, height=60)
 
+
+        date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
+        date_time_frame.place(x=1000, y=0, width=220, height=40)
         # Thời gian
         self.label_time = tk.Label(
-            qtv_frame,
+            date_time_frame,
             fg="#00214d",
             bg="#f9f4ef",
-            font=("proxima-nova", 12, "bold")
+            font=("proxima-nova", 14, "bold")
         )
-        self.label_time.place(x=0, y=0, width=180, height=20)
+        self.label_time.pack(expand=True, anchor="nw")
 
         # Tên QTV
         self.label_qtv = tk.Label(
@@ -71,17 +73,16 @@ class MH_QuanLy(tk.Frame):
             font=("proxima-nova", 12, "bold"),
             bg="#f9f4ef"
         )
-        self.label_qtv.place(x=0, y=20, width=180, height=20)
+        self.label_qtv.place(x=0, y=0, width=160, height=30)
 
         # Nút đăng xuất
         HoverButton(
-            qtv_frame,
-            text="Đăng xuất",
-            font=("proxima-nova", 10, "bold"),
-            bg="#8c7851", fg="#fffffe",
-            cursor="hand2", bd=2, relief="ridge",
+            qtv_frame, text="Đăng xuất",
+            font=("proxima-nova", 12, "bold"),
+            bg="#8c7851", fg="#fffffe", cursor="hand2",
+            bd=3, relief="ridge",
             command=lambda: self.controller.show_frame("MH_DangNhap")
-        ).place(x=0, y=40, width=180, height=25)
+        ).place(x=0, y=30, width=160, height=30)
 
         # Cập nhật thời gian liên tục
         def update_time():
@@ -92,11 +93,11 @@ class MH_QuanLy(tk.Frame):
 
         # Vùng nội dung bên dưới thanh menu
         content_frame = tk.Frame(full_frame, bg="#f9f4ef")
-        content_frame.place(x=0, y=80, width=1280, height=560)
+        content_frame.place(x=0, y=100, width=1260, height=520)
 
         # Khung trái – 4 nút quản lý
         left_panel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
-        left_panel.place(x=20, y=20, width=320, height=520)
+        left_panel.place(x=20, y=20, width=320, height=500)
 
         left_buttons = [
             ("QUẢN LÝ THỰC ĐƠN", self.show_quan_ly_thuc_don),
@@ -117,7 +118,7 @@ class MH_QuanLy(tk.Frame):
 
 
         self.right_pannel = tk.Frame(content_frame, bg="#fffffe", bd=2, relief="groove")
-        self.right_pannel.place(x=940, y=20, width=320, height=520)
+        self.right_pannel.place(x=940, y=20, width=320, height=500)
 
         action_buttons = [
             ("Thêm", lambda: self.handle_action("add")),
@@ -174,7 +175,7 @@ class MH_QuanLy(tk.Frame):
 
         # Khung trung tâm – placeholder để sau hiển thị bảng
         center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
-        center_panel.place(x=360, y=20, width=580, height=520)
+        center_panel.place(x=360, y=20, width=560, height=500)
         #Khung quản lý thực đơn
         self.frame_thuc_don = tk.Frame(center_panel, bg="#eaddcf")
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
@@ -316,9 +317,22 @@ class MH_QuanLy(tk.Frame):
         ).place(x=80, y=170, width=120, height=30)
 
     def on_show(self):
+        self.update_user_display() 
+
+    def update_user_display(self):
+        
         current = self.controller.current_user
         if current:
-            self.label_qtv.config(text=f"QTV: {current.username}")
+            username = current.username
+            user_role = current.role
+        else:
+            # Trường hợp lỗi/đăng xuất (fallback)
+            username = "ADMIN"
+            user_role = "Manager"
+            
+        # 1. Cập nhật tên QTV
+        self.label_qtv.config(text=f"QTV: {username.upper()}")
+        
 
     # Handlers trái
     def show_quan_ly_thuc_don(self):
@@ -723,35 +737,6 @@ class MH_QuanLy(tk.Frame):
         print("Số nhân viên:", len(self.ds_nhan_vien.ds))
         for nv in self.ds_nhan_vien.ds.values():
             print(nv)
-
-    def update_user_display(self):
-        
-        current = self.controller.current_user
-        if current:
-            username = current.username
-            user_role = current.role
-        else:
-            # Trường hợp lỗi/đăng xuất (fallback)
-            username = "ADMIN"
-            user_role = "Manager"
-            
-        # 1. Cập nhật tên QTV
-        self.label_qtv.config(text=f"QTV: {username.upper()}")
-        
-        # 2. Xử lý nút đặc quyền (Manager)
-        is_manager = user_role.lower() == "manager"
-        
-        # Danh sách tọa độ cho các nút đặc quyền
-        manager_xpos = [360, 520, 680]
-        
-        for i, btn in enumerate(self.manager_buttons):
-            if is_manager:
-                nv = self.ds_nhan_vien.find_by_username(username)
-                if nv and hasattr(nv, "password"):
-                    print(f"Mật khẩu của Manager {nv.ten_nv}: {nv.password}")
-            else:
-                # Ẩn nút nếu không phải Manager
-                btn.place_forget()
 
     def hien_khung_them_nv(self):
         print("Đang hiển thị khung thêm nhân viên")

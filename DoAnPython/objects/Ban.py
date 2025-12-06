@@ -3,7 +3,7 @@ from objects.Mon import Mon, DanhSachMon
 from objects.HoaDon import HoaDon, DanhSachHoaDon
 
 class Ban:
-    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, hoa_don: HoaDon | None, nguoi_lap = None):
+    def __init__(self, ma_ban, ten_ban, trang_thai, thoi_gian, hoa_don = None, nguoi_lap = None):
         self.ma_ban = ma_ban
         self.ten_ban = ten_ban
         self.trang_thai = trang_thai
@@ -31,6 +31,20 @@ class Ban:
 
     def __str__(self):
         return f"---------------------------------\nMã bàn: {self.ma_ban}\nTên bàn: {self.ten_ban}\nTrạng thái: {self.trang_thai}\nGiờ lập: {self.thoi_gian}\nNgười lập: {self.nguoi_lap}\n---------------------------------"
+
+    def kiem_tra_co_mon(self, ten_mon):
+        for mon in self.hoa_don.dsMon.ds:
+            if mon.ten_mon == ten_mon:
+                return True
+        return False
+
+    def cap_nhat_so_luong(self, ten_mon, so_luong):
+        for mon in self.hoa_don.dsMon.ds:
+            if mon.ten_mon == ten_mon:
+                mon.so_luong = so_luong
+                return True
+        return False
+
 
 class DanhSachBan:
     def __init__(self):

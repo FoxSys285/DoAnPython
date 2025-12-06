@@ -3,7 +3,7 @@
         "ma_mon": "M01",
         "ten_mon": "Cà phê đen",
         "don_gia": 20000,
-        "so_luong": 0,
+        "so_luong": 2,
         "loai": "Cafe",
         "dvt": "Ly"
     },
@@ -27,7 +27,7 @@
         "ma_mon": "M04",
         "ten_mon": "Matcha Latte",
         "don_gia": 35000,
-        "so_luong": 0,
+        "so_luong": 1,
         "loai": "Trà",
         "dvt": "Ly"
     },
@@ -123,7 +123,7 @@
         "ma_mon": "M16",
         "ten_mon": "Caramel đá xay",
         "don_gia": 39000,
-        "so_luong": 0,
+        "so_luong": 1,
         "loai": "Đá xay",
         "dvt": "Ly"
     },
@@ -147,7 +147,7 @@
         "ma_mon": "M19",
         "ten_mon": "Nước suối",
         "don_gia": 10000,
-        "so_luong": 0,
+        "so_luong": 2,
         "loai": "Nước - Chai",
         "dvt": "Chai"
     },
@@ -155,7 +155,7 @@
         "ma_mon": "M20",
         "ten_mon": "Coca",
         "don_gia": 15000,
-        "so_luong": 0,
+        "so_luong": 2,
         "loai": "Nước - Lon",
         "dvt": "Lon"
     },
@@ -163,7 +163,7 @@
         "ma_mon": "M21",
         "ten_mon": "Sinh tố dừa",
         "don_gia": 30000,
-        "so_luong": 0,
+        "so_luong": 2,
         "loai": "Sinh tố",
         "dvt": "Ly"
     },
@@ -187,7 +187,7 @@
         "ma_mon": "M23",
         "ten_mon": "Bánh Tiramisu",
         "don_gia": 29000,
-        "so_luong": 1,
+        "so_luong": 2,
         "loai": "Bánh kem",
         "dvt": "Bánh"
     },
@@ -195,7 +195,7 @@
         "ma_mon": "M24",
         "ten_mon": "Bánh mì ngọt",
         "don_gia": 12000,
-        "so_luong": 1,
+        "so_luong": 2,
         "loai": "Bánh kem",
         "dvt": "Bánh"
     }

@@ -25,7 +25,6 @@ class MH_TrangChu(tk.Frame):
         common_buttons = [
             ("TRANG CHỦ", 40, lambda: controller.show_frame("MH_TrangChu")),
             ("BÁN HÀNG",  200, lambda: controller.show_frame("MH_BanHang")),
-
         ]
         
         # Tạo và đặt các nút chung

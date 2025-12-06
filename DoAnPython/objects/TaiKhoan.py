@@ -26,11 +26,9 @@ class DanhSachTaiKhoan:
 			return True
 		return False
 
-	# Phương thức tìm kiếm (Hữu ích cho đăng nhập)
 	def Find(self, username):
 		return self.ds.get(username, None) # Trả về đối tượng TaiKhoan hoặc None
 
-	# Đọc file JSON và chuyển đổi dữ liệu thành đối tượng TaiKhoan
 	def doc_file(self, filename):
 		try:
 			with open(filename, "r", encoding = "utf-8") as file:
