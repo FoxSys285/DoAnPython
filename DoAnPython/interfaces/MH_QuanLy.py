@@ -35,7 +35,7 @@ class MH_QuanLy(tk.Frame):
         menu_buttons = [
             ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
             ("BÁN HÀNG", lambda: self.controller.show_frame("MH_BanHang")),
-            ("QUẢN LÝ", lambda: self.controller.show_frame("MH_QuanLy")),
+            ("QUẢN LÝ", lambda: [self.reset_quan_ly(), self.controller.show_frame("MH_QuanLy")]),
             ("THỐNG KÊ", lambda: self.controller.show_frame("MH_ThongKe")),
             ("CREDITS", lambda: self.controller.show_frame("MH_Credits")),
         ]
@@ -125,7 +125,7 @@ class MH_QuanLy(tk.Frame):
             ("Sửa", lambda: self.handle_action("edit")),
             ("Xóa", lambda: self.handle_action("delete"))
         ]
-        y = 30  # bắt đầu sau khung nhập
+        y = 50  # bắt đầu sau khung nhập
         for text, cmd in action_buttons:
             HoverButton(
                 self.right_pannel, text=text,
@@ -134,7 +134,7 @@ class MH_QuanLy(tk.Frame):
                 cursor="hand2", bd=3, relief="ridge",
                 command=cmd
             ).place(x=20, y=y, width=280, height=80)
-            y += 90
+            y += 120
 
         #Xử lý Nhóm Bàn
         self.frame_nhap_ban = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
@@ -174,18 +174,18 @@ class MH_QuanLy(tk.Frame):
         ).place(x=80, y=50, width=120, height=30)
 
         # Khung trung tâm – placeholder để sau hiển thị bảng
-        center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
-        center_panel.place(x=360, y=20, width=560, height=500)
+        self.center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
+        self.center_panel.place(x=360, y=20, width=560, height=500)
         #Khung quản lý thực đơn
-        self.frame_thuc_don = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_thuc_don = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
         columns = ("stt", "ma_mon", "ten_mon", "don_gia", "loai", "dvt")
         self.tree_mon = ttk.Treeview(self.frame_thuc_don, columns=columns, show="headings")
         #Khung quản lý nhóm món
-        self.frame_nhom_mon = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_nhom_mon = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_nhom_mon.place(x=0, y=0, relwidth=1, relheight=1)
         #Khung quản lý bàn
-        self.frame_ban = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_ban = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_ban.place(x=0, y=0, relwidth=1, relheight=1)
 
         columns_ban = ("stt", "ma_ban", "ten_ban", "trang_thai", "thoi_gian","nguoi_lap")
@@ -216,7 +216,7 @@ class MH_QuanLy(tk.Frame):
         self.tree_nhom.column("ten_nhom", anchor="center", width=540)
         self.tree_nhom.pack(fill="both", expand=True)
         #Khung quản lý nhân viên
-        self.frame_nhan_vien = tk.Frame(center_panel, bg="#eaddcf")
+        self.frame_nhan_vien = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
         columns_nv = ("stt", "ma_nv", "ten_nv", "role", "luong", "username")
         self.tree_nhan_vien = ttk.Treeview(self.frame_nhan_vien, columns=columns_nv, show="headings")
@@ -290,7 +290,7 @@ class MH_QuanLy(tk.Frame):
         self.ds_ban.doc_file("data/du_lieu_ban.json")
 
         tk.Label(
-            center_panel, text="Khu vực nội dung (bảng danh sách)",
+            self.center_panel, text="Khu vực nội dung (bảng danh sách)",
             font=("proxima-nova", 14, "bold"),
             fg="#716040", bg="#eaddcf"
         ).place(relx=0.5, rely=0.5, anchor="center")
@@ -479,7 +479,7 @@ class MH_QuanLy(tk.Frame):
     def hien_khung_them_mon(self):
         # Xóa nội dung cũ
         print("Đang hiển thị khung thêm món")
-        self.frame_them_mon.place(x=20, y=250, width=280, height=220)
+        self.frame_them_mon.place(x=20, y=125, width=280, height=220)
         for entry in self.entry_mon.values():
             entry.delete(0, tk.END)
     
@@ -847,7 +847,23 @@ class MH_QuanLy(tk.Frame):
     def reset_quan_ly(self):
         self.clear_center()
         self.trang_hien_tai = None
-        # Hiện label mặc định nếu muốn
-        self.label_mac_dinh = tk.Label(self.center_panel, text="Chọn chức năng quản lý bên trái", font=("Arial", 14), bg="#eaddcf")
-        self.label_mac_dinh.place(relx=0.5, rely=0.5, anchor="center")
+
+        # Đọc lại dữ liệu
+        from objects.Mon import DanhSachMon
+        self.ds_mon = DanhSachMon()
+        self.ds_mon.doc_file("data/du_lieu_mon.json")
+
+        from objects.DanhSachNhomMon import DanhSachNhomMon
+        self.ds_nhom = DanhSachNhomMon()
+        self.ds_nhom.doc_file("data/du_lieu_nhom_mon.json")
+
+        from objects.Ban import DanhSachBan
+        self.ds_ban = DanhSachBan()
+        self.ds_ban.doc_file("data/du_lieu_ban.json")
+
+        from objects.NhanVien import DanhSachNhanVien
+        self.ds_nhan_vien = DanhSachNhanVien()
+        self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
+
+        print("🔄 Đã reset và đọc lại toàn bộ dữ liệu")
                 
