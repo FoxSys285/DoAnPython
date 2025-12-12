@@ -139,6 +139,7 @@ class MH_TrangChu(tk.Frame):
         self.table_serve_var.set(f"Bàn đang phục vụ: {table_serve:02d}")
 
     def on_show(self):
+        self.ds_ban.doc_file("data/du_lieu_ban.json")
         self.update_user_display() 
         self.update_table_status()
 

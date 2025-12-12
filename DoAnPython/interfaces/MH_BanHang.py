@@ -282,15 +282,14 @@ class MH_BanHang(tk.Frame):
                 popup.destroy()
                 return
 
-            # Kiểm tra xem bàn đã có hóa đơn chưa
-            if not hasattr(ban, "hoa_don") or ban.hoa_don is None:
-                print("Lỗi: Bàn chưa được mở (Chưa bấm 'Gọi món')")
-                popup.destroy()
-                return
+            # # Kiểm tra xem bàn đã có hóa đơn chưa
+            # if not hasattr(ban, "hoa_don") or ban.hoa_don is None:
+            #     print("Lỗi: Bàn chưa được mở (Chưa bấm 'Gọi món')")
+            #     popup.destroy()
+            #     return
 
             hd = ban.hoa_don
 
-            # Đảm bảo dsMon là một list (nếu mới khởi tạo nó có thể là object DanhSachMon rỗng)
             if not isinstance(hd.dsMon, DanhSachMon):
                 hd.dsMon = DanhSachMon()
 
@@ -453,6 +452,7 @@ class MH_BanHang(tk.Frame):
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
 
         def goi_mon():
+            ds_loai.doc_file("data/du_lieu_nhom_mon.json")
             goi_mon_frame.place(x = 0, y = 0 , width = 500, height = 500)
             ban.trang_thai = "Serve"
             status_var.set("Đang phục vụ")
@@ -473,7 +473,7 @@ class MH_BanHang(tk.Frame):
             # ======= TẠO HÓA ĐƠN MỚI =======
             ma_hd = f"HD{datetime.now().strftime('%Y%m%d%H%M%S')}"
             gio_lap = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            hoa_don_moi = HoaDon(ma_hd, gio_lap, DanhSachMon(), 0, ban.ten_ban)
+            hoa_don_moi = HoaDon(ma_hd, gio_lap, DanhSachMon(), 0, ban.ma_ban,None,self.controller.current_user.username)
 
             quay_lai_button.place_forget()
             ban.hoa_don = hoa_don_moi
@@ -511,7 +511,7 @@ class MH_BanHang(tk.Frame):
 
         def thanh_toan(ban):
             if not ban.hoa_don.dsMon.ds:
-                print("Bàn chưa đặt món")
+                print("Bạn chưa gọi món")
                 return
             ban.hoa_don.gioRa = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             popup = tk.Toplevel(self, bg = "#FEF9E6")
@@ -971,6 +971,7 @@ class MH_BanHang(tk.Frame):
 
     def on_show(self):
         """Hàm được gọi khi màn hình được hiển thị."""
+
         self.update_user_display()
         self.show_page(self.bh_frame)
 

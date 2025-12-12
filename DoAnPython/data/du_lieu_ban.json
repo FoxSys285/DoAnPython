@@ -5,7 +5,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "02",
@@ -13,47 +13,15 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "03",
         "ten_ban": "Bàn 3",
-        "trang_thai": "Serve",
-        "thoi_gian": "21:46:13 06/12/2025",
-        "hoa_don": {
-            "maHD": "HD20251206214613",
-            "gioLap": "06/12/2025 21:46:13",
-            "dsMon": [
-                {
-                    "ma_mon": "M20",
-                    "ten_mon": "Coca",
-                    "don_gia": 15000,
-                    "so_luong": 2,
-                    "loai": "Nước - Lon",
-                    "dvt": "Lon"
-                },
-                {
-                    "ma_mon": "M22",
-                    "ten_mon": "Thuốc lá",
-                    "don_gia": 30000,
-                    "so_luong": 1,
-                    "loai": "Khác",
-                    "dvt": "Hộp"
-                },
-                {
-                    "ma_mon": "M01",
-                    "ten_mon": "Cà phê đen",
-                    "don_gia": 20000,
-                    "so_luong": 1,
-                    "loai": "Cafe",
-                    "dvt": "Ly"
-                }
-            ],
-            "tongTien": 80000,
-            "maBan": "Bàn 3",
-            "gioRa": null
-        },
-        "nguoi_lap": "ADMIN"
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "hoa_don": null,
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "04",
@@ -61,55 +29,15 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "05",
         "ten_ban": "Bàn 5",
-        "trang_thai": "Serve",
-        "thoi_gian": "21:46:42 06/12/2025",
-        "hoa_don": {
-            "maHD": "HD20251206214642",
-            "gioLap": "06/12/2025 21:46:42",
-            "dsMon": [
-                {
-                    "ma_mon": "M18",
-                    "ten_mon": "Matcha đá xay",
-                    "don_gia": 39000,
-                    "so_luong": 1,
-                    "loai": "Đá xay",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M17",
-                    "ten_mon": "Cookie đá xay",
-                    "don_gia": 39000,
-                    "so_luong": 1,
-                    "loai": "Đá xay",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M16",
-                    "ten_mon": "Caramel đá xay",
-                    "don_gia": 39000,
-                    "so_luong": 1,
-                    "loai": "Đá xay",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M08",
-                    "ten_mon": "Trà tắc",
-                    "don_gia": 15000,
-                    "so_luong": 1,
-                    "loai": "Trà",
-                    "dvt": "Ly"
-                }
-            ],
-            "tongTien": 132000,
-            "maBan": "Bàn 5",
-            "gioRa": null
-        },
-        "nguoi_lap": "ADMIN"
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "hoa_don": null,
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "06",
@@ -125,7 +53,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": null
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "08",
@@ -133,7 +61,7 @@
         "trang_thai": "Booked",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "09",
@@ -157,7 +85,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "12",
@@ -165,7 +93,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "13",
@@ -173,7 +101,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": null
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "14",
@@ -186,34 +114,10 @@
     {
         "ma_ban": "15",
         "ten_ban": "Bàn 15",
-        "trang_thai": "Serve",
-        "thoi_gian": "21:46:33 06/12/2025",
-        "hoa_don": {
-            "maHD": "HD20251206214633",
-            "gioLap": "06/12/2025 21:46:33",
-            "dsMon": [
-                {
-                    "ma_mon": "M16",
-                    "ten_mon": "Caramel đá xay",
-                    "don_gia": 39000,
-                    "so_luong": 2,
-                    "loai": "Đá xay",
-                    "dvt": "Ly"
-                },
-                {
-                    "ma_mon": "M04",
-                    "ten_mon": "Matcha Latte",
-                    "don_gia": 35000,
-                    "so_luong": 1,
-                    "loai": "Trà",
-                    "dvt": "Ly"
-                }
-            ],
-            "tongTien": 113000,
-            "maBan": "Bàn 15",
-            "gioRa": null
-        },
-        "nguoi_lap": "ADMIN"
+        "trang_thai": "Free",
+        "thoi_gian": "",
+        "hoa_don": null,
+        "nguoi_lap": "admin"
     },
     {
         "ma_ban": "16",
@@ -221,6 +125,6 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": "admin"
     }
 ]

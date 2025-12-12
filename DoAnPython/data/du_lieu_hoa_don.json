@@ -1,8 +1,60 @@
 [
     {
-        "maHD": "HD20251206213926",
-        "gioLap": "06/12/2025 21:39:26",
+        "maHD": "HD20251211194406",
+        "gioLap": "11/12/2025 19:44:06",
         "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 1,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 20000,
+        "maBan": "04",
+        "gioRa": "11/12/2025 19:44:21",
+        "nguoi_lap": "nv002"
+    },
+    {
+        "maHD": "HD20251211194458",
+        "gioLap": "11/12/2025 19:44:58",
+        "dsMon": [
+            {
+                "ma_mon": "M01",
+                "ten_mon": "Cà phê đen",
+                "don_gia": 20000,
+                "so_luong": 3,
+                "loai": "Cafe",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 60000,
+        "maBan": "02",
+        "gioRa": "11/12/2025 19:45:47",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251211194501",
+        "gioLap": "11/12/2025 19:45:01",
+        "dsMon": [
+            {
+                "ma_mon": "M19",
+                "ten_mon": "Nước suối",
+                "don_gia": 10000,
+                "so_luong": 1,
+                "loai": "Nước - Chai",
+                "dvt": "Chai"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Thuốc lá",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Khác",
+                "dvt": "Hộp"
+            },
             {
                 "ma_mon": "M01",
                 "ten_mon": "Cà phê đen",
@@ -12,14 +64,183 @@
                 "dvt": "Ly"
             }
         ],
-        "tongTien": 40000,
-        "maBan": "Bàn 1",
-        "gioRa": "06/12/2025 21:40:41"
+        "tongTien": 80000,
+        "maBan": "16",
+        "gioRa": "11/12/2025 19:45:17",
+        "nguoi_lap": "admin"
     },
     {
-        "maHD": "HD20251206213930",
-        "gioLap": "06/12/2025 21:39:30",
+        "maHD": "HD20251211194531",
+        "gioLap": "11/12/2025 19:45:31",
         "dsMon": [
+            {
+                "ma_mon": "M17",
+                "ten_mon": "Cookie đá xay",
+                "don_gia": 39000,
+                "so_luong": 2,
+                "loai": "Đá xay",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M16",
+                "ten_mon": "Caramel đá xay",
+                "don_gia": 39000,
+                "so_luong": 2,
+                "loai": "Đá xay",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 156000,
+        "maBan": "07",
+        "gioRa": "11/12/2025 19:46:07",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251211194619",
+        "gioLap": "11/12/2025 19:46:19",
+        "dsMon": [
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Sinh tố dâu",
+                "don_gia": 25000,
+                "so_luong": 3,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M15",
+                "ten_mon": "Sinh tố bơ",
+                "don_gia": 35000,
+                "so_luong": 2,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M21",
+                "ten_mon": "Sinh tố dừa",
+                "don_gia": 30000,
+                "so_luong": 3,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 235000,
+        "maBan": "01",
+        "gioRa": "11/12/2025 19:47:24",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251211194620",
+        "gioLap": "11/12/2025 19:46:20",
+        "dsMon": [
+            {
+                "ma_mon": "M11",
+                "ten_mon": "Sinh tố xoài",
+                "don_gia": 35000,
+                "so_luong": 2,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Sinh tố dâu",
+                "don_gia": 25000,
+                "so_luong": 2,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M15",
+                "ten_mon": "Sinh tố bơ",
+                "don_gia": 35000,
+                "so_luong": 1,
+                "loai": "Sinh tố",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 155000,
+        "maBan": "15",
+        "gioRa": "11/12/2025 19:46:57",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251211194621",
+        "gioLap": "11/12/2025 19:46:21",
+        "dsMon": [
+            {
+                "ma_mon": "M19",
+                "ten_mon": "Nước suối",
+                "don_gia": 10000,
+                "so_luong": 1,
+                "loai": "Nước - Chai",
+                "dvt": "Chai"
+            },
+            {
+                "ma_mon": "M06",
+                "ten_mon": "Trà đào",
+                "don_gia": 30000,
+                "so_luong": 2,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M09",
+                "ten_mon": "Trà sữa truyền thống",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M10",
+                "ten_mon": "Trà chanh",
+                "don_gia": 15000,
+                "so_luong": 1,
+                "loai": "Trà",
+                "dvt": "Ly"
+            },
+            {
+                "ma_mon": "M22",
+                "ten_mon": "Thuốc lá",
+                "don_gia": 30000,
+                "so_luong": 1,
+                "loai": "Khác",
+                "dvt": "Hộp"
+            },
+            {
+                "ma_mon": "M24",
+                "ten_mon": "Bánh mì ngọt",
+                "don_gia": 12000,
+                "so_luong": 3,
+                "loai": "Bánh kem",
+                "dvt": "Bánh"
+            },
+            {
+                "ma_mon": "M23",
+                "ten_mon": "Bánh Tiramisu",
+                "don_gia": 29000,
+                "so_luong": 1,
+                "loai": "Bánh kem",
+                "dvt": "Bánh"
+            }
+        ],
+        "tongTien": 210000,
+        "maBan": "12",
+        "gioRa": "11/12/2025 19:46:37",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251211194622",
+        "gioLap": "11/12/2025 19:46:22",
+        "dsMon": [
+            {
+                "ma_mon": "M18",
+                "ten_mon": "Matcha đá xay",
+                "don_gia": 39000,
+                "so_luong": 1,
+                "loai": "Đá xay",
+                "dvt": "Ly"
+            },
             {
                 "ma_mon": "M16",
                 "ten_mon": "Caramel đá xay",
@@ -27,57 +248,35 @@
                 "so_luong": 1,
                 "loai": "Đá xay",
                 "dvt": "Ly"
-            },
-            {
-                "ma_mon": "M20",
-                "ten_mon": "Coca",
-                "don_gia": 15000,
-                "so_luong": 2,
-                "loai": "Nước - Lon",
-                "dvt": "Lon"
             }
         ],
-        "tongTien": 69000,
-        "maBan": "Bàn 2",
-        "gioRa": "06/12/2025 21:40:14"
+        "tongTien": 78000,
+        "maBan": "13",
+        "gioRa": "11/12/2025 19:47:09",
+        "nguoi_lap": "admin"
     },
     {
-        "maHD": "HD20251206213937",
-        "gioLap": "06/12/2025 21:39:37",
+        "maHD": "HD20251211195535",
+        "gioLap": "11/12/2025 19:55:35",
         "dsMon": [
             {
-                "ma_mon": "M23",
-                "ten_mon": "Bánh Tiramisu",
-                "don_gia": 29000,
+                "ma_mon": "M04",
+                "ten_mon": "Matcha Latte",
+                "don_gia": 35000,
                 "so_luong": 2,
-                "loai": "Bánh kem",
-                "dvt": "Bánh"
-            },
-            {
-                "ma_mon": "M21",
-                "ten_mon": "Sinh tố dừa",
-                "don_gia": 30000,
-                "so_luong": 2,
-                "loai": "Sinh tố",
+                "loai": "Trà",
                 "dvt": "Ly"
             }
         ],
-        "tongTien": 118000,
-        "maBan": "Bàn 16",
-        "gioRa": "06/12/2025 21:43:46"
+        "tongTien": 70000,
+        "maBan": "16",
+        "gioRa": "11/12/2025 19:55:42",
+        "nguoi_lap": "admin"
     },
     {
-        "maHD": "HD20251206213950",
-        "gioLap": "06/12/2025 21:39:50",
+        "maHD": "HD20251211195615",
+        "gioLap": "11/12/2025 19:56:15",
         "dsMon": [
-            {
-                "ma_mon": "M19",
-                "ten_mon": "Nước suối",
-                "don_gia": 10000,
-                "so_luong": 2,
-                "loai": "Nước - Chai",
-                "dvt": "Chai"
-            },
             {
                 "ma_mon": "M04",
                 "ten_mon": "Matcha Latte",
@@ -87,25 +286,45 @@
                 "dvt": "Ly"
             }
         ],
-        "tongTien": 55000,
-        "maBan": "Bàn 11",
-        "gioRa": "06/12/2025 21:43:00"
+        "tongTien": 35000,
+        "maBan": "11",
+        "gioRa": "11/12/2025 19:56:27",
+        "nguoi_lap": "admin"
     },
     {
-        "maHD": "HD20251206214425",
-        "gioLap": "06/12/2025 21:44:25",
+        "maHD": "HD20251212224557",
+        "gioLap": "12/12/2025 22:45:57",
         "dsMon": [
             {
-                "ma_mon": "M24",
-                "ten_mon": "Bánh mì ngọt",
+                "ma_mon": "M25",
+                "ten_mon": "Rau má",
                 "don_gia": 12000,
-                "so_luong": 2,
-                "loai": "Bánh kem",
-                "dvt": "Bánh"
+                "so_luong": 3,
+                "loai": "Nước - ép",
+                "dvt": "Ly"
             }
         ],
-        "tongTien": 24000,
-        "maBan": "Bàn 1",
-        "gioRa": "06/12/2025 21:45:47"
+        "tongTien": 36000,
+        "maBan": "07",
+        "gioRa": "12/12/2025 22:46:02",
+        "nguoi_lap": "admin"
+    },
+    {
+        "maHD": "HD20251212224753",
+        "gioLap": "12/12/2025 22:47:53",
+        "dsMon": [
+            {
+                "ma_mon": "M25",
+                "ten_mon": "Rau má",
+                "don_gia": 12000,
+                "so_luong": 3,
+                "loai": "Nước - ép",
+                "dvt": "Ly"
+            }
+        ],
+        "tongTien": 36000,
+        "maBan": "01",
+        "gioRa": "12/12/2025 22:48:17",
+        "nguoi_lap": "admin"
     }
 ]

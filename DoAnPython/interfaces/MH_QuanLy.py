@@ -865,5 +865,5 @@ class MH_QuanLy(tk.Frame):
         self.ds_nhan_vien = DanhSachNhanVien()
         self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
 
-        print("🔄 Đã reset và đọc lại toàn bộ dữ liệu")
+        print("Đã reset và đọc lại toàn bộ dữ liệu")
                 

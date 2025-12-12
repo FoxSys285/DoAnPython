@@ -41,7 +41,7 @@ class MH_ThongKe(tk.Frame):
         self.manager_buttons = []
         manager_buttons_info = [
             ("QUẢN LÝ", 360,  lambda: controller.show_frame("MH_QuanLy")), 
-            ("THỐNG KÊ", 520,  lambda: controller.show_frame("MH_QuanLy")),
+            ("THỐNG KÊ", 520,  lambda: controller.show_frame("MH_ThongKe")),
             ("CREDITS", 680,  lambda: controller.show_frame("MH_Credits"))
         ]
         
@@ -127,6 +127,8 @@ class MH_ThongKe(tk.Frame):
             yscrollcommand=self.scroll_y.set,
             xscrollcommand=self.scroll_x.set
         )
+
+        
         self.scroll_y.config(command=self.tree_hoa_don.yview)
         self.scroll_x.config(command=self.tree_hoa_don.xview)
 
@@ -368,6 +370,7 @@ class MH_ThongKe(tk.Frame):
         )
 
     def thong_ke_theo_ngay(self):
+        self.ds_hoa_don.doc_file("data/du_lieu_hoa_don.json")
         tu_ngay = self.entry_tu_ngay.get()
         den_ngay = self.entry_den_ngay.get()
         print(f"Thống kê từ {tu_ngay} đến {den_ngay}")
