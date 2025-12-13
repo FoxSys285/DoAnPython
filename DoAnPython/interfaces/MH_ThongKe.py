@@ -115,7 +115,7 @@ class MH_ThongKe(tk.Frame):
         self.tree_frame_hd = tk.Frame(self.frame_hoa_don, bg="#fffffe")
         self.tree_frame_hd.pack(fill="both", expand=True)
 
-        columns_hd = ("ma_hd", "thoi_gian", "tien_mon", "giam_gia", "thanh_tien", "diem_ban", "cac_mon")
+        columns_hd = ("ma_hd", "thoi_gian", "tien_mon", "thanh_tien", "diem_ban", "cac_mon")
 
         self.scroll_y = ttk.Scrollbar(self.tree_frame_hd, orient="vertical")
         self.scroll_x = ttk.Scrollbar(self.tree_frame_hd, orient="horizontal")
@@ -142,7 +142,7 @@ class MH_ThongKe(tk.Frame):
         # 3) Cấu hình cột
         col_widths = {
             "ma_hd": 130, "thoi_gian": 140, "tien_mon": 90,
-            "giam_gia": 90, "thanh_tien": 110, "diem_ban": 80, "cac_mon": 300
+            "thanh_tien": 110, "diem_ban": 80, "cac_mon": 300
         }
         for col in columns_hd:
             self.tree_hoa_don.heading(col, text=col.upper())
@@ -312,7 +312,7 @@ class MH_ThongKe(tk.Frame):
             if tu_ngay <= ngay_lap <= den_ngay:
                 cac_mon = ", ".join([f"{mon.ten_mon}({mon.so_luong})" for mon in hd.dsMon.ds])
                 self.tree_hoa_don.insert("", "end", values=(
-                    hd.maHD, hd.gioLap, hd.tongTien, 0, hd.TinhThanhTien(), hd.maBan, cac_mon
+                    hd.maHD, hd.gioLap, hd.tongTien, hd.TinhThanhTien(), hd.maBan, cac_mon
                 ))
                 tong_tien_mon += hd.tongTien
                 tong_thanh_tien += hd.TinhThanhTien()
