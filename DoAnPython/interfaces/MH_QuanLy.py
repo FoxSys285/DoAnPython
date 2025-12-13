@@ -4,7 +4,7 @@ from .MyButton import HoverButton
 from datetime import datetime
 from tkinter import ttk
 from objects.Mon import DanhSachMon
-
+import json
 
 class MH_QuanLy(tk.Frame):
 
@@ -141,6 +141,8 @@ class MH_QuanLy(tk.Frame):
         self.frame_nhap_ban.place(x=20, y=30, width=280, height=280)
         self.frame_nhap_ban.place_forget()
 
+        
+
         fields_ban = ["Mã bàn", "Tên bàn", "Trạng thái", "Thời gian","Người lập"]
         self.entry_ban = {}
         y = 10
@@ -156,6 +158,12 @@ class MH_QuanLy(tk.Frame):
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_ban
         ).place(x=80, y=200, width=120, height=30)
+
+        tk.Button(
+            self.frame_nhap_ban, text="Hủy", font=("Arial", 10, "bold"),
+            bg="#f44336", fg="white", cursor="hand2",
+            command=self.an_khung_ban
+        ).place(x=210, y=200, width=60, height=30)
 
             #################################
 
@@ -173,6 +181,12 @@ class MH_QuanLy(tk.Frame):
             command=self.luu_nhom_mon
         ).place(x=80, y=50, width=120, height=30)
 
+        tk.Button(
+            self.frame_nhap_nhom, text="Hủy", font=("Arial", 10, "bold"),
+            bg="#f44336", fg="white", cursor="hand2",
+            command=self.an_khung_nhom
+        ).place(x=210, y=50, width=60, height=30)
+
         # Khung trung tâm – placeholder để sau hiển thị bảng
         self.center_panel = tk.Frame(content_frame, bg="#eaddcf", bd=2, relief="groove")
         self.center_panel.place(x=360, y=20, width=560, height=500)
@@ -181,6 +195,8 @@ class MH_QuanLy(tk.Frame):
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
         columns = ("stt", "ma_mon", "ten_mon", "don_gia", "loai", "dvt")
         self.tree_mon = ttk.Treeview(self.frame_thuc_don, columns=columns, show="headings")
+        self.tree_mon.bind("<<TreeviewSelect>>", self.on_select_mon)
+
         #Khung quản lý nhóm món
         self.frame_nhom_mon = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_nhom_mon.place(x=0, y=0, relwidth=1, relheight=1)
@@ -211,15 +227,21 @@ class MH_QuanLy(tk.Frame):
 
         self.tree_ban.pack(fill="both", expand=True)
 
+        self.tree_ban.bind("<<TreeviewSelect>>", self.on_select_ban)
+
         self.tree_nhom = ttk.Treeview(self.frame_nhom_mon, columns=("ten_nhom",), show="headings")
         self.tree_nhom.heading("ten_nhom", text="Tên nhóm món")
         self.tree_nhom.column("ten_nhom", anchor="center", width=540)
         self.tree_nhom.pack(fill="both", expand=True)
+        self.tree_nhom.bind("<<TreeviewSelect>>", self.on_select_nhom)
+
         #Khung quản lý nhân viên
         self.frame_nhan_vien = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
         columns_nv = ("stt", "ma_nv", "ten_nv", "role", "luong", "username")
         self.tree_nhan_vien = ttk.Treeview(self.frame_nhan_vien, columns=columns_nv, show="headings")
+
+        self.tree_nhan_vien.bind("<<TreeviewSelect>>", self.on_select_nhan_vien)
 
         self.tree_nhan_vien.heading("stt", text="STT")
         self.tree_nhan_vien.column("stt", width=50, anchor="center")
@@ -258,6 +280,12 @@ class MH_QuanLy(tk.Frame):
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_nhan_vien_moi
         ).place(x=80, y=220, width=120, height=30)
+
+        tk.Button(
+            self.frame_nhap_nv, text="Hủy", font=("Arial", 10, "bold"),
+            bg="#f44336", fg="white", cursor="hand2",
+            command=self.an_khung_nv
+        ).place(x=210, y=220, width=60, height=30)
 
         # Cấu hình từng cột
         self.tree_mon.heading("stt", text="STT")
@@ -316,6 +344,12 @@ class MH_QuanLy(tk.Frame):
             command=self.luu_mon_moi
         ).place(x=80, y=170, width=120, height=30)
 
+        tk.Button(
+            self.frame_them_mon, text="Hủy", font=("Arial", 10, "bold"),
+            bg="#f44336", fg="white", cursor="hand2",
+            command=self.an_khung_mon
+        ).place(x=210, y=170, width=60, height=30)
+
     def on_show(self):
         self.update_user_display() 
 
@@ -370,6 +404,7 @@ class MH_QuanLy(tk.Frame):
                 self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
                 self.entry_nhom.delete(0, tk.END)
                 self.entry_nhom.insert(0, ten_cu)
+                self.entry_nhom.config(state="normal")
                 print(f"Đang sửa nhóm: {ten_cu}")
             elif action == "delete":
                 selected = self.tree_nhom.selection()
@@ -448,6 +483,8 @@ class MH_QuanLy(tk.Frame):
                     self.dang_sua_ban = True
 
                     self.frame_nhap_ban.place(x=20, y=120, width=280, height=290)
+                    for entry in self.entry_ban.values():
+                        entry.config(state="normal")
 
                     self.entry_ban["Mã bàn"].delete(0, tk.END)
                     self.entry_ban["Mã bàn"].insert(0, ban.ma_ban)
@@ -480,6 +517,7 @@ class MH_QuanLy(tk.Frame):
         # Xóa nội dung cũ
         print("Đang hiển thị khung thêm món")
         self.frame_them_mon.place(x=20, y=125, width=280, height=220)
+        self.set_entry_state("normal")
         for entry in self.entry_mon.values():
             entry.delete(0, tk.END)
     
@@ -578,6 +616,7 @@ class MH_QuanLy(tk.Frame):
     #Sửa món
     def hien_khung_sua_mon(self):
         selected = self.tree_mon.selection()
+        self.set_entry_state("normal")
         if not selected:
             print("Chưa chọn món để sửa")
             return
@@ -671,6 +710,26 @@ class MH_QuanLy(tk.Frame):
             self.load_nhom_mon()
         else:
             print("Không thể xóa nhóm")
+
+    def an_khung_nhom(self):
+        self.frame_nhap_nhom.place_forget()
+        print("Đã ẩn khung nhóm món")
+
+    def an_khung_mon(self):
+        self.frame_them_mon.place_forget()
+        print("Đã ẩn khung nhập món")
+
+    def on_select_nhom(self, event):
+        selected = self.tree_nhom.selection()
+        if not selected:
+            return
+
+        self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
+
+        ten_nhom = self.tree_nhom.item(selected[0])["values"][0]
+        self.entry_nhom.delete(0, tk.END)
+        self.entry_nhom.insert(0, ten_nhom)
+        self.entry_nhom.config(state="readonly")
                 ###########
     
     def show_quan_ly_ban(self):
@@ -716,7 +775,25 @@ class MH_QuanLy(tk.Frame):
         self.load_ban()
         self.frame_nhap_ban.place_forget()
 
+    def on_select_ban(self, event):
+        selected = self.tree_ban.selection()
+        if not selected:
+            return
 
+        self.frame_nhap_ban.place(x=20, y=120, width=280, height=290)
+
+        item = self.tree_ban.item(selected[0])
+        values = item["values"]
+
+        fields = ["Mã bàn", "Tên bàn", "Trạng thái", "Thời gian", "Người lập"]
+        for i, field in enumerate(fields):
+            self.entry_ban[field].delete(0, tk.END)
+            self.entry_ban[field].insert(0, values[i + 1])  # bỏ STT
+            self.entry_ban[field].config(state="readonly")
+
+    def an_khung_ban(self):
+        self.frame_nhap_ban.place_forget()
+        print("Đã ẩn khung nhập bàn")
                 ###############
     
     def show_quan_ly_nhan_vien(self):
@@ -823,7 +900,10 @@ class MH_QuanLy(tk.Frame):
 
         # Hiện khung nhập
         self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
-
+        
+        for entry in self.entry_nv.values():
+            entry.config(state="normal")
+        
         # Đổ dữ liệu vào các ô nhập
         self.entry_nv["Mã NV"].delete(0, tk.END)
         self.entry_nv["Mã NV"].insert(0, nv.ma_nv)
@@ -867,3 +947,55 @@ class MH_QuanLy(tk.Frame):
 
         print("Đã reset và đọc lại toàn bộ dữ liệu")
                 
+    def on_select_mon(self, event):
+        selected = self.tree_mon.selection()
+        if not selected:
+            return
+
+        # Hiện khung nhập để nhìn thấy các Entry
+        self.frame_them_mon.place(x=20, y=125, width=280, height=220)
+
+        item = self.tree_mon.item(selected[0])
+        values = item["values"]
+
+        # STT, Mã món, Tên món, Đơn giá, Loại, ĐVT
+        self.entry_mon["Mã món"].delete(0, tk.END)
+        self.entry_mon["Mã món"].insert(0, values[1])
+
+        self.entry_mon["Tên món"].delete(0, tk.END)
+        self.entry_mon["Tên món"].insert(0, values[2])
+
+        self.entry_mon["Đơn giá"].delete(0, tk.END)
+        self.entry_mon["Đơn giá"].insert(0, str(values[3]))
+
+        self.entry_mon["Loại"].delete(0, tk.END)
+        self.entry_mon["Loại"].insert(0, values[4])
+
+        self.entry_mon["Đơn vị tính"].delete(0, tk.END)
+        self.entry_mon["Đơn vị tính"].insert(0, values[5])
+        self.set_entry_state("readonly")
+
+    def set_entry_state(self, state="normal"):
+        for entry in self.entry_mon.values():
+            entry.config(state=state)
+
+    def on_select_nhan_vien(self, event):
+        selected = self.tree_nhan_vien.selection()
+        if not selected:
+            return
+
+        self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
+
+        item = self.tree_nhan_vien.item(selected[0])
+        values = item["values"]
+
+        fields = ["Mã NV", "Tên nhân viên", "Chức vụ", "Lương", "Tài khoản"]
+        for i, field in enumerate(fields):
+            self.entry_nv[field].delete(0, tk.END)
+            self.entry_nv[field].insert(0, values[i + 1])  # bỏ STT
+            self.entry_nv[field].config(state="readonly")
+
+    def an_khung_nv(self):
+        self.frame_nhap_nv.place_forget()
+        print("Đã ẩn khung nhập nhân viên")
+
