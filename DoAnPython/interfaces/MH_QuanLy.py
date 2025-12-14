@@ -53,6 +53,8 @@ class MH_QuanLy(tk.Frame):
         qtv_frame = tk.Frame(full_frame, bg="#f9f4ef")
         qtv_frame.place(x=1020, y=40, width=160, height=60)
 
+        with open("data/du_lieu_nhom_mon.json", "r", encoding="utf-8") as f:
+            self.danh_sach_loai = json.load(f)
 
         date_time_frame = tk.Frame(full_frame, bg="#f9f4ef")
         date_time_frame.place(x=1000, y=0, width=220, height=40)
@@ -333,11 +335,19 @@ class MH_QuanLy(tk.Frame):
         y = 10
         for field in fields:
             tk.Label(self.frame_them_mon, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
-            entry = tk.Entry(self.frame_them_mon, font=("Arial", 10))
-            entry.place(x=100, y=y, width=200)
-            self.entry_mon[field] = entry
-            y += 30
 
+            if field == "Loại":
+                # Combobox cho loại món
+                self.combo_loai = ttk.Combobox(self.frame_them_mon, font=("Arial", 10), state="readonly")
+                self.combo_loai["values"] = self.danh_sach_loai
+                self.combo_loai.place(x=100, y=y, width=200)
+                self.entry_mon[field] = self.combo_loai
+            else:
+                entry = tk.Entry(self.frame_them_mon, font=("Arial", 10))
+                entry.place(x=100, y=y, width=200)
+                self.entry_mon[field] = entry
+
+            y += 23
         tk.Button(
             self.frame_them_mon, text="Lưu", font=("Arial", 10, "bold"),
             bg="#4CAF50", fg="white", cursor="hand2",
@@ -389,7 +399,8 @@ class MH_QuanLy(tk.Frame):
         elif self.trang_hien_tai == "nhom_mon":
             if action == "add":
                 self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
-                self.entry_nhom.delete(0, tk.END)
+                self.entry_nhom.config(state="normal")  # mở khóa
+                self.entry_nhom.delete(0, tk.END)       # xóa trắng
                 self.dang_sua_nhom = False
             elif action == "edit":
                 selected = self.tree_nhom.selection()
@@ -431,7 +442,8 @@ class MH_QuanLy(tk.Frame):
                 print("Đang thêm bàn mới")
                 self.frame_nhap_ban.place(x=20, y=120, width=280, height=250)
                 for entry in self.entry_ban.values():
-                    entry.delete(0, tk.END)
+                    entry.config(state="normal")   # mở khóa
+                    entry.delete(0, tk.END)        # xóa trắng
                 self.dang_sua_ban = False
             elif action == "delete":
                 selected = self.tree_ban.selection()
@@ -514,12 +526,15 @@ class MH_QuanLy(tk.Frame):
             
 
     def hien_khung_them_mon(self):
-        # Xóa nội dung cũ
         print("Đang hiển thị khung thêm món")
         self.frame_them_mon.place(x=20, y=125, width=280, height=220)
         self.set_entry_state("normal")
-        for entry in self.entry_mon.values():
-            entry.delete(0, tk.END)
+        self.dang_sua = False
+        for key, entry in self.entry_mon.items():
+            if key == "Loại":
+                entry.set("")  # reset combobox
+            else:
+                entry.delete(0, tk.END)
     
     def luu_mon_moi(self):
         ma = self.entry_mon["Mã món"].get()
@@ -639,8 +654,7 @@ class MH_QuanLy(tk.Frame):
             self.entry_mon["Đơn giá"].delete(0, tk.END)
             self.entry_mon["Đơn giá"].insert(0, str(mon.don_gia))
 
-            self.entry_mon["Loại"].delete(0, tk.END)
-            self.entry_mon["Loại"].insert(0, mon.loai)
+            self.combo_loai.set(mon.loai)
 
             self.entry_mon["Đơn vị tính"].delete(0, tk.END)
             self.entry_mon["Đơn vị tính"].insert(0, mon.dvt)
@@ -831,9 +845,10 @@ class MH_QuanLy(tk.Frame):
     def hien_khung_them_nv(self):
         print("Đang hiển thị khung thêm nhân viên")
         self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
-        for entry in self.entry_nv.values():
-            entry.delete(0, tk.END)
         self.dang_sua_nv = False
+        for entry in self.entry_nv.values():
+            entry.config(state="normal")
+            entry.delete(0, tk.END)
 
     def luu_nhan_vien_moi(self):
         ma = self.entry_nv["Mã NV"].get().strip()
@@ -983,8 +998,7 @@ class MH_QuanLy(tk.Frame):
         self.entry_mon["Đơn giá"].delete(0, tk.END)
         self.entry_mon["Đơn giá"].insert(0, str(values[3]))
 
-        self.entry_mon["Loại"].delete(0, tk.END)
-        self.entry_mon["Loại"].insert(0, values[4])
+        self.combo_loai.set(values[4])
 
         self.entry_mon["Đơn vị tính"].delete(0, tk.END)
         self.entry_mon["Đơn vị tính"].insert(0, values[5])
