@@ -726,9 +726,14 @@ class MH_QuanLy(tk.Frame):
 
         self.frame_nhap_nhom.place(x=20, y=30, width=280, height=130)
 
-        ten_nhom = self.tree_nhom.item(selected[0])["values"][0]
+        # Mở khóa trước khi xóa/điền
+        self.entry_nhom.config(state="normal")
         self.entry_nhom.delete(0, tk.END)
+
+        ten_nhom = self.tree_nhom.item(selected[0])["values"][0]
         self.entry_nhom.insert(0, ten_nhom)
+
+        # Khóa lại sau khi đổ xong
         self.entry_nhom.config(state="readonly")
                 ###########
     
@@ -786,10 +791,18 @@ class MH_QuanLy(tk.Frame):
         values = item["values"]
 
         fields = ["Mã bàn", "Tên bàn", "Trạng thái", "Thời gian", "Người lập"]
+
+        # Mở khóa trước khi cập nhật
+        for entry in self.entry_ban.values():
+            entry.config(state="normal")
+
         for i, field in enumerate(fields):
             self.entry_ban[field].delete(0, tk.END)
-            self.entry_ban[field].insert(0, values[i + 1])  # bỏ STT
-            self.entry_ban[field].config(state="readonly")
+            self.entry_ban[field].insert(0, values[i + 1])
+
+        # Khóa lại sau khi đổ dữ liệu
+        for entry in self.entry_ban.values():
+            entry.config(state="readonly")
 
     def an_khung_ban(self):
         self.frame_nhap_ban.place_forget()
@@ -952,11 +965,13 @@ class MH_QuanLy(tk.Frame):
         if not selected:
             return
 
-        # Hiện khung nhập để nhìn thấy các Entry
         self.frame_them_mon.place(x=20, y=125, width=280, height=220)
 
         item = self.tree_mon.item(selected[0])
         values = item["values"]
+
+        # MỞ KHÓA TRƯỚC KHI XÓA/ĐIỀN
+        self.set_entry_state("normal")
 
         # STT, Mã món, Tên món, Đơn giá, Loại, ĐVT
         self.entry_mon["Mã món"].delete(0, tk.END)
@@ -973,6 +988,8 @@ class MH_QuanLy(tk.Frame):
 
         self.entry_mon["Đơn vị tính"].delete(0, tk.END)
         self.entry_mon["Đơn vị tính"].insert(0, values[5])
+
+        # KHÓA LẠI SAU KHI ĐỔ XONG
         self.set_entry_state("readonly")
 
     def set_entry_state(self, state="normal"):
@@ -990,10 +1007,18 @@ class MH_QuanLy(tk.Frame):
         values = item["values"]
 
         fields = ["Mã NV", "Tên nhân viên", "Chức vụ", "Lương", "Tài khoản"]
+
+        # Mở khóa trước khi cập nhật
+        for entry in self.entry_nv.values():
+            entry.config(state="normal")
+
         for i, field in enumerate(fields):
             self.entry_nv[field].delete(0, tk.END)
-            self.entry_nv[field].insert(0, values[i + 1])  # bỏ STT
-            self.entry_nv[field].config(state="readonly")
+            self.entry_nv[field].insert(0, values[i + 1])
+
+        # Khóa lại sau khi đổ dữ liệu
+        for entry in self.entry_nv.values():
+            entry.config(state="readonly")
 
     def an_khung_nv(self):
         self.frame_nhap_nv.place_forget()
