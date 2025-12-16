@@ -381,6 +381,10 @@ class MH_QuanLy(tk.Frame):
     # Handlers trái
     def show_quan_ly_thuc_don(self):
         self.clear_center()
+        with open("data/du_lieu_nhom_mon.json", "r", encoding="utf-8") as f:
+            self.danh_sach_loai = json.load(f)
+        self.combo_loai["values"] = self.danh_sach_loai
+        
         self.trang_hien_tai = "thuc_don"
         self.load_mon()
         self.frame_thuc_don.place(x=0, y=0, relwidth=1, relheight=1)
