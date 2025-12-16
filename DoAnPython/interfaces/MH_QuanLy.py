@@ -340,14 +340,14 @@ class MH_QuanLy(tk.Frame):
                 # Combobox cho loại món
                 self.combo_loai = ttk.Combobox(self.frame_them_mon, font=("Arial", 10), state="readonly")
                 self.combo_loai["values"] = self.danh_sach_loai
-                self.combo_loai.place(x=100, y=y, width=200)
+                self.combo_loai.place(x=100, y=y, width=150)
                 self.entry_mon[field] = self.combo_loai
             else:
                 entry = tk.Entry(self.frame_them_mon, font=("Arial", 10))
-                entry.place(x=100, y=y, width=200)
+                entry.place(x=100, y=y, width=150)
                 self.entry_mon[field] = entry
 
-            y += 23
+            y += 24
         tk.Button(
             self.frame_them_mon, text="Lưu", font=("Arial", 10, "bold"),
             bg="#4CAF50", fg="white", cursor="hand2",
@@ -1037,4 +1037,5 @@ class MH_QuanLy(tk.Frame):
     def an_khung_nv(self):
         self.frame_nhap_nv.place_forget()
         print("Đã ẩn khung nhập nhân viên")
+
 
