@@ -283,11 +283,17 @@ class MH_BanHang(tk.Frame):
                 popup.destroy()
                 return
 
-            # # Kiểm tra xem bàn đã có hóa đơn chưa
-            # if not hasattr(ban, "hoa_don") or ban.hoa_don is None:
-            #     print("Lỗi: Bàn chưa được mở (Chưa bấm 'Gọi món')")
-            #     popup.destroy()
-            #     return
+            # Kiểm tra và khôi phục link hóa đơn nếu bị mất
+            if ban.hoa_don is None:
+                for hd in reversed(self.ds_hoa_don.dsHD):
+                    if hd.maBan == ban.ma_ban and (hd.gioRa is None or hd.gioRa == ""):
+                        ban.hoa_don = hd
+                        break
+            
+            if ban.hoa_don is None:
+                messagebox.showerror("Lỗi", "Không tìm thấy hóa đơn cho bàn này. Vui lòng thử 'Gói món' lại.")
+                popup.destroy()
+                return
 
             hd = ban.hoa_don
 
@@ -354,11 +360,17 @@ class MH_BanHang(tk.Frame):
 
         # self.ds_hoa_don.doc_file("data/du_lieu_hoa_don.json")
         if ban.trang_thai == "Serve":
-            # Tìm hóa đơn đang hoạt động của bàn này
+            found_hd = False
             for hd in reversed(self.ds_hoa_don.dsHD):
-                if hd.maBan == ban.ten_ban:
+                if hd.maBan == ban.ma_ban and (hd.gioRa is None or hd.gioRa == ""):
                     ban.hoa_don = hd
+                    found_hd = True
                     break
+            
+            # Nếu bàn trạng thái Serve mà không tìm thấy hóa đơn (do lỗi dữ liệu)
+            # thì nên tạo lại hoặc thông báo lỗi thay vì để None
+            if not found_hd:
+                print(f"Cảnh báo: Không tìm thấy hóa đơn chưa thanh toán cho {ban.ten_ban}")
         # ===================================================
         now = "..."
         gio_den_hien_thi = f"Giờ đến: {now}"
@@ -631,6 +643,9 @@ class MH_BanHang(tk.Frame):
                 ban.hoa_don = None
                 huy_frame() 
                 ban.trang_thai = "Free"
+                ban.thoi_gian = ""
+                ban.hoa_don = None
+                self.ds_ban.ghi_file("data/du_lieu_ban.json")
                 status_var.set("Còn trống")
                 popup.destroy()
 
