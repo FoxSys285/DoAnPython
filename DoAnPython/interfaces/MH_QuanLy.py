@@ -32,7 +32,9 @@ class MH_QuanLy(tk.Frame):
         from objects.NhanVien import DanhSachNhanVien
         self.ds_nhan_vien = DanhSachNhanVien()
         self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
-        # ============== MÃ CŨ ==================#
+        self.danh_sach_chuc_vu = self.ds_nhan_vien.lay_danh_sach_chuc_vu()
+        self.danh_sach_chuc_vu = list({nv.role for nv in self.ds_nhan_vien.ds.values()})
+        # ============== MÃ CŨ ==================# 
         self.ma_mon_cu = None
         self.ma_nv_cu = None
         self.ma_ban_cu = None
@@ -145,12 +147,12 @@ class MH_QuanLy(tk.Frame):
 
         #Xử lý Nhóm Bàn
         self.frame_nhap_ban = tk.Frame(self.right_pannel, bg="#fffffe", bd=2, relief="ridge")
-        self.frame_nhap_ban.place(x=20, y=30, width=280, height=280)
+        self.frame_nhap_ban.place(x=20, y=30, width=280, height=150)
         self.frame_nhap_ban.place_forget()
 
         
 
-        fields_ban = ["Mã bàn", "Tên bàn", "Trạng thái", "Thời gian","Người lập"]
+        fields_ban = ["Mã bàn", "Tên bàn"]
         self.entry_ban = {}
         y = 10
         for field in fields_ban:
@@ -164,13 +166,13 @@ class MH_QuanLy(tk.Frame):
             self.frame_nhap_ban, text="Lưu", font=("Arial", 10, "bold"),
             bg="#4CAF50", fg="white", cursor="hand2",
             command=self.luu_ban
-        ).place(x=80, y=200, width=120, height=30)
+        ).place(x=80, y=80, width=120, height=30)
 
         tk.Button(
             self.frame_nhap_ban, text="Hủy", font=("Arial", 10, "bold"),
             bg="#f44336", fg="white", cursor="hand2",
             command=self.an_khung_ban
-        ).place(x=210, y=200, width=60, height=30)
+        ).place(x=210, y=80, width=60, height=30)
 
             #################################
 
@@ -211,7 +213,7 @@ class MH_QuanLy(tk.Frame):
         self.frame_ban = tk.Frame(self.center_panel, bg="#eaddcf")
         self.frame_ban.place(x=0, y=0, relwidth=1, relheight=1)
 
-        columns_ban = ("stt", "ma_ban", "ten_ban", "trang_thai", "thoi_gian","nguoi_lap")
+        columns_ban = ("stt", "ma_ban", "ten_ban")
         self.tree_ban = ttk.Treeview(self.frame_ban, columns=columns_ban, show="headings")
 
         self.tree_ban.heading("stt", text="STT")
@@ -222,15 +224,6 @@ class MH_QuanLy(tk.Frame):
 
         self.tree_ban.heading("ten_ban", text="Tên bàn")
         self.tree_ban.column("ten_ban", width=100, anchor="center")
-
-        self.tree_ban.heading("trang_thai", text="Trạng thái")
-        self.tree_ban.column("trang_thai", width=80, anchor="center")
-
-        self.tree_ban.heading("thoi_gian", text="Thời gian")
-        self.tree_ban.column("thoi_gian", width=130, anchor="center")
-
-        self.tree_ban.heading("nguoi_lap", text="Người lập")
-        self.tree_ban.column("nguoi_lap", width=90, anchor="center")
 
         self.tree_ban.pack(fill="both", expand=True)
 
@@ -272,14 +265,26 @@ class MH_QuanLy(tk.Frame):
         self.frame_nhap_nv.place(x=20, y=120, width=280, height=280)
         self.frame_nhap_nv.place_forget()
 
+        self.label_mat_khau = tk.Label(self.frame_nhap_nv, text="Mật khẩu", font=("Arial", 10), bg="#fffffe")
+        self.entry_mat_khau = tk.Entry(self.frame_nhap_nv, font=("Arial", 10), show="*")
+
         fields_nv = ["Mã NV", "Tên nhân viên", "Chức vụ", "Lương", "Tài khoản"]
         self.entry_nv = {}
         y = 10
         for field in fields_nv:
             tk.Label(self.frame_nhap_nv, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
-            entry = tk.Entry(self.frame_nhap_nv, font=("Arial", 10))
-            entry.place(x=110, y=y, width=150)
-            self.entry_nv[field] = entry
+
+            if field == "Chức vụ":
+                combo = ttk.Combobox(self.frame_nhap_nv, font=("Arial", 10), state="readonly")
+                combo["values"] = self.danh_sach_chuc_vu
+                combo.place(x=110, y=y, width=150)
+                self.entry_nv[field] = combo
+                combo.bind("<<ComboboxSelected>>", self.cap_nhat_mat_khau_nv)
+            else:
+                entry = tk.Entry(self.frame_nhap_nv, font=("Arial", 10))
+                entry.place(x=110, y=y, width=150)
+                self.entry_nv[field] = entry
+
             y += 30
 
         tk.Button(
@@ -449,7 +454,7 @@ class MH_QuanLy(tk.Frame):
         elif self.trang_hien_tai == "ban":
             if action == "add":
                 print("Đang thêm bàn mới")
-                self.frame_nhap_ban.place(x=20, y=120, width=280, height=250)
+                self.frame_nhap_ban.place(x=20, y=120, width=280, height=150)
                 for entry in self.entry_ban.values():
                     entry.config(state="normal")   # mở khóa
                     entry.delete(0, tk.END)        # xóa trắng
@@ -512,15 +517,6 @@ class MH_QuanLy(tk.Frame):
                     self.ma_ban_cu = ban.ma_ban
                     self.entry_ban["Tên bàn"].delete(0, tk.END)
                     self.entry_ban["Tên bàn"].insert(0, ban.ten_ban)
-
-                    self.entry_ban["Trạng thái"].delete(0, tk.END)
-                    self.entry_ban["Trạng thái"].insert(0, ban.trang_thai)
-
-                    self.entry_ban["Thời gian"].delete(0, tk.END)
-                    self.entry_ban["Thời gian"].insert(0, ban.thoi_gian)
-
-                    self.entry_ban["Người lập"].delete(0, tk.END)
-                    self.entry_ban["Người lập"].insert(0, getattr(ban, "nguoi_lap", ""))
 
                     print(f"Đang sửa bàn: {ban.ten_ban}")
                 else:
@@ -824,13 +820,13 @@ class MH_QuanLy(tk.Frame):
             return
 
         # ======= Tên =======
-        if not re.match(r"^Bàn \d{2}$", ten_ban):
+        if not re.match(r"^Bàn \d{2}$", ten):
             messagebox.showwarning("Cảnh báo", "Định dạng đúng phải là: Bàn xx (VD: Bàn 01)")
             return
         
 
         from objects.Ban import Ban
-        ban_moi = Ban(ma, ten, tt or "Free", tg or "", None, nl or "")
+        ban_moi = Ban(ma, ten)
 
         if getattr(self, "dang_sua_ban", False):
             self.ds_ban.ds[self.ban_dang_sua_index] = ban_moi
@@ -881,6 +877,8 @@ class MH_QuanLy(tk.Frame):
         self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
         self.tree_nhan_vien.pack(fill="both", expand=True)
         self.frame_nhan_vien.tkraise()
+        self.danh_sach_chuc_vu = self.ds_nhan_vien.lay_danh_sach_chuc_vu()
+        self.entry_nv["Chức vụ"]["values"] = self.danh_sach_chuc_vu
 
     def load_nhan_vien(self):
         self.tree_nhan_vien.delete(*self.tree_nhan_vien.get_children())
@@ -906,6 +904,30 @@ class MH_QuanLy(tk.Frame):
         role = self.entry_nv["Chức vụ"].get().strip()
         luong = self.entry_nv["Lương"].get().strip()
         username = self.entry_nv["Tài khoản"].get().strip()
+        mat_khau = self.entry_mat_khau.get() if self.entry_mat_khau.winfo_ismapped() else ""
+        if role in ["Manager", "Cashier"]:
+            from objects.TaiKhoan import DanhSachTaiKhoan
+            ds_tk = DanhSachTaiKhoan()
+            ds_tk.doc_file("data/du_lieu_tk.json")
+
+            if ds_tk.Add(username, mat_khau, role):
+                ds_tk.ghi_file("data/du_lieu_tk.json")
+                print(f"Đã tạo tài khoản cho {username}")
+            else:
+                print("Tài khoản đã tồn tại, không thêm lại")
+
+        from objects.TaiKhoan import DanhSachTaiKhoan
+        ds_tk = DanhSachTaiKhoan()
+        ds_tk.doc_file("data/du_lieu_tk.json")
+
+        username = self.entry_nv["Tài khoản"].get()
+        role = self.entry_nv["Chức vụ"].get()
+
+        if role not in ["Manager", "Cashier"]:
+            if ds_tk.Find(username):
+                del ds_tk.ds[username]
+                ds_tk.ghi_file("data/du_lieu_tk.json")
+                print(f"Đã xóa tài khoản của {username} vì chức vụ không còn hợp lệ")
 
         if not ma or not ten or not role or not luong or not username:
             print("Thiếu thông tin bắt buộc")
@@ -1022,7 +1044,7 @@ class MH_QuanLy(tk.Frame):
         from objects.NhanVien import DanhSachNhanVien
         self.ds_nhan_vien = DanhSachNhanVien()
         self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
-
+        self.danh_sach_chuc_vu = self.ds_nhan_vien.lay_danh_sach_chuc_vu()
         print("Đã reset và đọc lại toàn bộ dữ liệu")
                 
     def on_select_mon(self, event):
@@ -1088,4 +1110,11 @@ class MH_QuanLy(tk.Frame):
         self.frame_nhap_nv.place_forget()
         print("Đã ẩn khung nhập nhân viên")
 
-
+    def cap_nhat_mat_khau_nv(self, event=None):
+        chuc_vu = self.entry_nv["Chức vụ"].get()
+        if chuc_vu in ["Manager", "Cashier"]:
+            self.label_mat_khau.place(x=10, y=160)
+            self.entry_mat_khau.place(x=110, y=160, width=150)
+        else:
+            self.label_mat_khau.place_forget()
+            self.entry_mat_khau.place_forget()
