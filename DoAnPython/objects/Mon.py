@@ -4,7 +4,7 @@ class Mon:
     def __init__(self, ma_mon, ten_mon, don_gia, so_luong, loai, dvt):
         self.ma_mon = ma_mon
         self.ten_mon = ten_mon
-        self.don_gia = don_gia
+        self.don_gia = int(don_gia)
         self.so_luong = so_luong
         self.loai = loai
         self.dvt = dvt
@@ -74,3 +74,9 @@ class DanhSachMon:
             if i.ten_mon == ten_mon:
                 self.ds.remove(i)
                 return
+
+    def kiem_tra_ma(self, ma):
+        for i in self.ds:
+            if i.ma_mon == ma:
+                return True
+        return False

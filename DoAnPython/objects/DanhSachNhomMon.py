@@ -36,3 +36,9 @@ class DanhSachNhomMon:
 
     def lay_danh_sach(self):
         return self.ds
+
+    def kiem_tra_ton_tai(self, s):
+        for i in self.ds:
+            if i.lower() == s.lower():
+                return True
+        return False

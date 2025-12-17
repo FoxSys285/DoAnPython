@@ -3,7 +3,7 @@
         "ma_mon": "M01",
         "ten_mon": "Cà phê đen",
         "don_gia": 20000,
-        "so_luong": 10,
+        "so_luong": 1,
         "loai": "Cafe",
         "dvt": "Ly"
     },
@@ -205,6 +205,14 @@
         "don_gia": 12000,
         "so_luong": 15,
         "loai": "Nước - ép",
+        "dvt": "Ly"
+    },
+    {
+        "ma_mon": "M26",
+        "ten_mon": "Cacao nóng",
+        "don_gia": 20000,
+        "so_luong": 1,
+        "loai": "Cafe",
         "dvt": "Ly"
     }
 ]

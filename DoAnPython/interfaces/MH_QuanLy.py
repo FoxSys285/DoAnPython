@@ -5,6 +5,8 @@ from datetime import datetime
 from tkinter import ttk
 from objects.Mon import DanhSachMon
 import json
+from tkinter import messagebox
+import re
 
 class MH_QuanLy(tk.Frame):
 
@@ -30,7 +32,10 @@ class MH_QuanLy(tk.Frame):
         from objects.NhanVien import DanhSachNhanVien
         self.ds_nhan_vien = DanhSachNhanVien()
         self.ds_nhan_vien.doc_file("data/du_lieu_nv.json")
-
+        # ============== MÃ CŨ ==================#
+        self.ma_mon_cu = None
+        self.ma_nv_cu = None
+        self.ma_ban_cu = None
         # Nút chuyển trang
         menu_buttons = [
             ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
@@ -151,7 +156,7 @@ class MH_QuanLy(tk.Frame):
         for field in fields_ban:
             tk.Label(self.frame_nhap_ban, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
             entry = tk.Entry(self.frame_nhap_ban, font=("Arial", 10))
-            entry.place(x=100, y=y, width=170)
+            entry.place(x=100, y=y, width=150)
             self.entry_ban[field] = entry
             y += 30
 
@@ -175,7 +180,7 @@ class MH_QuanLy(tk.Frame):
 
         tk.Label(self.frame_nhap_nhom, text="Tên nhóm", font=("Arial", 10), bg="#fffffe").place(x=10, y=10)
         self.entry_nhom = tk.Entry(self.frame_nhap_nhom, font=("Arial", 10))
-        self.entry_nhom.place(x=100, y=10, width=160)
+        self.entry_nhom.place(x=100, y=10, width=150)
 
         tk.Button(
             self.frame_nhap_nhom, text="Lưu", font=("Arial", 10, "bold"),
@@ -273,7 +278,7 @@ class MH_QuanLy(tk.Frame):
         for field in fields_nv:
             tk.Label(self.frame_nhap_nv, text=field, font=("Arial", 10), bg="#fffffe").place(x=10, y=y)
             entry = tk.Entry(self.frame_nhap_nv, font=("Arial", 10))
-            entry.place(x=110, y=y, width=160)
+            entry.place(x=110, y=y, width=150)
             self.entry_nv[field] = entry
             y += 30
 
@@ -409,7 +414,7 @@ class MH_QuanLy(tk.Frame):
             elif action == "edit":
                 selected = self.tree_nhom.selection()
                 if not selected:
-                    print("Chưa chọn nhóm để sửa")
+                    messagebox.showwarning("Cảnh báo", "Bạn chưa chọn nhóm món để sửa")
                     return
 
                 ten_cu = self.tree_nhom.item(selected[0])["values"][0]
@@ -424,12 +429,12 @@ class MH_QuanLy(tk.Frame):
             elif action == "delete":
                 selected = self.tree_nhom.selection()
                 if not selected:
-                    print("Chưa chọn nhóm để xóa")
+                    messagebox.showwarning("Cảnh báo", "Bạn chưa chọn nhóm món để xóa")
                     return
 
                 ten = self.tree_nhom.item(selected[0])["values"][0]
 
-                from tkinter import messagebox
+                
                 confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhóm '{ten}' không?")
                 if not confirm:
                     print("Hủy xóa nhóm")
@@ -452,14 +457,14 @@ class MH_QuanLy(tk.Frame):
             elif action == "delete":
                 selected = self.tree_ban.selection()
                 if not selected:
-                    print("Chưa chọn bàn để xóa")
+                    messagebox.showwarning("Cảnh báo", "Bạn chưa chọn bàn để xóa")
                     return
 
                 item = self.tree_ban.item(selected[0])
                 stt = item["values"][0]
                 ten_ban = item["values"][2]
 
-                from tkinter import messagebox
+                
                 confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa bàn '{ten_ban}' không?")
                 if not confirm:
                     print("Hủy xóa bàn")
@@ -472,7 +477,7 @@ class MH_QuanLy(tk.Frame):
                     self.load_ban()
                     print(f"Đã xóa bàn: {ten_ban}")
                 else:
-                    print("Không tìm thấy bàn để xóa")
+                    messagebox.showinfo("Thông báo", "Không tìm thấy bàn")
 
                 ten_cu = self.tree_nhom.item(selected[0])["values"][0]
                 self.nhom_cu = ten_cu
@@ -486,7 +491,7 @@ class MH_QuanLy(tk.Frame):
             elif action == "edit":
                 selected = self.tree_ban.selection()
                 if not selected:
-                    print("Chưa chọn bàn để sửa")
+                    messagebox.showwarning("Cảnh báo", "Bạn chưa chọn bàn để sửa")
                     return
 
                 item = self.tree_ban.item(selected[0])
@@ -504,7 +509,7 @@ class MH_QuanLy(tk.Frame):
 
                     self.entry_ban["Mã bàn"].delete(0, tk.END)
                     self.entry_ban["Mã bàn"].insert(0, ban.ma_ban)
-
+                    self.ma_ban_cu = ban.ma_ban
                     self.entry_ban["Tên bàn"].delete(0, tk.END)
                     self.entry_ban["Tên bàn"].insert(0, ban.ten_ban)
 
@@ -519,7 +524,7 @@ class MH_QuanLy(tk.Frame):
 
                     print(f"Đang sửa bàn: {ban.ten_ban}")
                 else:
-                    print("Không tìm thấy bàn để sửa")
+                    messagebox.showinfo("Thông báo", "Không tìm thấy bàn này")
         elif self.trang_hien_tai == "nhan_vien":
             if action == "add":
                 self.hien_khung_them_nv()
@@ -547,13 +552,40 @@ class MH_QuanLy(tk.Frame):
         loai = self.entry_mon["Loại"].get()
         dvt = self.entry_mon["Đơn vị tính"].get()
 
+
         if not ma or not ten or not gia:
-            print("Thiếu thông tin bắt buộc")
+            messagebox.showwarning("Cảnh báo", "Hãy điền đầy đủ thông tin")
             return
+        # ======= Mã =======
+        if ma != self.ma_mon_cu:
+            if self.ds_mon.kiem_tra_ma(ma) == True:
+                messagebox.showwarning("Cảnh báo", "Mã đã tồn tại")
+                return
+        if not re.match(r"^M\d{2}$", ma):
+            messagebox.showwarning("Cảnh báo", "Mã món không phù hợp (Định dạng: Mxx, ví dụ M01)")
+            return
+
+        # ======= Giá =======
         try:
             gia = int(gia)
-        except:
-            print("Đơn giá phải là số")
+            if gia <= 10000:
+                raise ValueError
+        except ValueError:
+            messagebox.showwarning("Cảnh báo", "Nhập giá hợp lệ (Giá >= 10000)")
+            return
+
+        # ======= Tên =======
+        if not re.match(r"^[a-zA-ZÀ-ỹ\s]+$", ten):
+            messagebox.showwarning("Cảnh báo", "Tên món không được chứa số hoặc ký tự đặc biệt!")
+            return
+        # ======= Loại =======
+        if self.ds_nhom.kiem_tra_ton_tai(loai) == False:
+            messagebox.showwarning("Cảnh báo", "Không tìm thấy loại này")
+            return
+
+        # ======= Đơn vị tính =======
+        if not re.match(r"^[a-zA-ZÀ-ỹ\s]+$", ten):
+            messagebox.showwarning("Cảnh báo", "Đơn vị tính không được chứa số hoặc ký tự đặc biệt!")
             return
 
         from objects.Mon import Mon
@@ -609,7 +641,7 @@ class MH_QuanLy(tk.Frame):
     def xoa_mon(self):
         selected = self.tree_mon.selection()
         if not selected:
-            print("Chưa chọn món để xóa")
+            messagebox.showwarning("Cảnh báo", "Bạn chưa chọn món để xóa")
             return
 
         item = self.tree_mon.item(selected[0])
@@ -617,7 +649,7 @@ class MH_QuanLy(tk.Frame):
         ten_mon = item["values"][2]  # Tên món để hiển thị xác nhận
 
         # Hộp thoại xác nhận
-        from tkinter import messagebox
+        
         confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa món '{ten_mon}' không?")
         if not confirm:
             print("Hủy xóa món")
@@ -630,16 +662,16 @@ class MH_QuanLy(tk.Frame):
             self.load_mon()
             print(f"Đã xóa món: {ten_mon}")
         else:
-            print("Không tìm thấy món để xóa")
-
+            messagebox.showinfo("Thông báo", "Không tìm thấy món cần xóa")
+    
     #Sửa món
     def hien_khung_sua_mon(self):
         selected = self.tree_mon.selection()
         self.set_entry_state("normal")
         if not selected:
-            print("Chưa chọn món để sửa")
+            messagebox.showwarning("Cảnh báo", "Bạn chưa chọn món để sửa")
             return
-
+        
         item = self.tree_mon.item(selected[0])
         stt = item["values"][0]
         index = stt - 1
@@ -651,7 +683,7 @@ class MH_QuanLy(tk.Frame):
             self.frame_them_mon.place(x=20, y=250, width=280, height=220)
             self.entry_mon["Mã món"].delete(0, tk.END)
             self.entry_mon["Mã món"].insert(0, mon.ma_mon)
-
+            self.ma_mon_cu = mon.ma_mon
             self.entry_mon["Tên món"].delete(0, tk.END)
             self.entry_mon["Tên món"].insert(0, mon.ten_mon)
 
@@ -666,10 +698,7 @@ class MH_QuanLy(tk.Frame):
             self.dang_sua = True 
             print(f"Đang sửa món: {mon.ten_mon}")
         else:
-            print("Không tìm thấy món để sửa")
-
-
-                ########
+            messagebox.showinfo("Thông báo", "Không tìm thấy món để sửa")
     
     def load_nhom_mon(self):
         self.tree_nhom.delete(*self.tree_nhom.get_children())
@@ -688,9 +717,14 @@ class MH_QuanLy(tk.Frame):
     def luu_nhom_mon(self):
         ten = self.entry_nhom.get().strip()
         if not ten:
-            print("Tên nhóm không được để trống")
+            messagebox.showwarning("Cảnh báo", "Tên không được để trống")
             return
-
+        if self.ds_nhom.kiem_tra_ton_tai(ten):
+            messagebox.showwarning("Cảnh báo", "Tên đã tồn tại")
+            return
+        if re.match(r"^[a-zA-ZÀ-ỹ\s]+$", ten):
+            messagebox.showwarning("Cảnh báo", "Tên nhóm món không được chứa số hoặc ký tự đặc biệt!")
+            return
         if hasattr(self, "dang_sua_nhom") and self.dang_sua_nhom:
             # Sửa nhóm
             if self.ds_nhom.sua_nhom(self.nhom_cu, ten):
@@ -699,7 +733,6 @@ class MH_QuanLy(tk.Frame):
                 print("Không thể sửa nhóm")
             self.dang_sua_nhom = False
         else:
-            # Thêm nhóm
             if self.ds_nhom.them_nhom(ten):
                 print(f"Đã thêm nhóm: {ten}")
             else:
@@ -716,7 +749,7 @@ class MH_QuanLy(tk.Frame):
             return
 
         ten = self.tree_nhom.item(selected[0])["values"][0]
-        from tkinter import messagebox
+        
         confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhóm '{ten}' không?")
         if not confirm:
             print("Hủy xóa nhóm")
@@ -775,13 +808,26 @@ class MH_QuanLy(tk.Frame):
     def luu_ban(self):
         ma = self.entry_ban["Mã bàn"].get()
         ten = self.entry_ban["Tên bàn"].get()
-        tt = self.entry_ban["Trạng thái"].get()
-        tg = self.entry_ban["Thời gian"].get()
-        nl = self.entry_ban["Người lập"].get()
+
 
         if not ma or not ten:
             print("Thiếu thông tin bàn")
             return
+
+        # ======= Mã ======== #
+        if ma != self.ma_ban_cu:
+            if self.ds_ban.kiem_tra_ton_tai(ma):
+                messagebox.showwarning("Cảnh báo", "Đã có mã bàn này")
+                return
+        if not re.match(r"^M\d{2}$", ma):
+            messagebox.showwarning("Cảnh báo", "Mã món không phù hợp (Định dạng: Mxx, ví dụ M01)")
+            return
+
+        # ======= Tên =======
+        if not re.match(r"^Bàn \d{2}$", ten_ban):
+            messagebox.showwarning("Cảnh báo", "Định dạng đúng phải là: Bàn xx (VD: Bàn 01)")
+            return
+        
 
         from objects.Ban import Ban
         ban_moi = Ban(ma, ten, tt or "Free", tg or "", None, nl or "")
@@ -880,7 +926,7 @@ class MH_QuanLy(tk.Frame):
             if self.ds_nhan_vien.add_nv(nv_moi):
                 print(f"Đã thêm nhân viên: {ten}")
             else:
-                print("Mã NV đã tồn tại")
+                messagebox.showinfo("Thông báo", "Mã đã tồn tài")
                 return
 
     # Ghi file và reload
@@ -892,7 +938,7 @@ class MH_QuanLy(tk.Frame):
     def xoa_nhan_vien(self):
         selected = self.tree_nhan_vien.selection()
         if not selected:
-            print("Chưa chọn nhân viên để xóa")
+            messagebox.showwarning("Cảnh báo", "Bạn chưa chọn nhân viên cần xóa")
             return
 
         item = self.tree_nhan_vien.item(selected[0])
@@ -900,7 +946,7 @@ class MH_QuanLy(tk.Frame):
         ma_nv = item["values"][1]     # mã NV
         ten_nv = item["values"][2]    # tên NV
 
-        from tkinter import messagebox
+        
         confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhân viên '{ten_nv}' ({ma_nv}) không?")
         if not confirm:
             print("Hủy xóa nhân viên")
@@ -913,13 +959,13 @@ class MH_QuanLy(tk.Frame):
             self.load_nhan_vien()
             print(f"Đã xóa nhân viên: {ten_nv}")
         else:
-            print("Không tìm thấy nhân viên để xóa")
+            messagebox.showinfo("Thông báo", "Không tìm thấy nhân viên")
 
 
     def hien_khung_sua_nv(self):
         selected = self.tree_nhan_vien.selection()
         if not selected:
-            print("Chưa chọn nhân viên để sửa")
+            messagebox.showwarning("Cảnh báo", "Bạn chưa chọn nhân viên để sửa")
             return
 
         item = self.tree_nhan_vien.item(selected[0])

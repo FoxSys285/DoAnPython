@@ -133,3 +133,9 @@ class DanhSachBan:
             if ban.ma_ban == ma_ban:
                 return ban
         return None
+
+    def kiem_tra_ton_tai(self, ma):
+        for ban in self.ds:
+            if ban.ma_ban == ma:
+                return True
+        return False 
