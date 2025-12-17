@@ -68,3 +68,10 @@ class DanhSachHoaDon:
                print("Ghi file mon thanh cong!")
        except Exception as loi:
            print("Ghi file bi loi hóa đơn:",loi)
+
+    def xoa_hoa_don(self, maHD):
+        for i in self.dsHD:
+            if i.maHD == maHD:
+                self.dsHD.remove(i)
+                print(f"Xóa hóa đơn {i.maHD} thành công")
+                return

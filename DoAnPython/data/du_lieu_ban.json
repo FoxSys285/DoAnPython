@@ -5,7 +5,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "02",
@@ -13,7 +13,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "03",
@@ -21,7 +21,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "04",
@@ -29,7 +29,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "05",
@@ -37,15 +37,15 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "06",
         "ten_ban": "Bàn 6",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "07",
@@ -53,23 +53,23 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "08",
         "ten_ban": "Bàn 8",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "09",
         "ten_ban": "Bàn 9",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "10",
@@ -77,7 +77,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "11",
@@ -85,7 +85,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "12",
@@ -93,7 +93,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "13",
@@ -101,15 +101,15 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "14",
         "ten_ban": "Bàn 14",
-        "trang_thai": "Booked",
+        "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "ADMIN"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "15",
@@ -117,7 +117,7 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     },
     {
         "ma_ban": "16",
@@ -125,6 +125,6 @@
         "trang_thai": "Free",
         "thoi_gian": "",
         "hoa_don": null,
-        "nguoi_lap": "admin"
+        "nguoi_lap": ""
     }
 ]

@@ -68,7 +68,7 @@ class App(tk.Tk):
             self.frames[F.__name__] = frame
             frame.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.show_frame("MH_QuanLy")
+        self.show_frame("MH_BanHang")
 
         # ================================================================
         # BẮT ĐẦU FLASK API TRÊN MỘT THREAD RIÊNG

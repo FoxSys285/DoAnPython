@@ -3,7 +3,7 @@
         "ma_mon": "M01",
         "ten_mon": "Cà phê đen",
         "don_gia": 20000,
-        "so_luong": 1,
+        "so_luong": 14,
         "loai": "Cafe",
         "dvt": "Ly"
     },
@@ -11,7 +11,7 @@
         "ma_mon": "M02",
         "ten_mon": "Cà phê sữa",
         "don_gia": 25000,
-        "so_luong": 0,
+        "so_luong": 2,
         "loai": "Cafe",
         "dvt": "Ly"
     },
@@ -27,7 +27,7 @@
         "ma_mon": "M04",
         "ten_mon": "Matcha Latte",
         "don_gia": 35000,
-        "so_luong": 7,
+        "so_luong": 12,
         "loai": "Trà",
         "dvt": "Ly"
     },
@@ -35,7 +35,7 @@
         "ma_mon": "M05",
         "ten_mon": "Cappuccino",
         "don_gia": 35000,
-        "so_luong": 5,
+        "so_luong": 8,
         "loai": "Cafe",
         "dvt": "Ly"
     },
@@ -59,7 +59,7 @@
         "ma_mon": "M08",
         "ten_mon": "Trà tắc",
         "don_gia": 15000,
-        "so_luong": 3,
+        "so_luong": 10,
         "loai": "Trà",
         "dvt": "Ly"
     },
@@ -83,7 +83,7 @@
         "ma_mon": "M11",
         "ten_mon": "Sinh tố xoài",
         "don_gia": 35000,
-        "so_luong": 4,
+        "so_luong": 11,
         "loai": "Sinh tố",
         "dvt": "Ly"
     },
@@ -91,7 +91,7 @@
         "ma_mon": "M12",
         "ten_mon": "Sinh tố dâu",
         "don_gia": 35000,
-        "so_luong": 4,
+        "so_luong": 12,
         "loai": "Sinh tố",
         "dvt": "Ly"
     },
@@ -107,7 +107,7 @@
         "ma_mon": "M14",
         "ten_mon": "Nước ép táo",
         "don_gia": 30000,
-        "so_luong": 5,
+        "so_luong": 9,
         "loai": "Sinh tố",
         "dvt": "Ly"
     },
@@ -123,7 +123,7 @@
         "ma_mon": "M16",
         "ten_mon": "Caramel đá xay",
         "don_gia": 39000,
-        "so_luong": 4,
+        "so_luong": 16,
         "loai": "Đá xay",
         "dvt": "Ly"
     },
@@ -147,7 +147,7 @@
         "ma_mon": "M19",
         "ten_mon": "Nước suối",
         "don_gia": 10000,
-        "so_luong": 10,
+        "so_luong": 12,
         "loai": "Nước - Chai",
         "dvt": "Chai"
     },
@@ -171,7 +171,7 @@
         "ma_mon": "M22",
         "ten_mon": "Sinh tố dâu",
         "don_gia": 25000,
-        "so_luong": 4,
+        "so_luong": 6,
         "loai": "Sinh tố",
         "dvt": "Ly"
     },
@@ -203,7 +203,7 @@
         "ma_mon": "M25",
         "ten_mon": "Rau má",
         "don_gia": 12000,
-        "so_luong": 15,
+        "so_luong": 24,
         "loai": "Nước - ép",
         "dvt": "Ly"
     },
@@ -211,7 +211,7 @@
         "ma_mon": "M26",
         "ten_mon": "Cacao nóng",
         "don_gia": 20000,
-        "so_luong": 1,
+        "so_luong": 3,
         "loai": "Cafe",
         "dvt": "Ly"
     }

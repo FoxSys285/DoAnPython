@@ -13,7 +13,8 @@ from objects.HoaDon import HoaDon, DanhSachHoaDon
 from .MH_QuanLy import MH_QuanLy
 from components.HoverButton import HoverButton
 from objects.DanhSachNhomMon import DanhSachNhomMon
-
+from tkinter import messagebox
+import re
 # MÀN HÌNH BÁN HÀNG
 
 class MH_BanHang(tk.Frame):
@@ -320,7 +321,7 @@ class MH_BanHang(tk.Frame):
             hd.tongTien = tong_tien_moi # Cập nhật thuộc tính tổng tiền của Object HoaDon
 
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
-
+            self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
             # Cập nhật giao diện
             popup.destroy()
             self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
@@ -345,7 +346,7 @@ class MH_BanHang(tk.Frame):
             username = "ADMIN"
             user_role = "Manager"
 
-        ban.nguoi_lap = username
+        
         ds_loai = DanhSachNhomMon()
         ds_loai.doc_file("data/du_lieu_nhom_mon.json")
 
@@ -437,11 +438,18 @@ class MH_BanHang(tk.Frame):
         #===========================================================#
         def dat_ban():
             if ban.trang_thai == "Free":
+                current = self.controller.current_user
+                if current:
+                    username = current.username
+                else:
+                    username = "ADMIN"
+                ban.nguoi_lap = username
                 ban.trang_thai = "Booked"
                 dat_ban_var.set("Huỷ đặt")
                 status_var.set("Đã đặt trước")
                 print("Đã đặt bàn")
             elif ban.trang_thai == "Booked":
+                ban.nguoi_lap = ""
                 ban.trang_thai = "Free"
                 dat_ban_var.set("Đặt bàn")
                 status_var.set("Còn trống")
@@ -452,6 +460,12 @@ class MH_BanHang(tk.Frame):
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
 
         def goi_mon():
+            current = self.controller.current_user
+            if current:
+                username = current.username
+            else:
+                username = "ADMIN"
+            ban.nguoi_lap = username
             ds_loai.doc_file("data/du_lieu_nhom_mon.json")
             goi_mon_frame.place(x = 0, y = 0 , width = 500, height = 500)
             ban.trang_thai = "Serve"
@@ -473,16 +487,22 @@ class MH_BanHang(tk.Frame):
             # ======= TẠO HÓA ĐƠN MỚI =======
             ma_hd = f"HD{datetime.now().strftime('%Y%m%d%H%M%S')}"
             gio_lap = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            hoa_don_moi = HoaDon(ma_hd, gio_lap, DanhSachMon(), 0, ban.ma_ban,None,self.controller.current_user.username)
+            current = self.controller.current_user
+            if current:
+                username = current.username
+            else:
+                username = "ADMIN"
+            hoa_don_moi = HoaDon(ma_hd, gio_lap, DanhSachMon(), 0, ban.ma_ban,None,username)
 
             quay_lai_button.place_forget()
             ban.hoa_don = hoa_don_moi
             self.ds_hoa_don.dsHD.append(hoa_don_moi)
-            
+            self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
+            self.ds_ban.ghi_file("data/du_lieu_ban.json")
             huy_ban_button.place(x = 10, y = 400, width = 100, height = 40)
             thanh_toan_button.place(x = 230, y = 400, width = 100, height = 40)
 
-        def huy_ban():
+        def huy_frame():
             ban.trang_thai = "Free"
             status_var.set("Còn trống")
             dat_ban_button.place(x = 35, y = 230)
@@ -490,11 +510,10 @@ class MH_BanHang(tk.Frame):
             huy_ban_button.place_forget()
             gio_den_var.set("Giờ đến: ...")
             ban.thoi_gian = ""
+            ban.nguoi_lap = ""
             self.ds_ban.ghi_file("data/du_lieu_ban.json")
             type_frame.place_forget()
             self.cap_nhat_mau_nut_ban(ban)
-            ban.hoa_don = None
-            self.ds_ban.ghi_file("data/du_lieu_ban.json")
             goi_mon_frame.place_forget()
             photo_menu_label.place(x = 0, y = 0) 
             photo_menu_label.image = photo_menu
@@ -506,12 +525,21 @@ class MH_BanHang(tk.Frame):
             thanh_toan_button.place_forget()
             chinh_sua_button.place_forget()
             self.lbl_tong_tien_value.config(text="0 VNĐ")
-            ban.hoa_don = None
             self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
+
+        def huy_ban():
+            if ban.hoa_don == None:
+                huy_frame()
+                return
+            self.ds_hoa_don.xoa_hoa_don(ban.hoa_don.maHD)
+            ban.hoa_don = None
+            self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
+            huy_frame()
+            
 
         def thanh_toan(ban):
             if not ban.hoa_don.dsMon.ds:
-                print("Bạn chưa gọi món")
+                messagebox.showwarning("Cảnh báo","Bạn chưa gọi món")
                 return
             ban.hoa_don.gioRa = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             popup = tk.Toplevel(self, bg = "#FEF9E6")
@@ -525,6 +553,7 @@ class MH_BanHang(tk.Frame):
             popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
             popup.resizable(False, False)
 
+            popup.grab_set()
             text_label = tk.Label(popup, text = f"{ban.ten_ban} - Thanh toán",font=("proxima-nova", 20, "bold"), bg="#FEF9E6")
             text_label.place(x = 10, y = 10)
             
@@ -580,12 +609,13 @@ class MH_BanHang(tk.Frame):
             # Hàm xác nhận thanh toán cuối cùng
             def xac_nhan_thanh_toan():
                 if tinh_tien_thua() < 0:
-                    print("Giá trị ko hợp lệ")
+                    messagebox.showwarning("Cảnh báo", "Số tiền không hợp lệ")
                     return
                 if ban.hoa_don:
-
+                    # self.ds_hoa_don.xoa_hoa_don(ban.hoa_don.maHD)
+                    # self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
                     ban.hoa_don.tongTien = tong_tien_phai_tra 
-                    ban.hoa_don.thoiGianKetThuc = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                    ban.hoa_don.gioRa = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
                     # 3. Lưu danh sách hóa đơn vào file
                     self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
@@ -598,9 +628,8 @@ class MH_BanHang(tk.Frame):
                             break
                             
                 self.ds_mon_an.ghi_file("data/du_lieu_mon.json")
-                
-                huy_ban() 
-                # Đóng popup
+                ban.hoa_don = None
+                huy_frame() 
                 ban.trang_thai = "Free"
                 status_var.set("Còn trống")
                 popup.destroy()
@@ -631,7 +660,7 @@ class MH_BanHang(tk.Frame):
 
             popup.geometry(f"{popup_width}x{popup_height}+{x}+{y}")
             popup.resizable(False, False)
-
+            popup.grab_set()
             tree = ttk.Treeview(popup, column = ("ten_mon", "so_luong"), show = "headings")
             tree.heading("ten_mon", text = "Tên món")
             tree.heading("so_luong", text = "Số lượng")
@@ -650,6 +679,38 @@ class MH_BanHang(tk.Frame):
             ten_entry.place(x = 90, y = 30, width = 100, height = 20)
             so_luong_entry.place(x = 90, y = 60, width = 100, height = 20)
             
+            def xoa_mon():
+                ten_mon = ten_entry.get()
+                if ten_mon == "":
+                    messagebox.showwarning("Cảnh báo", "Bạn chưa nhập tên món")
+                    return
+                if not re.match(r"^[A-Za-zÀ-ỹ\s]+$", ten_mon):
+                    messagebox.showerror("Lỗi", "Tên món không hợp lệ (Chỉ nhận kí tự từ a-z,A-Z)")
+                    return
+
+                if ban.kiem_tra_co_mon(ten_mon) == False:
+                    messagebox.showerror("Lỗi", "Không tìm thấy món này")
+                    return
+                else:
+                    ban.hoa_don.dsMon.xoa_mon(ten_mon)
+                    print("Xóa món thành công")
+                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
+                    self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
+                    huy()
+                    self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
+
+
+
+            xoa_mon_button = tk.Button(popup, text = "Xóa món",
+                font=("proxima-nova", 10, "bold"), 
+                bg="#8c7851", 
+                fg="#fffffe",
+                cursor="hand2",
+                bd=3, relief="ridge",
+                command = xoa_mon)
+
+            xoa_mon_button.place(x = 220, y = 40)
+
             def on_tree_select(event):
                 selected_item = tree.focus()
                 if not selected_item:
@@ -668,24 +729,28 @@ class MH_BanHang(tk.Frame):
 
             def xac_nhan():
                 ten_mon = ten_entry.get()
-                so_luong = int(so_luong_entry.get())
-                
-                if ban.kiem_tra_co_mon(ten_mon) == False:
-                    text.set("Không có món này trong hóa đơn")
+                if not re.match(r"^[A-Za-zÀ-ỹ\s]+$", ten_mon):
+                    messagebox.showerror("Lỗi", "Tên món không hợp lệ (Chỉ nhận kí tự từ a-z,A-Z)")
                     return
 
-                if so_luong <= 0:
-                    ban.hoa_don.dsMon.xoa_mon(ten_mon)
-                    print("Đã xóa món")
-                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
-                    self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
-                    huy()
-                else:
-                    ban.cap_nhat_so_luong(ten_mon, so_luong)
-                    print("Cập nhật số lượng thành công")
-                    self.ds_ban.ghi_file("data/du_lieu_ban.json")
-                    self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
-                    huy()
+                if ban.kiem_tra_co_mon(ten_mon) == False:
+                    messagebox.showerror("Lỗi", "Không tìm thấy món này")
+                    return
+                
+                try:
+                    so_luong = int(so_luong_entry.get())
+                    if so_luong <= 0:
+                        raise ValueError
+                except ValueError:
+                    messagebox.showerror("Lỗi", "Số lượng nhập không hợp lệ")
+                    return
+
+                ban.cap_nhat_so_luong(ten_mon, so_luong)
+                print("Cập nhật số lượng thành công")
+                self.ds_ban.ghi_file("data/du_lieu_ban.json")
+                self.cap_nhat_listbox_hoa_don(ban, hoa_don_listbox)
+                huy()
+                self.ds_hoa_don.ghi_file("data/du_lieu_hoa_don.json")
 
             xac_nhan_button = tk.Button(popup, text = "Xác nhận",
                 font=("proxima-nova", 12, "bold"), 

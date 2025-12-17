@@ -74,6 +74,3 @@ class DanhSachNhanVien:
             del self.ds[ma_nv]
             return True
         return False
-
-    def lay_danh_sach_chuc_vu(self):
-        return list({nv.role for nv in self.ds.values()})
