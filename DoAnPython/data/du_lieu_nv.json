@@ -1,72 +1,72 @@
 [
-  {
-    "ma_nv": "NV001",
-    "ten_nv": "Nguyễn Thành Nam",
-    "role": "Manager",
-    "luong": 15000000,
-    "username": "admin"
-  },
-  {
-    "ma_nv": "NV002",
-    "ten_nv": "Trần Nguyên",
-    "role": "Cashier",
-    "luong": 9000000,
-    "username": "nv002"
-  },
-  {
-    "ma_nv": "NV003",
-    "ten_nv": "Nguyễn Thành Đạt",
-    "role": "Cashier",
-    "luong": 9000000,
-    "username": "nv003"
-  },
-  {
-    "ma_nv": "NV004",
-    "ten_nv": "Phạm Ngọc Ánh",
-    "role": "Barista",
-    "luong": 9500000,
-    "username": "nv004"
-  },
-  {
-    "ma_nv": "NV005",
-    "ten_nv": "Võ Quang Huy",
-    "role": "Barista",
-    "luong": 9500000,
-    "username": "nv005"
-  },
-  {
-    "ma_nv": "NV006",
-    "ten_nv": "Huỳnh Đức Khánh",
-    "role": "Server",
-    "luong": 7000000,
-    "username": "nv006"
-  },
-  {
-    "ma_nv": "NV007",
-    "ten_nv": "Đỗ Khánh Vy",
-    "role": "Server",
-    "luong": 7000000,
-    "username": "nv007"
-  },
-  {
-    "ma_nv": "NV008",
-    "ten_nv": "Bùi Ngọc Thiên",
-    "role": "Server",
-    "luong": 7000000,
-    "username": "nv008"
-  },
-  {
-    "ma_nv": "NV009",
-    "ten_nv": "Hoàng Trung Hiếu",
-    "role": "Server",
-    "luong": 7000000,
-    "username": "nv009"
-  },
-  {
-    "ma_nv": "NV010",
-    "ten_nv": "Lý Gia Hân",
-    "role": "Server",
-    "luong": 7000000,
-    "username": "nv010"
-  }
+    {
+        "ma_nv": "NV001",
+        "ten_nv": "Nguyễn Thành Nam",
+        "role": "Manager",
+        "luong": 15000000,
+        "username": "nv001"
+    },
+    {
+        "ma_nv": "NV002",
+        "ten_nv": "Trần Nguyên",
+        "role": "Cashier",
+        "luong": 9000000,
+        "username": "nv002"
+    },
+    {
+        "ma_nv": "NV003",
+        "ten_nv": "Nguyễn Thành Đạt",
+        "role": "Cashier",
+        "luong": 9000000,
+        "username": "nv003"
+    },
+    {
+        "ma_nv": "NV004",
+        "ten_nv": "Phạm Ngọc Ánh",
+        "role": "Barista",
+        "luong": 9500000,
+        "username": "nv004"
+    },
+    {
+        "ma_nv": "NV005",
+        "ten_nv": "Võ Quang Huy",
+        "role": "Manager",
+        "luong": 9500000,
+        "username": "nv005"
+    },
+    {
+        "ma_nv": "NV006",
+        "ten_nv": "Huỳnh Đức Khánh",
+        "role": "Server",
+        "luong": 7000000,
+        "username": "nv006"
+    },
+    {
+        "ma_nv": "NV007",
+        "ten_nv": "Đỗ Khánh Vy",
+        "role": "Server",
+        "luong": 7000000,
+        "username": "nv007"
+    },
+    {
+        "ma_nv": "NV008",
+        "ten_nv": "Bùi Ngọc Thiên",
+        "role": "Server",
+        "luong": 7000000,
+        "username": "nv008"
+    },
+    {
+        "ma_nv": "NV009",
+        "ten_nv": "Hoàng Trung Hiếu",
+        "role": "Server",
+        "luong": 7000000,
+        "username": "nv009"
+    },
+    {
+        "ma_nv": "NV010",
+        "ten_nv": "Lý Gia Hân",
+        "role": "Server",
+        "luong": 7000000,
+        "username": "nv010"
+    }
 ]

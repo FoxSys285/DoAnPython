@@ -38,7 +38,6 @@ class MH_QuanLy(tk.Frame):
         self.ma_mon_cu = None
         self.ma_nv_cu = None
         self.ma_ban_cu = None
-        self.tk_cu = None
         # Nút chuyển trang
         menu_buttons = [
             ("TRANG CHỦ", lambda: self.controller.show_frame("MH_TrangChu")),
@@ -719,7 +718,7 @@ class MH_QuanLy(tk.Frame):
         if self.ds_nhom.kiem_tra_ton_tai(ten):
             messagebox.showwarning("Cảnh báo", "Tên đã tồn tại")
             return
-        if not re.match(r"^[a-zA-ZÀ-ỹ\s-]+$", ten):
+        if re.match(r"^[a-zA-ZÀ-ỹ\s]+$", ten):
             messagebox.showwarning("Cảnh báo", "Tên nhóm món không được chứa số hoặc ký tự đặc biệt!")
             return
         if hasattr(self, "dang_sua_nhom") and self.dang_sua_nhom:
@@ -816,8 +815,8 @@ class MH_QuanLy(tk.Frame):
             if self.ds_ban.kiem_tra_ton_tai(ma):
                 messagebox.showwarning("Cảnh báo", "Đã có mã bàn này")
                 return
-        if not re.match(r"^\d{2}$", ma):
-            messagebox.showwarning("Cảnh báo", "Mã món không phù hợp (Định dạng: xx, ví dụ 01)")
+        if not re.match(r"^M\d{2}$", ma):
+            messagebox.showwarning("Cảnh báo", "Mã món không phù hợp (Định dạng: Mxx, ví dụ M01)")
             return
 
         # ======= Tên =======
@@ -827,7 +826,7 @@ class MH_QuanLy(tk.Frame):
         
 
         from objects.Ban import Ban
-        ban_moi = Ban(ma, ten, "Free", "")
+        ban_moi = Ban(ma, ten)
 
         if getattr(self, "dang_sua_ban", False):
             self.ds_ban.ds[self.ban_dang_sua_index] = ban_moi
@@ -900,62 +899,43 @@ class MH_QuanLy(tk.Frame):
             entry.delete(0, tk.END)
 
     def luu_nhan_vien_moi(self):
-        ma = self.entry_nv["Mã NV"].get()
-        ten = self.entry_nv["Tên nhân viên"].get()
-        role = self.entry_nv["Chức vụ"].get()
-        luong = self.entry_nv["Lương"].get()
-        username = self.entry_nv["Tài khoản"].get()
+        ma = self.entry_nv["Mã NV"].get().strip()
+        ten = self.entry_nv["Tên nhân viên"].get().strip()
+        role = self.entry_nv["Chức vụ"].get().strip()
+        luong = self.entry_nv["Lương"].get().strip()
+        username = self.entry_nv["Tài khoản"].get().strip()
         mat_khau = self.entry_mat_khau.get() if self.entry_mat_khau.winfo_ismapped() else ""
-
-        from objects.TaiKhoan import DanhSachTaiKhoan
-        ds_tk = DanhSachTaiKhoan()
-        ds_tk.doc_file("data/du_lieu_tk.json")
-
-        if not ma or not ten or not role or not luong or not username:
-            messagebox.showwarning("Cảnh báo", "Thiếu thông tin")
-            return
-
-        if ma != self.ma_nv_cu:
-            if not re.match(r"^NV\d{3}$", ma):
-                messagebox.showwarning("Cảnh báo", "Mã không đúng định dạng (VD: NV001)")
-                return
-
-            if self.ds_nhan_vien.kiem_tra_ton_tai(ma):
-                messagebox.showinfo("Thông báo", "Mã đã tồn tại, không thêm lại")
-                return
-
-        if role not in ["Manager", "Cashier", "Server", "Barista"]:
-            messagebox.showinfo("Thông báo", f"Không có chức vụ này")
-            return
-
-        if role in ["Server", "Barista"]:
-            if mat_khau != "":
-                messagebox.showinfo("Thông báo", "Không phải Manager hoặc Cashier không thể tạo mật khẩu")
-                return
-
         if role in ["Manager", "Cashier"]:
             from objects.TaiKhoan import DanhSachTaiKhoan
             ds_tk = DanhSachTaiKhoan()
             ds_tk.doc_file("data/du_lieu_tk.json")
 
-            if self.tk_cu != username:
-                if ds_tk.Add(username, mat_khau, role):
-                    ds_tk.ghi_file("data/du_lieu_tk.json")
-                    print(f"Đã tạo tài khoản cho {username}")
-                else:
-                    messagebox.showinfo("Thông báo", "Tài khoản đã tồn tại, không thêm lại")
-                    return
+            if ds_tk.Add(username, mat_khau, role):
+                ds_tk.ghi_file("data/du_lieu_tk.json")
+                print(f"Đã tạo tài khoản cho {username}")
+            else:
+                print("Tài khoản đã tồn tại, không thêm lại")
 
-        if not re.match(r"^[A-Za-zÀ-ỹ0-9]$"):
-            messagebox.showwarning("Cảnh báo", "Tên không được chứa các ký tự đặc biệt")
+        from objects.TaiKhoan import DanhSachTaiKhoan
+        ds_tk = DanhSachTaiKhoan()
+        ds_tk.doc_file("data/du_lieu_tk.json")
+
+        username = self.entry_nv["Tài khoản"].get()
+        role = self.entry_nv["Chức vụ"].get()
+
+        if role not in ["Manager", "Cashier"]:
+            if ds_tk.Find(username):
+                del ds_tk.ds[username]
+                ds_tk.ghi_file("data/du_lieu_tk.json")
+                print(f"Đã xóa tài khoản của {username} vì chức vụ không còn hợp lệ")
+
+        if not ma or not ten or not role or not luong or not username:
+            print("Thiếu thông tin bắt buộc")
             return
-
         try:
             luong = int(luong)
-            if luong <= 0:
-                raise ValueError
-        except ValueError:
-            messagebox.showwarning("Cảnh báo", "Lương không hợp lệ")
+        except:
+            print("Lương phải là số")
             return
 
         from objects.NhanVien import NhanVien
@@ -1027,7 +1007,7 @@ class MH_QuanLy(tk.Frame):
         # Đổ dữ liệu vào các ô nhập
         self.entry_nv["Mã NV"].delete(0, tk.END)
         self.entry_nv["Mã NV"].insert(0, nv.ma_nv)
-        self.ma_nv_cu = self.entry_nv["Mã NV"].get()
+
         self.entry_nv["Tên nhân viên"].delete(0, tk.END)
         self.entry_nv["Tên nhân viên"].insert(0, nv.ten_nv)
 
@@ -1039,7 +1019,6 @@ class MH_QuanLy(tk.Frame):
 
         self.entry_nv["Tài khoản"].delete(0, tk.END)
         self.entry_nv["Tài khoản"].insert(0, nv.username)
-        self.tk_cu = self.entry_nv["Tài khoản"].get()
 
         # Đánh dấu đang sửa
         self.dang_sua_nv = True

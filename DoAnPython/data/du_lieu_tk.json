@@ -13,5 +13,10 @@
         "username": "nv003",
         "password": "123456",
         "role": "Cashier"
+    },
+    {
+        "username": "nv004",
+        "password": "1234567",
+        "role": "Cashier"
     }
 ]

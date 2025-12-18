@@ -78,3 +78,8 @@ class DanhSachNhanVien:
     def lay_danh_sach_chuc_vu(self):
         return sorted({nv.role for nv in self.ds.values()})
 
+    def kiem_tra_ton_tai(self, ma):
+        for ma in self.ds:
+            return True
+        return False
+
