@@ -79,7 +79,10 @@ class DanhSachNhanVien:
         return sorted({nv.role for nv in self.ds.values()})
 
     def kiem_tra_ton_tai(self, ma):
-        for ma in self.ds:
-            return True
-        return False
+        return ma in self.ds
 
+    def kiem_tra_tai_khoan(self, user):
+        for nv in self.ds.values():
+            if nv.username == user:
+                return True
+        return False

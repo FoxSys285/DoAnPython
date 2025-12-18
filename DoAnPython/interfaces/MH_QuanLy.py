@@ -878,7 +878,7 @@ class MH_QuanLy(tk.Frame):
         self.frame_nhan_vien.place(x=0, y=0, relwidth=1, relheight=1)
         self.tree_nhan_vien.pack(fill="both", expand=True)
         self.frame_nhan_vien.tkraise()
-        self.danh_sach_chuc_vu = self.ds_nhan_vien.lay_danh_sach_chuc_vu()
+        self.danh_sach_chuc_vu = ["Manager", "Cashier", "Server", "Barista"]
         self.entry_nv["Chức vụ"]["values"] = self.danh_sach_chuc_vu
 
     def load_nhan_vien(self):
@@ -900,82 +900,96 @@ class MH_QuanLy(tk.Frame):
             entry.delete(0, tk.END)
 
     def luu_nhan_vien_moi(self):
-        ma = self.entry_nv["Mã NV"].get()
-        ten = self.entry_nv["Tên nhân viên"].get()
+        # --- 1. Lấy dữ liệu từ giao diện ---
+        ma = self.entry_nv["Mã NV"].get().strip()
+        ten = self.entry_nv["Tên nhân viên"].get().strip()
         role = self.entry_nv["Chức vụ"].get()
-        luong = self.entry_nv["Lương"].get()
-        username = self.entry_nv["Tài khoản"].get()
-        mat_khau = self.entry_mat_khau.get() if self.entry_mat_khau.winfo_ismapped() else ""
+        luong_str = self.entry_nv["Lương"].get().strip()
+        username = self.entry_nv["Tài khoản"].get().strip()
+        mat_khau = self.entry_mat_khau.get().strip()
 
-        from objects.TaiKhoan import DanhSachTaiKhoan
-        ds_tk = DanhSachTaiKhoan()
-        ds_tk.doc_file("data/du_lieu_tk.json")
-
-        if not ma or not ten or not role or not luong or not username:
-            messagebox.showwarning("Cảnh báo", "Thiếu thông tin")
-            return
-
-        if ma != self.ma_nv_cu:
-            if not re.match(r"^NV\d{3}$", ma):
-                messagebox.showwarning("Cảnh báo", "Mã không đúng định dạng (VD: NV001)")
-                return
-
-            if self.ds_nhan_vien.kiem_tra_ton_tai(ma):
-                messagebox.showinfo("Thông báo", "Mã đã tồn tại, không thêm lại")
-                return
-
-        if role not in ["Manager", "Cashier", "Server", "Barista"]:
-            messagebox.showinfo("Thông báo", f"Không có chức vụ này")
-            return
-
-        if role in ["Server", "Barista"]:
-            if mat_khau != "":
-                messagebox.showinfo("Thông báo", "Không phải Manager hoặc Cashier không thể tạo mật khẩu")
-                return
-
-        if role in ["Manager", "Cashier"]:
-            from objects.TaiKhoan import DanhSachTaiKhoan
-            ds_tk = DanhSachTaiKhoan()
-            ds_tk.doc_file("data/du_lieu_tk.json")
-
-            if self.tk_cu != username:
-                if ds_tk.Add(username, mat_khau, role):
-                    ds_tk.ghi_file("data/du_lieu_tk.json")
-                    print(f"Đã tạo tài khoản cho {username}")
-                else:
-                    messagebox.showinfo("Thông báo", "Tài khoản đã tồn tại, không thêm lại")
-                    return
-
-        if not re.match(r"^[A-Za-zÀ-ỹ0-9]$"):
-            messagebox.showwarning("Cảnh báo", "Tên không được chứa các ký tự đặc biệt")
+        # --- 2. Kiểm tra tính hợp lệ cơ bản ---
+        if not all([ma, ten, role, luong_str, username]):
+            messagebox.showwarning("Cảnh báo", "Vui lòng điền đầy đủ thông tin nhân viên")
             return
 
         try:
-            luong = int(luong)
-            if luong <= 0:
-                raise ValueError
+            luong = int(luong_str)
         except ValueError:
-            messagebox.showwarning("Cảnh báo", "Lương không hợp lệ")
+            messagebox.showwarning("Cảnh báo", "Lương phải là số nguyên")
             return
 
+        # --- 3. Xử lý logic Tài khoản (Đồng bộ với du_lieu_tk.json) ---
+        from objects.TaiKhoan import DanhSachTaiKhoan, TaiKhoan
+        ds_tk = DanhSachTaiKhoan()
+        ds_tk.doc_file("data/du_lieu_tk.json")
+
+        if role in ["Manager", "Cashier"]:
+            # Nếu là Manager/Cashier thì BẮT BUỘC phải có tài khoản
+            
+            # Xóa tài khoản cũ nếu người dùng đổi Username khi đang sửa
+            if getattr(self, "dang_sua_nv", False) and self.tk_cu and self.tk_cu != username:
+                if self.tk_cu in ds_tk.ds:
+                    del ds_tk.ds[self.tk_cu]
+
+            # Kiểm tra mật khẩu (Nếu thêm mới hoặc tài khoản chưa tồn tại thì bắt buộc nhập pass)
+            if not mat_khau and username not in ds_tk.ds:
+                messagebox.showwarning("Cảnh báo", f"Chức vụ {role} yêu cầu mật khẩu khởi tạo!")
+                return
+
+            # Cập nhật hoặc tạo mới đối tượng TaiKhoan (Tránh lỗi attribute 'to_dict' bằng cách dùng Class)
+            if mat_khau:
+                # Tạo mới hoặc đổi mật khẩu
+                new_tk_obj = TaiKhoan(username, mat_khau, role)
+                ds_tk.ds[username] = new_tk_obj
+            else:
+                # Nếu đang sửa mà không nhập pass mới thì chỉ cập nhật Role cho username hiện tại
+                if username in ds_tk.ds:
+                    ds_tk.ds[username].role = role
+
+            ds_tk.ghi_file("data/du_lieu_tk.json")
+            print(f"Đã lưu tài khoản cho: {username}")
+
+        else:
+            # Nếu là Server/Barista: Xóa tài khoản nếu có (vì không có quyền login)
+            da_xoa = False
+            if username in ds_tk.ds:
+                del ds_tk.ds[username]
+                da_xoa = True
+            if getattr(self, "dang_sua_nv", False) and self.tk_cu and self.tk_cu in ds_tk.ds:
+                del ds_tk.ds[self.tk_cu]
+                da_xoa = True
+            
+            if da_xoa:
+                ds_tk.ghi_file("data/du_lieu_tk.json")
+                print(f"Đã thu hồi quyền truy cập của {username}")
+
+        # --- 4. Xử lý logic Nhân viên (Đồng bộ với du_lieu_nv.json) ---
         from objects.NhanVien import NhanVien
         nv_moi = NhanVien(ma, ten, role, luong, username)
 
         if getattr(self, "dang_sua_nv", False):
-            self.ds_nhan_vien.ds[self.ma_nv_dang_sua] = nv_moi
-            print(f"Đã cập nhật nhân viên: {ten}")
+            # Trường hợp sửa: xóa mã cũ nếu đổi mã NV
+            if self.ma_nv_dang_sua != ma:
+                if ma in self.ds_nhan_vien.ds:
+                    messagebox.showerror("Lỗi", "Mã nhân viên mới đã tồn tại!")
+                    return
+                del self.ds_nhan_vien.ds[self.ma_nv_dang_sua]
+            
+            self.ds_nhan_vien.ds[ma] = nv_moi
         else:
-            if self.ds_nhan_vien.add_nv(nv_moi):
-                print(f"Đã thêm nhân viên: {ten}")
-            else:
-                messagebox.showinfo("Thông báo", "Mã đã tồn tài")
+            # Trường hợp thêm mới
+            if ma in self.ds_nhan_vien.ds:
+                messagebox.showwarning("Cảnh báo", "Mã nhân viên đã tồn tại")
                 return
+            self.ds_nhan_vien.add_nv(nv_moi)
 
-    # Ghi file và reload
+        # --- 5. Lưu file nhân viên và làm mới giao diện ---
         self.ds_nhan_vien.ghi_file("data/du_lieu_nv.json")
         self.load_nhan_vien()
         self.frame_nhap_nv.place_forget()
         self.dang_sua_nv = False
+        messagebox.showinfo("Thành công", f"Đã lưu thông tin nhân viên {ten}")
 
     def xoa_nhan_vien(self):
         selected = self.tree_nhan_vien.selection()

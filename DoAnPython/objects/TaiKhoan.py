@@ -1,5 +1,6 @@
 import json
 from objects.NhanVien import NhanVien, DanhSachNhanVien
+from tkinter import messagebox
 
 class TaiKhoan:
 	def __init__(self, username, password, role = "Employee"):
@@ -13,6 +14,8 @@ class TaiKhoan:
 			"password": self.password,
 			"role": self.role
 		}
+	def __str__(self):
+		return f"{username}"
 
 class DanhSachTaiKhoan:
 	def __init__(self):
@@ -74,3 +77,37 @@ class DanhSachTaiKhoan:
 				return False, "Sai mật khẩu."
 		else:
 			return False, "Tài khoản không tồn tại."
+
+	def kiem_tra_ton_tai(self, user):
+		return user in self.ds
+
+	def xoa_nhan_vien(self):
+	    selected = self.tree_nhan_vien.selection()
+	    if not selected:
+	        messagebox.showwarning("Cảnh báo", "Bạn chưa chọn nhân viên cần xóa")
+	        return
+
+	    item = self.tree_nhan_vien.item(selected[0])
+	    ma_nv = item["values"][1]
+	    ten_nv = item["values"][2]
+	    username_xoa = item["values"][5] # Lấy username từ bảng
+
+	    confirm = messagebox.askyesno("Xác nhận xóa", f"Bạn có chắc muốn xóa nhân viên '{ten_nv}' không?")
+	    if not confirm: return
+
+	    if ma_nv in self.ds_nhan_vien.ds:
+	        # 1. Xóa nhân viên
+	        self.ds_nhan_vien.remove_nv(ma_nv)
+	        self.ds_nhan_vien.ghi_file("data/du_lieu_nv.json")
+
+	        # 2. XÓA TÀI KHOẢN TƯƠNG ỨNG (Thêm đoạn này)
+	        from objects.TaiKhoan import DanhSachTaiKhoan
+	        ds_tk = DanhSachTaiKhoan()
+	        ds_tk.doc_file("data/du_lieu_tk.json")
+	        if username_xoa in ds_tk.ds:
+	            del ds_tk.ds[username_xoa]
+	            ds_tk.ghi_file("data/du_lieu_tk.json")
+	            print(f"Đã xóa tài khoản: {username_xoa}")
+
+	        self.load_nhan_vien()
+	        messagebox.showinfo("Thông báo", "Đã xóa nhân viên và tài khoản liên quan")

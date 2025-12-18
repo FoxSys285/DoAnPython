@@ -1,38 +1,3 @@
 [
-    {
-        "maHD": "HD20251218000253",
-        "gioLap": "18/12/2025 00:02:53",
-        "dsMon": [
-            {
-                "ma_mon": "M01",
-                "ten_mon": "Cà phê đen",
-                "don_gia": 20000,
-                "so_luong": 3,
-                "loai": "Cafe",
-                "dvt": "Ly"
-            }
-        ],
-        "tongTien": 60000,
-        "maBan": "01",
-        "gioRa": null,
-        "nguoi_lap": "ADMIN"
-    },
-    {
-        "maHD": "HD20251218000613",
-        "gioLap": "18/12/2025 00:06:13",
-        "dsMon": [
-            {
-                "ma_mon": "M14",
-                "ten_mon": "Nước ép táo",
-                "don_gia": 30000,
-                "so_luong": 2,
-                "loai": "Sinh tố",
-                "dvt": "Ly"
-            }
-        ],
-        "tongTien": 60000,
-        "maBan": "02",
-        "gioRa": "18/12/2025 00:06:53",
-        "nguoi_lap": "ADMIN"
-    }
+    
 ]
